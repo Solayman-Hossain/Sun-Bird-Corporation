@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  # ==============================================================================
+  # Nginx Reverse Proxy & Load Balancer
+  # ==============================================================================
+  nginx:
+    image: nginx:alpine
+    container_name: sunbird-erp-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+    networks:
+      - sunbird-erp-net
+
+  # ==============================================================================
+  # Sun Bird Corporation ERP Backend API (Node.js Express TypeScript)
+  # ==============================================================================
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sunbird-erp-api
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - MONGO_URI=${MONGO_URI:-mongodb://mongodb:27017/sunbird_erp?replicaSet=rs0}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - JWT_SECRET=${JWT_SECRET:-sunbird_super_secure_production_secret_key_2026}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-sunbird_refresh_secure_production_secret_key_2026}
+      - SSLCOMMERZ_STORE_ID=${SSLCOMMERZ_STORE_ID:-sunbi67450live}
+      - SSLCOMMERZ_STORE_PASSWD=${SSLCOMMERZ_STORE_PASSWD:-sunbi67450live@ssl}
+      - SSLCOMMERZ_IS_SANDBOX=${SSLCOMMERZ_IS_SANDBOX:-false}
+      - PATHAO_CLIENT_ID=${PATHAO_CLIENT_ID:-sunbird_pathao_client}
+      - PATHAO_CLIENT_SECRET=${PATHAO_CLIENT_SECRET:-sunbird_pathao_secret}
+      - STEADFAST_API_KEY=${STEADFAST_API_KEY:-sunbird_steadfast_key}
+      - STEADFAST_SECRET_KEY=${STEADFAST_SECRET_KEY:-sunbird_steadfast_secret}
+    expose:
+      - "5000"
+    depends_on:
+      - redis
+      - mongodb
+    networks:
+      - sunbird-erp-net
+
+  # ==============================================================================
+  # Redis 7 (Caching, Rate Limiting & BullMQ Background Queue Store)
+  # ==============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: sunbird-erp-redis
+    restart: always
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:-}"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - sunbird-erp-net
+
+  # ==============================================================================
+  # MongoDB Replica Set (Local development & Staging ACID transaction support)
+  # In Production, can point MONGO_URI directly to MongoDB Atlas cluster
+  # ==============================================================================
+  mongodb:
+    image: mongo:7.0
+    container_name: sunbird-erp-mongodb
+    restart: always
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - sunbird-erp-net
+
+networks:
+  sunbird-erp-net:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local

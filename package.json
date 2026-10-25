@@ -1,0 +1,18 @@
+{
+  "name": "sun-bird-corporation",
+  "version": "1.0.0",
+  "description": "Sun Bird Corporation — Integrated Cloud ERP, E-Commerce, POS & AI Platform",
+  "private": true,
+  "workspaces": [
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm --workspace=backend run dev",
+    "build": "npm --workspace=backend run build",
+    "start": "npm --workspace=backend run start",
+    "test": "npm --workspace=backend run test"
+  },
+  "keywords": [],
+  "author": "Sun Bird Corporation",
+  "license": "ISC"
+}
