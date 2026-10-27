@@ -81,6 +81,7 @@ Access must be enforced on the backend/API, not only by hiding buttons or menus.
 - /reseller — reseller portal
 - /vendor-portal — vendor portal
 - /employee-portal — employee self-service
+- /portal/customer — customer self-service profile, orders, and OTP verification logs
 Every protected route must validate session and permissions server-side. Direct URL access without permission must be denied.
 6. Public Ecommerce Requirements
 6.1 Homepage layout

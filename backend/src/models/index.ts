@@ -34,3 +34,5 @@ export * from './PayrollRun';
 export * from './CrmActivity';
 export * from './ApprovalRequest';
 export * from './AuditLog';
+export * from './VerificationLog';
+export * from './BannedNid';

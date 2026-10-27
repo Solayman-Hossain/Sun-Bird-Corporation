@@ -81,6 +81,7 @@ Every gap previously identified has been completely resolved with concrete, prod
 | **GAP-12** | **Courier Automation (Pathao/Steadfast)** | Direct API webhook integration; automated AWB barcode on Challans; automated courier clearing receivable accounting. | **SOLVED** |
 | **GAP-13** | **Fixed Asset Depreciation** | Straight-Line Method (SLM) posted monthly across 4 asset classes (IT 25%, Machinery 15%, Furniture 10%, Vehicles 20%). | **SOLVED** |
 | **GAP-14** | **AI Integration Engine (Gemini)** | Advisory-only AI CS Advisor, SEO product copy generator, and 90-day moving demand forecast with strict PII masking. | **SOLVED** |
+| **GAP-15** | **Customer Profile OTP Login & Audit** | Passwordless customer mobile OTP authentication, Customer Portal self-service profile & orders, and immutable `verification_logs` with 90-day TTL. | **SOLVED** |
 
 ---
 

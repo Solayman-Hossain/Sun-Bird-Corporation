@@ -2,6 +2,8 @@ import { UserModel, IUser } from '../models/User';
 import { CustomerModel, ICustomer } from '../models/Customer';
 import { OtpService } from './OtpService';
 import { TokenService } from './TokenService';
+import { AuditLogService } from './AuditLogService';
+import { VerificationLogService } from './VerificationLogService';
 import { normalizeMobileNumber } from '../integrations/smsGateway';
 import { ValidationError } from '../errors/AppError';
 import logger from '../config/logger';
@@ -52,6 +54,17 @@ export class CustomerAuthService {
     // 1. Verify OTP against Redis single-use store
     const isOtpValid = await OtpService.verifyOtp(mobile, otp);
     if (!isOtpValid) {
+      // Record failed verification log for forensic analysis and abuse detection
+      await VerificationLogService.recordLog({
+        mobile,
+        verificationType: 'CUSTOMER_LOGIN',
+        status: 'FAILED',
+        purpose: 'LOGIN',
+        ipAddress,
+        userAgent,
+        failureReason: 'Invalid or expired OTP code',
+      }).catch((logErr) => logger.error('Failed to write VerificationLog on OTP failure:', logErr));
+
       throw new ValidationError([
         {
           field: 'otp',
@@ -117,6 +130,30 @@ export class CustomerAuthService {
     // 4. Issue 15-minute Access Token and 7-day Rotating Refresh Token
     const accessToken = TokenService.generateAccessToken(user);
     const refreshToken = await TokenService.generateRefreshToken(user, ipAddress, userAgent);
+
+    // 5. Record successful verification log & append immutable audit trail
+    await Promise.allSettled([
+      VerificationLogService.recordLog({
+        mobile,
+        verificationType: 'CUSTOMER_LOGIN',
+        status: 'SUCCESS',
+        purpose: 'LOGIN',
+        userId: user._id,
+        customerId: customer._id,
+        ipAddress,
+        userAgent,
+      }),
+      AuditLogService.logAction({
+        actorId: user._id,
+        actorRole: 'CUSTOMER',
+        action: 'CUSTOMER_PROFILE_LOGIN_VERIFIED',
+        targetCollection: 'customers',
+        targetId: customer._id,
+        ipAddress,
+        userAgent,
+        notes: `Customer logged in successfully via mobile OTP verification (${mobile})`,
+      }),
+    ]);
 
     return {
       accessToken,

@@ -502,6 +502,12 @@ const CustomerCreditProfileSchema = new Schema({
 ## 6. Service-by-Service Implementation Architecture
 
 ### 6.1 E-Commerce, Tiered Pricing & B2B Credit Gate
+- **Customer Profile Login & Verification:**
+  - Customers authenticate on public storefront via Bangladeshi mobile number and 6-digit SMS OTP (180s TTL in Redis).
+  - On verification, creates or links `users` record (`userType: 'CUSTOMER'`) and `customers` shadow record.
+  - Every verification attempt (SUCCESS, FAILED, RATE_LIMITED) is immutably logged to `verification_logs` collection with 90-day TTL retention for forensic fraud analysis.
+  - Profile login events trigger tamper-proof append-only records in `audit_logs` (`CUSTOMER_PROFILE_LOGIN_VERIFIED`).
+  - Authenticated customers manage shipping/billing addresses, view orders, and inspect login security history via `/api/v1/portal/customer/*`.
 - **OTP Validation:** Customers placing COD orders above BDT 5,000 receive a 6-digit SMS OTP via BulkSMSBD/Greenweb. The order remains in `UNVERIFIED_COD` until verified.
 - **Cart Reservation:** Uses Redis key `cart:reservation:<orderId>` with a 15-minute TTL. An atomic BullMQ queue worker releases unpurchased items automatically.
 - **Tiered Pricing Engine:**

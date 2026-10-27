@@ -204,10 +204,10 @@ All list endpoints (`GET`) accept the following standard query parameters:
 
 ---
 
-### 2.2 Customer Mobile OTP Verification
+### 2.2 Customer Mobile OTP Verification & Profile Login
 - **Path:** `POST /api/v1/public/auth/verify-otp`
 - **Auth:** Public
-- **Description:** Verifies OTP code, generates customer user record if first-time visitor, sets HTTP-Only refresh token cookie, and returns access token.
+- **Description:** Verifies OTP code, generates customer user and shadow records if first-time visitor, records immutable audit trails in `verification_logs` and `audit_logs`, sets HTTP-Only refresh token cookie, and returns access token with user & customer profile data.
 
 #### Request Body
 ```json
@@ -231,10 +231,33 @@ All list endpoints (`GET`) accept the following standard query parameters:
       "fullName": "Rahim Ahmed",
       "mobile": "01711000000",
       "userType": "CUSTOMER"
+    },
+    "customer": {
+      "_id": "67128a1c9e81f12345678902",
+      "fullName": "Rahim Ahmed",
+      "mobile": "01711000000",
+      "customerType": "RETAIL",
+      "isGuest": false
     }
   }
 }
 ```
+
+---
+
+### 2.2.1 Customer Portal: Profile & Verification Logs
+> **Base Path:** `/api/v1/portal/customer`  
+> **Auth:** Bearer JWT (`userType: 'CUSTOMER'`)
+
+#### Endpoints:
+1. **`GET /api/v1/portal/customer/profile`**
+   - Returns full customer profile, user account details, B2B credit profile (if hospital/clinic), and order statistics.
+2. **`PUT /api/v1/portal/customer/profile`**
+   - Updates personal details (`fullName`, `email`, `billingAddress`, `shippingAddress`, `companyName`, `buyerBin`) and appends immutable update record to `audit_logs`.
+3. **`GET /api/v1/portal/customer/orders`**
+   - Lists paginated order history placed by this customer account.
+4. **`GET /api/v1/portal/customer/verification-logs`**
+   - Returns chronological login and OTP verification security history for transparency and fraud monitoring.
 
 ---
 

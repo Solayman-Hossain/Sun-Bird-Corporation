@@ -48,6 +48,8 @@
 | 33 | `quorum_approvals` | System & Auxiliary | D12 | [7.5 `quorum_approvals`](#75-quorum_approvals--multi-director-quorum-log) |
 | 34 | `audit_logs` | System & Auxiliary | D12 | [7.6 `audit_logs`](#76-audit_logs--append-only-audit-trail) |
 | 35 | `idempotency_keys` | System & Auxiliary | Aux | [7.7 `idempotency_keys`](#77-idempotency_keys--duplicate-request-guard) |
+| 36 | `verification_logs` | System & Security | D12/Aux | [7.8 `verification_logs`](#78-verification_logs--customer-otp--identity-verification-audit-log) |
+| 37 | `banned_nids` | System & Security | D12/Aux | [7.9 `banned_nids`](#79-banned_nids--blacklisted-national-id-registry) |
 
 ---
 
@@ -2059,6 +2061,101 @@ export const IdempotencyKeyModel = model<IIdempotencyKey>('IdempotencyKey', Idem
 
 ---
 
+### 7.8 `verification_logs` — Customer OTP & Identity Verification Audit Log
+
+> **DFD Store:** D12 (`Audit & Quorum DB`) / Security Store  
+> Records every customer OTP login verification, MFA check, and NID identity verification attempt with 90-day retention TTL and append-only tamper resistance.
+
+```typescript
+export interface IVerificationLog extends Document {
+  mobile: string;
+  nidHash: string; // SHA-256 salted hash of the NID number. Not Unique - same nid may appear across multiple attempts
+  subject: string; // Supporting subject (e.g. CUSTOMER, EMPLOYEE, PARTNER, DIRECTOR)
+  subjectType: 'CUSTOMER' | 'EMPLOYEE' | 'PARTNER' | 'DIRECTOR' | 'VENDOR' | 'RESELLER';
+  subjectId?: Types.ObjectId;
+  nidMasked?: string;
+  nidType: 'NID_10' | 'NID_13' | 'NID_17' | 'SMART_CARD' | 'LEGACY' | 'UNKNOWN';
+  verificationType: 'SMS_OTP' | 'TOTP_MFA' | 'CUSTOMER_LOGIN' | 'ORDER_COD_OTP' | 'PASSWORD_RESET' | 'NID_VERIFICATION' | 'KYC_IDENTITY';
+  status: 'PENDING' | 'SUCCESS' | 'FAILED' | 'EXPIRED' | 'RATE_LIMITED' | 'REJECTED';
+  purpose: string;
+  verificationProvider?: string;
+  userId?: Types.ObjectId;
+  customerId?: Types.ObjectId;
+  ipAddress?: string;
+  userAgent?: string;
+  attemptsCount: number;
+  failureReason?: string;
+  metadata?: Record<string, any>;
+  expiresAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const VerificationLogSchema = new Schema<IVerificationLog>({
+  mobile:               { type: String, required: true, trim: true },
+  nidHash:              { type: String, required: true, trim: true }, // Salted SHA-256 HMAC of NID; Not Unique
+  subject:              { type: String, required: true, trim: true, default: 'CUSTOMER' },
+  subjectType:          { type: String, enum: ['CUSTOMER', 'EMPLOYEE', 'PARTNER', 'DIRECTOR', 'VENDOR', 'RESELLER'], default: 'CUSTOMER', required: true },
+  subjectId:            { type: Schema.Types.ObjectId, refPath: 'subjectType' },
+  nidMasked:            { type: String, trim: true },
+  nidType:              { type: String, enum: ['NID_10', 'NID_13', 'NID_17', 'SMART_CARD', 'LEGACY', 'UNKNOWN'], default: 'UNKNOWN' },
+  verificationType:     { type: String, enum: ['SMS_OTP', 'TOTP_MFA', 'CUSTOMER_LOGIN', 'ORDER_COD_OTP', 'PASSWORD_RESET', 'NID_VERIFICATION', 'KYC_IDENTITY'], default: 'SMS_OTP', required: true },
+  status:               { type: String, enum: ['PENDING', 'SUCCESS', 'FAILED', 'EXPIRED', 'RATE_LIMITED', 'REJECTED'], required: true },
+  purpose:              { type: String, required: true, trim: true, default: 'LOGIN' },
+  verificationProvider: { type: String, trim: true, default: 'INTERNAL_GATEWAY' },
+  userId:               { type: Schema.Types.ObjectId, ref: 'User' },
+  customerId:           { type: Schema.Types.ObjectId, ref: 'Customer' },
+  ipAddress:            { type: String, trim: true },
+  userAgent:            { type: String, trim: true },
+  attemptsCount:        { type: Number, default: 1, min: 1 },
+  failureReason:        { type: String, trim: true },
+  metadata:             { type: Schema.Types.Mixed },
+  expiresAt:            { type: Date, required: true, default: () => new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) }
+}, { timestamps: true });
+
+// Explicit Canonical Indexes
+VerificationLogSchema.index({ nidHash: 1 }); // Non-unique: same NID may appear across multiple attempts
+VerificationLogSchema.index({ mobile: 1, createdAt: -1 });
+VerificationLogSchema.index({ customerId: 1, createdAt: -1 });
+VerificationLogSchema.index({ subjectType: 1, subjectId: 1 });
+VerificationLogSchema.index({ verificationType: 1, status: 1 });
+VerificationLogSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // 90-day automated TTL cleanup
+
+export const VerificationLogModel = model<IVerificationLog>('VerificationLog', VerificationLogSchema, 'verification_logs');
+```
+
+---
+
+### 7.9 `banned_nids` — Blacklisted National ID Registry
+
+> **DFD Store:** D12 (`Audit & Quorum DB`) / Security Store  
+> Stores SHA-256 cryptographic hashes of blacklisted NIDs to block fraudulent actors, abusive applicants, and bad-debt defaulters with unique index enforcement.
+
+```typescript
+export interface IBannedNid extends Document {
+  nidHash: string; // SHA-256 cryptographic hash of the blacklisted NID
+  reason: string;
+  bannedBy: Types.ObjectId; // Admin who issued the ban
+  bannedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const BannedNidSchema = new Schema<IBannedNid>({
+  nidHash:  { type: String, required: true, trim: true },
+  reason:   { type: String, required: true, trim: true },
+  bannedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  bannedAt: { type: Date, default: Date.now, required: true }
+}, { timestamps: true });
+
+// Explicit canonical index: { nidHash: 1 } unique
+BannedNidSchema.index({ nidHash: 1 }, { unique: true });
+
+export const BannedNidModel = model<IBannedNid>('BannedNid', BannedNidSchema, 'banned_nids');
+```
+
+---
+
 ## Schema Correction Log
 
 ### v1.2 — Field & Status Fixes
@@ -2111,6 +2208,7 @@ export const IdempotencyKeyModel = model<IIdempotencyKey>('IdempotencyKey', Idem
 | S-37 | `attendance_punches` | **Conflicting Index Direction** | Inline `punchDate: { index: true }` created ascending index conflicting with explicit descending `punchDate: -1` | Removed inline ascending index; kept explicit descending index for fast reverse-chronological payroll aggregation |
 | S-38 | `quorum_approvals` | **Leadership Governance Indexes** | Quorum multi-director workflow lacked indexes for director task queue and module-specific pending queries | Added `QuorumApprovalSchema.index({ 'approvals.directorId': 1 })` and `QuorumApprovalSchema.index({ targetCollection: 1, isComplete: 1 })` |
 | S-39 | Document Header & Log | **Header Repair & Cleanup** | Corrupted document title and keystrokes at line 1 restored; removed duplicate v1.2 footer | Restored original header `# Database Schema Specification Document` and cleaned footer |
+| S-40 | `verification_logs` | **Security Audit Trail** | Customer OTP login and verification required immutable audit logs for brute-force tracking and abuse prevention | Added `verification_logs` collection with explicit compound indexes and 90-day TTL cleanup |
 
 ---
 

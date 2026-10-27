@@ -52,6 +52,8 @@
 | 33 | `crm_activities` | Aux | CRM leads, enquiries, follow-ups, support cases |
 | 34 | `approval_requests` | Aux | Workflow approval requests & actions |
 | 35 | `idempotency_keys` | Aux | Idempotency guard for payment, payroll, POS retries |
+| 36 | `verification_logs` | D12/Aux | Customer OTP verification logs & authentication security trail |
+| 37 | `banned_nids` | D12/Aux | Blacklisted National ID cryptographic registry |
 
 ---
 
@@ -60,7 +62,7 @@
 প্রতিটি কালেকশনের সম্পূর্ণ ও প্রোডাকশন-রেডি TypeScript Mongoose Schema আলাদা ডেডিকেটেড ফাইল **[`Database-Schema.md`](file:///e:/Documents/Sun%20Bird%20Corporation/Database-Schema.md)**-এ স্থানান্তর ও সুবিন্যস্ত করা হয়েছে।
 
 > [!NOTE]
-> **সকল ৩৫টি কালেকশনের সম্পূর্ণ Mongoose Schema দেখতে ভিজিট করুন:**  
+> **সকল ৩৭টি কালেকশনের সম্পূর্ণ Mongoose Schema দেখতে ভিজিট করুন:**  
 > 👉 **[`Database-Schema.md`](file:///e:/Documents/Sun%20Bird%20Corporation/Database-Schema.md)**  
 > এতে প্রতিটি কালেকশনের জন্য TypeScript Interface, Mongoose Schema Definition, Compound/TTL Indexes, Pre-save Hooks ও মডেল এক্সপোর্ট অন্তর্ভুক্ত রয়েছে।
 

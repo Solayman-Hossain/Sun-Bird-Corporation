@@ -87,6 +87,7 @@ export class AuthController {
         data: {
           accessToken: result.accessToken,
           user: result.user,
+          customer: result.customer,
         },
       });
     } catch (error) {

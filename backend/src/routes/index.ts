@@ -11,6 +11,7 @@ import erpProductRouter from './erp/productRoutes';
 import erpInventoryRouter from './erp/inventoryRoutes';
 import erpProcurementRouter from './erp/procurementRoutes';
 import portalVendorRouter from './portal/vendorRoutes';
+import portalCustomerRouter from './portal/customerRoutes';
 import publicCheckoutRouter from './public/checkoutRoutes';
 import publicTrackingRouter from './public/trackingRoutes';
 import erpSalesRouter from './erp/salesRoutes';
@@ -69,6 +70,9 @@ apiV1Router.use('/erp/procurement', erpProcurementRouter);
 
 // Authenticated vendor portal mounted at /api/v1/portal/vendor
 apiV1Router.use('/portal/vendor', portalVendorRouter);
+
+// Authenticated customer portal mounted at /api/v1/portal/customer
+apiV1Router.use('/portal/customer', portalCustomerRouter);
 
 // Public storefront checkout mounted at /api/v1/public/checkout
 apiV1Router.use('/public/checkout', publicCheckoutRouter);

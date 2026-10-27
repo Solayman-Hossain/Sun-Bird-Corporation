@@ -66,3 +66,6 @@ export { default as PaymentWebhookService } from './PaymentWebhookService';
 
 export * from './CourierWebhookService';
 export { default as CourierWebhookService } from './CourierWebhookService';
+
+export * from './VerificationLogService';
+export { default as VerificationLogService } from './VerificationLogService';

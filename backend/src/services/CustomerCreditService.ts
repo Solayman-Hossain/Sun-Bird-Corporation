@@ -9,6 +9,7 @@ import {
   NotFoundError,
   UnauthorizedError,
 } from '../errors/AppError';
+import { verifySync } from 'otplib';
 import logger from '../config/logger';
 
 export interface CreditExposureDetails {
@@ -199,7 +200,13 @@ export class CustomerCreditService {
         );
       }
 
-      if (!/^\d{6}$/.test(String(totpCode).trim())) {
+      const totpResult = verifySync({
+        token: String(totpCode).trim(),
+        secret: director.totpSecret,
+        epochTolerance: 30,
+      });
+
+      if (!totpResult || !totpResult.valid) {
         throw new UnauthorizedError('Invalid or expired MFA TOTP code');
       }
     }
