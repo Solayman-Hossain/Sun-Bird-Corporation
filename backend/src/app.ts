@@ -8,7 +8,9 @@ import { morganMiddleware } from './config/logger';
 import { requestIdMiddleware } from './middlewares/requestId';
 import errorHandler from './middlewares/errorHandler';
 import { NotFoundError } from './errors/AppError';
+import { xssSanitizerMiddleware } from './middlewares/xssSanitizer';
 import apiV1Router from './routes';
+import mediaRouter from './routes/media.routes';
 
 const app: Application = express();
 
@@ -60,6 +62,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Parse Cookie headers
 app.use(cookieParser());
 
+// XSS sanitization middleware (Prompt 23 Requirement 1.5)
+app.use(xssSanitizerMiddleware);
+
 // Request correlation tracking
 app.use(requestIdMiddleware);
 
@@ -77,6 +82,9 @@ app.get('/', (req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// Mount Media routes under /api/v1/media
+app.use('/api/v1/media', mediaRouter);
 
 // Mount API v1 router
 app.use('/api/v1', apiV1Router);

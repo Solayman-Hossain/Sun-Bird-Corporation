@@ -8,6 +8,7 @@
 - **Product Requirements Baseline:** [`prd.md`](file:///e:/Documents/Sun%20Bird%20Corporation/prd.md) (v1.3 / v2.1)
 - **Format:** OpenAPI 3.0-aligned Markdown Specification
 - **Security:** JWT (15m Access Token) + HTTP-Only Rotating Refresh Token (7d) + TOTP MFA + RBAC + Cryptographic Quorum Signatures
+- **Postman API Collection:** [`Docs/Sun-Bird-Corporation.postman_collection.json`](file:///e:/Documents/Sun%20Bird%20Corporation/Docs/Sun-Bird-Corporation.postman_collection.json) (v2.1.0 Ready-to-Import Template)
 
 ---
 
@@ -46,6 +47,9 @@
     - 11.2 RFC 8594 Sunset & Deprecation Protocol
     - 11.3 Version Lifecycle Timeline
     - 11.4 Version History & Changelog Table
+12. [Module 11: Media Storage & S3 Pre-Signed Upload Services](#12-module-11-media-storage--s3-pre-signed-upload-services)
+    - 12.1 Generate Pre-Signed S3 Upload URL (`POST /api/v1/media/presigned-url`)
+    - 12.2 Generate Pre-Signed S3 Read URL (`POST /api/v1/media/presigned-read-url`)
 
 ---
 
@@ -61,6 +65,7 @@ The API strictly isolates public consumer traffic from private internal ERP oper
 | `/api/v1/portal/reseller/*` | Verified B2B Resellers | Bearer JWT (`RESELLER` scope) | 120 req / min |
 | `/api/v1/portal/vendor/*` | Verified Foreign & Local Suppliers | Bearer JWT (`VENDOR` scope) | 120 req / min |
 | `/api/v1/portal/employee/*`| Internal Staff Self-Service (Punches, Slips) | Bearer JWT (`STAFF` scope) | 60 req / min |
+| `/api/v1/media/*` | Authenticated Users & Admins (S3 Pre-signed Upload/Read) | Bearer JWT | 180 req / min |
 | `/api/v1/webhooks/*` | SSLCOMMERZ, Pathao, Steadfast Gateways | HMAC Signature / Webhook Token | 600 req / min |
 
 ### 1.2 Authentication & Token Lifecycles
@@ -1669,5 +1674,253 @@ stateDiagram-v2
 
 ---
 
-*Document v1.0 — API Specification Document — Sun Bird Corporation Integrated Cloud ERP Platform*  
-*Node.js · Express.js · TypeScript · MongoDB Atlas · Redis BullMQ · Next.js 14+*
+## 12. Module 11: Media Storage & S3 Pre-Signed Upload Services
+
+### 12.1 Generate Pre-Signed S3 Upload URL
+- **Endpoint:** `POST /api/v1/media/presigned-url`
+- **Access Control:** Authenticated (Bearer JWT via `authGuard`)
+- **Rate Limit:** 180 req/min
+- **Purpose:** Generates a short-lived (5 minutes) AWS S3 pre-signed `PUT` URL so frontend clients can securely upload product media, KYC NID scans, and employee photos directly to S3 / MinIO storage without taxing Express server memory.
+
+#### Request Headers
+```http
+POST /api/v1/media/presigned-url HTTP/1.1
+Host: api.sunbirdcorp.com
+Authorization: Bearer <accessToken>
+Content-Type: application/json
+```
+
+#### Request Payload
+```json
+{
+  "fileName": "autoclave-sterilizer-front.png",
+  "fileType": "image/png",
+  "folder": "listings"
+}
+```
+
+| Field | Type | Required | Allowed Values / Constraints |
+|---|---|:---:|---|
+| `fileName` | String | Yes | Original file name (e.g. `product-front.webp`). Sanitized automatically. |
+| `fileType` | String | Yes | MIME type. Must be one of: `image/webp`, `image/jpeg`, `image/png`. |
+| `folder` | String | No | Target folder prefix. Default: `listings`. Allowed: `listings`, `nid`, `selfies`. |
+
+#### Response `200 OK`
+```json
+{
+  "success": true,
+  "uploadUrl": "https://sunbird-documents.s3.ap-southeast-1.amazonaws.com/listings/68a183d2-d17b-4013-8a30-22c67c001_autoclave-sterilizer-front.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=...&X-Amz-Expires=300...",
+  "fileUrl": "https://sunbird-documents.s3.ap-southeast-1.amazonaws.com/listings/68a183d2-d17b-4013-8a30-22c67c001_autoclave-sterilizer-front.png"
+}
+```
+
+#### Error Responses
+- `400 Bad Request`: When `fileName` or `fileType` is missing, or `fileType` is not in allowed list (`image/webp`, `image/jpeg`, `image/png`).
+- `401 Unauthorized`: When missing, expired, or malformed Bearer JWT token.
+
+---
+
+### 12.2 Generate Pre-Signed S3 Read URL
+- **Endpoint:** `POST /api/v1/media/presigned-read-url`
+- **Access Control:** Authenticated (Bearer JWT via `authGuard`)
+- **Purpose:** Generates a 5-minute pre-signed `GET` URL for authorized staff and administrators to safely inspect private assets (such as encrypted NID identity card photos and KYC verification selfies).
+
+#### Request Payload
+```json
+{
+  "fileKey": "nid/68a183d2-d17b-4013-8a30-22c67c001_nid-card-back.jpg"
+}
+```
+
+#### Response `200 OK`
+```json
+{
+  "success": true,
+  "signedUrl": "https://sunbird-documents.s3.ap-southeast-1.amazonaws.com/nid/68a183d2-d17b-4013-8a30-22c67c001_nid-card-back.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=300..."
+}
+```
+
+---
+
+## 13. Product Reviews & Ratings Engine (Prompt 18 & 58)
+
+### 13.1 Submit Product Review
+- **Endpoint:** `POST /api/v1/public/reviews`
+- **Access Control:** Public / Verified Customer
+- **Purpose:** Allows customers to submit a 1–5 star rating and feedback for medical equipment. Automatically recalculates the product's average rating and total review count.
+
+#### Request Payload
+```json
+{
+  "productId": "6aef0af156dcdc20a8dea2e8",
+  "reviewerName": "Dr. Shahriar Rahman",
+  "reviewerPhone": "01711223344",
+  "rating": 5,
+  "title": "Hospital-grade accuracy",
+  "reviewText": "Used in cardiology OPD. Highly sensitive diaphragm and durable build."
+}
+```
+
+#### Response `201 Created`
+```json
+{
+  "success": true,
+  "message": "Review submitted successfully",
+  "data": {
+    "_id": "6aef0af156dcdc20a8dea2e8",
+    "productId": "6aef0af156dcdc20a8dea2e8",
+    "productSku": "MED-BPM-ARM",
+    "reviewerName": "Dr. Shahriar Rahman",
+    "rating": 5,
+    "reviewText": "Used in cardiology OPD...",
+    "isVerifiedBuyer": true,
+    "status": "APPROVED",
+    "createdAt": "2026-11-07T11:26:00.000Z"
+  }
+}
+```
+
+### 13.2 Get Product Reviews
+- **Endpoint:** `GET /api/v1/public/reviews/:productId?page=1&limit=10`
+- **Access Control:** Public
+- **Response:** List of approved reviews with pagination.
+
+### 13.3 ERP Admin Review Moderation Queue
+- **Endpoint:** `GET /api/v1/erp/reviews?status=PENDING`
+- **Endpoint:** `PATCH /api/v1/erp/reviews/:id/moderate` (`{ "status": "APPROVED" | "REJECTED" }`)
+
+---
+
+## 14. Real-time Customer Support Chat & Safety Engine (Slides 15, 20, 26, 31, 32, 37 & Prompt 57)
+
+### 14.1 Send Chat Message
+- **Endpoint:** `POST /api/v1/public/chat/message`
+- **Access Control:** Public Storefront Customer
+- **Purpose:** Submits a customer inquiry. Runs regex pattern matching to mask credit card numbers (`[card hidden]`) and links (`[link hidden]`), flagging structured warnings. Decouples conversation metadata into `ChatRoom` and message history into `ChatMessage`.
+
+#### Request Payload
+```json
+{
+  "customerName": "Dhaka Care Hospital",
+  "customerPhone": "01811000000",
+  "senderType": "CUSTOMER",
+  "senderName": "Procurement Officer",
+  "text": "Call me at 01811000000 for urgent IV cannula quotation"
+}
+```
+
+#### Response `201 Created`
+```json
+{
+  "success": true,
+  "data": {
+    "message": {
+      "_id": "6aef0af056dcdc20a8dea2d0",
+      "roomId": "6aef0af056dcdc20a8dea2ca",
+      "senderType": "CUSTOMER",
+      "senderName": "Procurement Officer",
+      "rawText": "Call me at 01811000000 for urgent IV cannula quotation",
+      "sanitizedText": "Call me at 01811000000 for urgent IV cannula quotation",
+      "warnings": ["PHONE_NUMBER_DETECTED"],
+      "isBlocked": false
+    },
+    "room": {
+      "_id": "6aef0af056dcdc20a8dea2ca",
+      "customerPhone": "01811000000",
+      "lastMessagePreview": "Call me at 01811000000 for urgent IV cannula quotation",
+      "unreadCountAdmin": 1
+    }
+  }
+}
+```
+
+### 14.2 ERP Customer Support Inbox Summary
+- **Endpoint:** `GET /api/v1/erp/chat/inbox`
+- **Access Control:** Authenticated Staff / ERP
+- **Response:** List of chat rooms sorted by `lastMessageAt: -1` with `lastMessagePreview` and `unreadCountAdmin`.
+
+### 14.3 Mark Conversation as Read
+- **Endpoint:** `PATCH /api/v1/erp/chat/rooms/:roomId/read`
+- **Payload:** `{ "viewer": "ADMIN" | "CUSTOMER" }`
+
+---
+
+## 15. Medical RMA Warranty & Dispute Claims Engine (Prompt 19, 20 & 59)
+
+### 15.1 Register RMA Warranty / Damage Claim
+- **Endpoint:** `POST /api/v1/public/disputes/rma`
+- **Access Control:** Public / Customer
+- **Purpose:** Submits an RMA ticket for defective, broken seal, or damaged equipment. Automatically generates a sequential tracking number (e.g., `RMA-2026-00001`).
+
+#### Request Payload
+```json
+{
+  "orderId": "ORD-2026-0091",
+  "productSku": "MED-BPM-ARM",
+  "productName": "Digital Upper Arm BP Monitor",
+  "customerName": "Dr. Rafiqul Islam",
+  "customerPhone": "01711000000",
+  "claimType": "DEFECTIVE_PRODUCT",
+  "description": "LCD display backlight flickering after 2 weeks of OPD operation."
+}
+```
+
+#### Response `201 Created`
+```json
+{
+  "success": true,
+  "message": "Claim RMA-2026-00001 registered successfully",
+  "data": {
+    "claimNumber": "RMA-2026-00001",
+    "orderId": "ORD-2026-0091",
+    "productSku": "MED-BPM-ARM",
+    "status": "PENDING_REVIEW",
+    "createdAt": "2026-11-07T11:26:00.000Z"
+  }
+}
+```
+
+### 15.2 ERP Admin Claims Moderation Queue
+- **Endpoint:** `GET /api/v1/erp/disputes`
+- **Endpoint:** `PATCH /api/v1/erp/disputes/:id/resolve`
+- **Payload:** `{ "status": "APPROVED_REPLACEMENT" | "APPROVED_REFUND" | "REJECTED", "moderatorNotes": "..." }`
+
+---
+
+## 16. Server Lifecycle, Global Middlewares & Health Check (Prompt 23, 24 & 61)
+
+### 16.1 System Health Check Endpoint
+- **Endpoint:** `GET /api/v1/health`
+- **Access Control:** Public (No Auth Required)
+- **Response `200 OK`:**
+```json
+{
+  "success": true,
+  "message": "Sun Bird Corporation Cloud ERP & Storefront API is running",
+  "status": "UP",
+  "version": "1.0.0",
+  "uptime": 124.5,
+  "timestamp": "2026-11-07T11:54:00.000Z",
+  "environment": "development",
+  "service": "sunbird-erp-backend",
+  "services": {
+    "database": "CONNECTED",
+    "redis": "CONNECTED"
+  }
+}
+```
+
+### 16.2 Global Security Middleware Stack
+1. `helmet()` — Strict HTTP security headers.
+2. `cors()` — Origin whitelist and credentialed cookies.
+3. `compression()` — Gzip response compression.
+4. `express.json({ limit: "10mb" })` & `express.urlencoded()` — Body parsers.
+5. `cookieParser()` — Cookie parsing.
+6. `xssSanitizerMiddleware` — In-place recursive sanitization of `<script>` tags and dangerous HTML attributes.
+7. `requestIdMiddleware` — Request tracking UUIDs.
+8. `NotFoundError` & `errorHandler` — Standardized RFC 7807 problem details.
+
+---
+
+*Document v1.1 — API Specification Document — Sun Bird Corporation Integrated Cloud ERP Platform*  
+*Node.js · Express.js · TypeScript · MongoDB Atlas · Redis BullMQ · Next.js 16+*

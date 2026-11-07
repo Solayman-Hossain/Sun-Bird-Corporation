@@ -23,7 +23,7 @@
 ```
 Sun Bird Corporation/
 ├── Docs/                     # Master requirements, schemas, and prompt blueprint
-│   ├── prompt.md             # Complete 55 Prompts Roadmap (Phases 1-9)
+│   ├── prompt.md             # Complete 56 Prompts Roadmap (Phases 0-10)
 │   ├── Database-Schema.md    # 35 MongoDB Mongoose Schemas & Indexes
 │   ├── prd.md                # Product Requirements Document
 │   └── api-spec.md           # REST API Specifications
@@ -172,5 +172,29 @@ Expected Response:
 | **Phase 7** | Quorum Approvals, CRM & Governance | 43–49 | ✅ Complete |
 | **Phase 8** | Webhooks (SSLCOMMERZ, Courier) & BullMQ | 50–52 | ✅ Complete |
 | **Phase 9** | Master Seeder, Testing & Production Deployment | 53–55 | ✅ Complete |
+| **Phase 10** | Secure Media Upload & S3 Pre-Signed Storage Engine | 56 | ✅ Complete |
+| **Phase 11** | Real-time Communications, Regex Sanitizer & Safety | 57 | ✅ Complete |
+| **Phase 12** | Customer Reviews, Ratings & Aggregation | 58 | ✅ Complete |
+| **Phase 13** | Reports, Warranty Claims & RMA Dispute Resolution | 59–60 | ✅ Complete |
+| **Phase 14** | Route Verification, XSS Sanitizer & Full API Testing | 61–62 | ✅ Complete |
 
-*Document v1.0 — Sun Bird Corporation Enterprise Cloud ERP Platform*
+---
+
+### Automated API Integration Test Execution
+Run the comprehensive end-to-end integration test covering all 14 phases:
+```bash
+cd backend
+npm run test:api-integration
+```
+
+---
+
+### 📬 Postman API Collection (v2.1.0)
+For interactive API testing, import the pre-configured Postman Collection:
+- **File Location:** [`Docs/Sun-Bird-Corporation.postman_collection.json`](file:///e:/Documents/Sun%20Bird%20Corporation/Docs/Sun-Bird-Corporation.postman_collection.json)
+- **Supported Clients:** Postman, Insomnia, Thunder Client, Bruno, VS Code REST Client.
+- **Environment Variables:**
+  - `{{baseUrl}}`: `http://localhost:5000`
+  - `{{jwtToken}}`: Bearer JWT authentication token
+
+*Document v1.1 — Sun Bird Corporation Enterprise Cloud ERP Platform*

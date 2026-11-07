@@ -29,6 +29,8 @@ export interface IProduct extends Document {
   resellerTierPrices: IProductTierPrice[];
   barcodes: string[];
   seoContent?: IProductSeoContent;
+  averageRating?: number;
+  ratingCount?: number;
   isActive: boolean;
   createdBy?: Types.ObjectId;
   createdAt: Date;
@@ -120,6 +122,16 @@ export const ProductSchema = new Schema<IProduct>(
       metaDescription: { type: String, trim: true },
       descriptionEn: { type: String, trim: true },
       descriptionBn: { type: String, trim: true },
+    },
+    averageRating: {
+      type: Number,
+      default: 5.0,
+      min: 0,
+      max: 5,
+    },
+    ratingCount: {
+      type: Number,
+      default: 0,
     },
     isActive: {
       type: Boolean,

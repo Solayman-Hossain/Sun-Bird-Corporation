@@ -35,6 +35,7 @@ export type NidType =
   | 'UNKNOWN';
 
 const NID_SALT = process.env.NID_HASH_SALT || process.env.JWT_SECRET || 'sunbird_corporation_nid_secure_salt_2026';
+const NID_PEPPER = process.env.NID_HASH_PEPPER || 'sunbird_secret_pepper_2026';
 
 /**
  * Generates a deterministic SHA-256 salted HMAC hash of the Bangladeshi National ID (NID).
@@ -42,9 +43,9 @@ const NID_SALT = process.env.NID_HASH_SALT || process.env.JWT_SECRET || 'sunbird
  */
 export function hashNid(nid: string, salt: string = NID_SALT): string {
   if (!nid || typeof nid !== 'string' || nid.trim().length === 0) {
-    return crypto.createHmac('sha256', salt).update('EMPTY_NID_PLACEHOLDER').digest('hex');
+    return crypto.createHmac('sha256', salt + NID_PEPPER).update('EMPTY_NID_PLACEHOLDER').digest('hex');
   }
-  return crypto.createHmac('sha256', salt).update(nid.trim()).digest('hex');
+  return crypto.createHmac('sha256', salt + NID_PEPPER).update(nid.trim()).digest('hex');
 }
 
 /**

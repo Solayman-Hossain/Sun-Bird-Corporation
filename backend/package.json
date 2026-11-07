@@ -21,6 +21,8 @@
     "test:hrm-payroll": "ts-node -r dotenv/config src/controllers/verify-hrm-payroll.ts",
     "test:system-aux": "ts-node -r dotenv/config src/controllers/verify-system-aux.ts",
     "test:webhooks-queues": "ts-node -r dotenv/config src/controllers/verify-webhooks-queues.ts",
+    "test:s3-media": "ts-node -r dotenv/config src/services/verify-s3-media.ts",
+    "test:api-integration": "ts-node -r dotenv/config src/services/verify-full-api-integration.ts",
     "seed": "ts-node -r dotenv/config src/seeders/masterSeeder.ts",
     "test:jest": "jest --config jest.config.js --runInBand --detectOpenHandles",
     "test": "ts-node src/config/verify-infra.ts && ts-node src/errors/verify-errors.ts && ts-node src/middlewares/verify-validation-idempotency.ts && ts-node src/services/verify-token-service.ts && ts-node src/services/verify-customer-otp.ts && ts-node src/middlewares/verify-rbac-guards.ts && ts-node src/controllers/verify-auth-controllers.ts && ts-node src/models/verify-product-inventory-models.ts && ts-node src/controllers/verify-product-inventory.ts && ts-node src/models/verify-procurement-models.ts && ts-node src/controllers/verify-vendor-portal.ts && ts-node src/controllers/verify-cs-gemini.ts && ts-node src/controllers/verify-po-quorum.ts && ts-node src/controllers/verify-lc-landed-cost.ts && ts-node src/models/verify-sales-models.ts && ts-node -r dotenv/config src/services/verify-credit-gate.ts && ts-node -r dotenv/config src/services/verify-cart-checkout.ts && ts-node -r dotenv/config src/services/verify-pos-checkout.ts && ts-node src/services/verify-document-service.ts && ts-node -r dotenv/config src/services/verify-logistics-service.ts && ts-node -r dotenv/config src/controllers/verify-sales-pos-logistics.ts"
@@ -32,6 +34,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1153.0",
     "@aws-sdk/lib-storage": "^3.1153.0",
+    "@aws-sdk/s3-request-presigner": "^3.1157.0",
     "@google/genai": "^2.30.0",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.3",

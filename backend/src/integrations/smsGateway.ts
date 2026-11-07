@@ -64,7 +64,7 @@ function sendHttpRequest(urlStr: string): Promise<string> {
  * Development: Mock simulation logger
  */
 export class SmsGateway {
-  private static bulksmsbdApiKey = process.env.BULKSMSBD_API_KEY || '';
+  private static bulksmsbdApiKey = process.env.SMS_API_KEY || process.env.BULKSMSBD_API_KEY || '';
   private static bulksmsbdSenderId = process.env.BULKSMSBD_SENDER_ID || 'SunBird';
   private static greenwebToken = process.env.GREENWEB_TOKEN || '';
 

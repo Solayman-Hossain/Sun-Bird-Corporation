@@ -26,7 +26,9 @@ router.get('/', (req: Request, res: Response) => {
 
   res.status(isHealthy ? 200 : 503).json({
     success: isHealthy,
+    message: 'Sun Bird Corporation Cloud ERP & Storefront API is running',
     status: isHealthy ? 'UP' : 'DEGRADED',
+    version: '1.0.0',
     uptime: uptimeSeconds,
     timestamp: new Date().toISOString(),
     environment: env.NODE_ENV,

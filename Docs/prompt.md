@@ -33,6 +33,11 @@
 - [Phase 7: Quorum Approvals, Governance, CRM & System Auxiliaries (Prompts 43–49)](#phase-7-quorum-approvals-governance-crm--system-auxiliaries)
 - [Phase 8: External Gateways, Webhooks & Asynchronous BullMQ Queues (Prompts 50–52)](#phase-8-external-gateways-webhooks--asynchronous-bullmq-queues)
 - [Phase 9: Seeding, Automated Testing & Production Deployment (Prompts 53–55)](#phase-9-seeding-automated-testing--production-deployment)
+- [Phase 10: Secure Media Upload & S3 Pre-Signed Storage Engine (Prompt 56)](#phase-10-secure-media-upload--s3-pre-signed-storage-engine)
+- [Phase 11: Real-time Communications & Safety Engine (Prompt 57)](#phase-11-real-time-communications--safety-engine)
+- [Phase 12: Customer Reviews, Ratings & Social Proof (Prompt 58)](#phase-12-customer-reviews-ratings--social-proof)
+- [Phase 13: Reports, Warranty Claims & RMA Dispute Resolution Engine (Prompts 59–60)](#phase-13-reports-warranty-claims--rma-dispute-resolution-engine)
+- [Phase 14: Final Integration, Route Verification & Server Lifecycle (Prompts 61–62)](#phase-14-final-integration-route-verification--server-lifecycle)
 
 ---
 
@@ -1264,5 +1269,227 @@ Verification: Execute `docker compose up --build` and verify `GET /api/v1/health
 
 ---
 
-*Document v1.0 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
-*Node.js · Express.js · TypeScript · MongoDB Atlas · Redis BullMQ · Next.js 14+*
+## Phase 10: Secure Media Upload & S3 Pre-Signed Storage Engine
+
+### Prompt 56: S3 Pre-Signed URL Media Upload Service & Protected Routes
+```text
+Task: Create the S3 pre-signed URL service and protected routes for secure client-side media file uploads.
+
+Technical Requirements:
+1. Create `src/config/s3.ts`:
+   - Initialize and export an AWS S3 client configured from environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `AWS_S3_BUCKET`), with fallback support for MinIO / local S3 storage.
+2. Create `src/services/s3.service.ts`:
+   - `generatePresignedUploadUrl(fileName: string, fileType: string, folder: string)`:
+     - Validate `fileType` is one of: 'image/webp', 'image/jpeg', 'image/png'.
+     - Generate a unique S3 key: `${folder}/${uuid}_${fileName}`.
+     - Generate a pre-signed PUT URL with 5-minute expiration (300 seconds).
+     - Return `{ uploadUrl, fileUrl }` where fileUrl is the final permanent S3 URL.
+   - `generatePresignedReadUrl(fileKey: string)`:
+     - Generate a pre-signed GET URL with 5-minute expiration (used by admins/authorized users to view encrypted NID photos or secure attachments).
+     - Return the signed URL string.
+3. Create `src/controllers/media.controller.ts`:
+   - `getPresignedUrl` handler:
+     - Extract `fileName` and `fileType` from `req.body`.
+     - Validate both fields are present.
+     - Determine folder based on context (default: 'listings'). Can accept optional `folder` field ('listings', 'nid', 'selfies').
+     - Call `s3Service.generatePresignedUploadUrl(...)`.
+     - Send response 200 with `{ success: true, uploadUrl, fileUrl }`.
+   - `getPresignedReadUrl` handler:
+     - Extract `fileKey` from `req.body` and validate presence.
+     - Call `s3Service.generatePresignedReadUrl(fileKey)`.
+     - Send response 200 with `{ success: true, signedUrl }`.
+4. Create `src/routes/media.routes.ts`:
+   - `POST /presigned-url` -> `authGuard` -> `getPresignedUrl`
+   - `POST /presigned-read-url` -> `authGuard` -> `getPresignedReadUrl`
+5. Register media routes in `src/app.ts` and `src/routes/index.ts` under `/api/v1/media`.
+6. Add verification script `src/services/verify-s3-media.ts` and package script `"test:s3-media"`.
+
+Verification: Execute `npm run test:s3-media` and verify all S3 client, upload validation, read signing, and auth guard assertions pass.
+```
+
+---
+
+## Phase 11: Real-time Communications & Safety Engine
+
+### Prompt 57: Decoupled Chat Architecture, Regex Sanitizer & Structured Return
+```text
+Task: Implement a decoupled real-time customer support chat architecture with pattern-matching regex safety filters and structured returns.
+
+Reference: Course Slides 15 (ChatRoom & Message Collections), 20 (Timestamps), 26 (Regex Basics), 31 (Structured Return), 32 (Service Layer Separation), 37 (Last Message Preview + Unread Count).
+
+Technical Requirements:
+1. Create `src/models/ChatRoom.ts`:
+   - Decoupled room metadata collection: `customerPhone`, `customerName`, `customerEmail`, `orderId`, `status` ('OPEN', 'IN_PROGRESS', 'RESOLVED').
+   - Summary fields for fast inbox list rendering: `lastMessagePreview`, `lastMessageSender`, `lastMessageAt`, `unreadCountAdmin`, `unreadCountCustomer`.
+   - Index on `{ lastMessageAt: -1 }`.
+2. Create `src/models/ChatMessage.ts`:
+   - Decoupled message history: `roomId` (ref: ChatRoom), `senderType` ('CUSTOMER', 'AGENT', 'BOT'), `senderName`, `rawText`, `sanitizedText`, `warnings` (string array), `isBlocked` (boolean).
+   - Index on `{ roomId: 1, createdAt: 1 }` for chronological rendering with automatic timestamps.
+3. Create `src/services/ChatService.ts`:
+   - `sanitizeChatMessage(text: string)`:
+     - Apply regex to detect sensitive financial numbers: `/\b(?:\d{4}[ -]?){3}\d{4}\b/g` -> mask with `[card hidden]` and emit `FINANCIAL_DATA_DETECTED`.
+     - Apply regex to detect external phishing links: `/(https?:\/\/[^\s]+|www\.[^\s]+)/gi` -> mask with `[link hidden]` and emit `EXTERNAL_LINK_DETECTED`.
+     - Apply regex to detect phone numbers: `/(?:\+?88)?01[3-9]\d{8}\b/g` -> flag with `PHONE_NUMBER_DETECTED`.
+     - Detect malicious script tags: `/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi` -> block and emit `SCRIPT_INJECTION_DETECTED`.
+     - Return structured object: `{ sanitizedText, warnings, isBlocked }`.
+   - `sendMessage(input)`: Persist message, update room preview, and atomically increment unread counters.
+   - `getInboxSummary(status, page, limit)`: Return conversation list with latest preview and aggregated unread count.
+   - `getRoomMessages(roomId)`: Return chronological conversation history.
+   - `markRoomRead(roomId, viewer)`: Reset unread counter.
+4. Create `src/controllers/ChatController.ts` and routes:
+   - Public: `POST /api/v1/public/chat/message`, `GET /api/v1/public/chat/rooms/:roomId/messages`.
+   - ERP Admin: `GET /api/v1/erp/chat/inbox`, `PATCH /api/v1/erp/chat/rooms/:roomId/read`.
+
+Verification: Send simulated messages containing telephone and credit card numbers; verify masking and structured warning flags.
+```
+
+---
+
+## Phase 12: Customer Reviews, Ratings & Social Proof
+
+### Prompt 58: Product Review Model, Service, Rating Aggregation & Storefront Integration
+```text
+Task: Create the customer review, star rating (1–5), and aggregation engine for medical diagnostic equipment.
+
+Reference: Course Prompt 18 (Review Model, Service, Controller & Routes).
+
+Technical Requirements:
+1. Create `src/models/Review.ts`:
+   - Fields: `productId` (ref: Product), `productSku`, `reviewerName`, `reviewerPhone`, `customerId` (optional), `orderId` (optional), `rating` (1 to 5), `title`, `reviewText`, `isVerifiedBuyer`, `status` ('APPROVED', 'PENDING', 'REJECTED').
+   - Indexes: `{ productId: 1, createdAt: -1 }`, `{ status: 1 }`.
+2. Update `src/models/Product.ts`:
+   - Add fields `averageRating` (Number, default 5.0) and `ratingCount` (Number, default 0).
+3. Create `src/services/ReviewService.ts`:
+   - `submitReview(input)`: Validate rating (1–5) and review text; save review; recalculate product `averageRating` and `ratingCount` via Mongoose aggregation pipeline.
+   - `recalculateProductRating(productId)`: Aggregate `$avg: "$rating"` and `$sum: 1` on approved reviews.
+   - `getProductReviews(productId, page, limit)`: Return approved reviews sorted by `createdAt: -1`.
+   - `getModerationQueue(status, page, limit)`: Return reviews for ERP admin review.
+   - `moderateReview(reviewId, status)`: Approve/reject review and recalculate ratings.
+4. Create `src/controllers/ReviewController.ts` and routes:
+   - Public: `POST /api/v1/public/reviews`, `GET /api/v1/public/reviews/:productId`.
+   - ERP Admin: `GET /api/v1/erp/reviews`, `PATCH /api/v1/erp/reviews/:id/moderate`.
+5. Frontend Integration:
+   - Display star ratings on product cards and product detail modal.
+   - Include interactive 1–5 star submission form in `ProductModal.tsx`.
+
+Verification: Submit a 5-star review and verify product average rating updates from aggregation.
+```
+
+---
+
+## Phase 13: Reports, Warranty Claims & RMA Dispute Resolution Engine
+
+### Prompt 59: Medical RMA & Dispute Claims Engine, Ticket Generation & Resolution
+```text
+Task: Implement the RMA (Return Merchandise Authorization) warranty claim, damaged goods dispute, and defective batch reporting system.
+
+Reference: Course Prompt 19 (Report Model, Service, Controller & Routes).
+
+Technical Requirements:
+1. Create `src/models/DisputeClaim.ts`:
+   - Fields: `claimNumber` (unique, e.g. RMA-2026-00001), `orderId`, `orderNumber`, `productSku`, `productName`, `customerName`, `customerPhone`, `customerEmail`, `claimType` ('DAMAGED_IN_TRANSIT', 'DEFECTIVE_PRODUCT', 'WRONG_ITEM_DELIVERED', 'WARRANTY_SERVICE', 'EXPIRED_BATCH', 'OTHER_DISPUTE'), `description`, `evidenceUrls`, `status` ('PENDING_REVIEW', 'UNDER_INVESTIGATION', 'APPROVED_REPLACEMENT', 'APPROVED_REFUND', 'REJECTED', 'RESOLVED'), `moderatorNotes`, `resolvedBy`, `resolvedAt`.
+   - Index on `{ status: 1, createdAt: -1 }`.
+2. Create `src/services/DisputeService.ts`:
+   - `submitClaim(input)`: Validate required order and customer fields; generate gapless RMA sequence using `CounterService.getNextSequence('RMA')`; save claim.
+   - `getClaimsQueue(status, page, limit)`: Return claims for admin resolution.
+   - `resolveClaim(input)`: Transition claim status (e.g. `APPROVED_REPLACEMENT`, `APPROVED_REFUND`, `REJECTED`) and persist moderator notes.
+   - `getCustomerClaims(query)`: Lookup claims by phone number or order ID.
+3. Create `src/controllers/DisputeController.ts` and routes:
+   - Public: `POST /api/v1/public/disputes/rma`, `GET /api/v1/public/disputes/lookup`.
+   - ERP Admin: `GET /api/v1/erp/disputes`, `PATCH /api/v1/erp/disputes/:id/resolve`.
+4. Frontend Integration:
+   - Create `RmaClaimModal.tsx` in storefront for direct ticket registration.
+   - Add RMA moderation tab in `frontend/src/app/erp/page.tsx` for one-click replacement approval.
+
+Verification: Submit an RMA claim; verify `RMA-2026-XXXX` generated sequence and resolution updates.
+```
+
+### Prompt 60: Admin Moderation Service, Governance Queue & Banned NID Screening
+```text
+Task: Create the administrative moderation service integrating dispute claims, review approval, and corporate compliance screening.
+
+Reference: Course Prompt 20 (Admin Service, Controller & Routes).
+
+Technical Requirements:
+1. Create `src/services/AdminModerationService.ts`:
+   - `getModerationOverview()`: Aggregate counts of pending reviews, pending dispute claims, and active banned NID records.
+   - `banCustomerOrUser(targetId, targetType, reason, bannedBy, nid)`: Deactivate user/customer account; persist hashed NID in `BannedNidModel` with reason and audit timestamp.
+2. Cross-Module Verification:
+   - Connect moderation queue with `CustomerCreditProfile` to automatically prevent high-risk customers from credit terms.
+   - Integrate with `AuditLogService` for tamper-evident tracking of admin decisions.
+
+Verification: Run admin overview and verify aggregated pending metrics across reviews, disputes, and banned NIDs.
+```
+
+---
+
+## Phase 14: Final Integration, Route Verification & Server Lifecycle
+
+### Prompt 61: Route Registration Verification, Global Security Middlewares & App.ts Finalization
+```text
+Task: Finalize the Express `app.ts` middleware pipeline and `server.ts` lifecycle management to ensure strict execution order and zero security gaps.
+
+Reference: Course Prompt 23 (Route Registration Verification & App.ts Finalization).
+
+Technical Requirements:
+1. Middleware Pipeline Order in `src/app.ts`:
+   1. `helmet()` — Security HTTP headers (HSTS, frameguard, nosniff).
+   2. `cors({ origin: allowedOrigins, credentials: true })` — CORS with credentials and exposed headers.
+   3. `compression()` — Gzip response compression.
+   4. `express.json({ limit: '10mb' })` — Body parser.
+   5. `express.urlencoded({ extended: true, limit: '10mb' })` — URL-encoded parser.
+   6. `cookieParser()` — Cookie parsing for JWT tokens.
+   7. `xssSanitizerMiddleware` (`src/middlewares/xssSanitizer.ts`) — In-place recursive sanitization of `<script>` and malicious HTML tags on body, query, and params.
+   8. `requestIdMiddleware` — `X-Request-ID` UUID correlation tracking.
+   9. `morganMiddleware` — Correlated Winston HTTP access logging.
+   10. Route Mounting:
+       - Root: `GET /`
+       - Health Check: `GET /api/v1/health` (no auth required, returns `{ success: true, message, status: 'UP', version: '1.0.0', uptime, timestamp }`)
+       - Auth: `/api/v1/auth`, `/api/v1/public/auth`, `/api/v1/erp/auth`
+       - Products: `/api/v1/public/products`, `/api/v1/erp/products`
+       - Inventory & Procurement: `/api/v1/erp/inventory`, `/api/v1/erp/procurement`
+       - Portals: `/api/v1/portal/vendor`, `/api/v1/portal/customer`, `/api/v1/portal/employee`
+       - Sales & Checkout: `/api/v1/public/checkout`, `/api/v1/public/track-order`, `/api/v1/erp/sales`, `/api/v1/erp/pos`, `/api/v1/erp/logistics`
+       - Accounting & Governance: `/api/v1/erp/accounts`, `/api/v1/erp/assets`, `/api/v1/erp/loans`, `/api/v1/erp/partners`, `/api/v1/erp/hrm`, `/api/v1/erp/approvals/quorum`, `/api/v1/erp/approvals/requests`, `/api/v1/erp/audit-logs`
+       - Communications & Reviews: `/api/v1/public/reviews`, `/api/v1/public/chat`, `/api/v1/public/disputes`, `/api/v1/erp/reviews`, `/api/v1/erp/chat`, `/api/v1/erp/disputes`
+       - Media & Webhooks: `/api/v1/media`, `/api/v1/webhooks`
+   11. Catch-All 404 Route Handler: `app.use((req, res, next) => next(new NotFoundError(...)))`
+   12. Centralized RFC 7807 Error Middleware: `app.use(errorHandler)`
+2. Server Lifecycle in `src/server.ts`:
+   - Establish MongoDB connection before HTTP server begins accepting requests.
+   - Fallback-resilient Redis connection handling.
+   - Graceful shutdown on `SIGINT` and `SIGTERM`: close HTTP server, disconnect MongoDB, disconnect Redis with 10s safety timeout.
+   - Handlers for `unhandledRejection` and `uncaughtException`.
+
+Verification: Execute `npm run test:api-integration` and verify health check, root route, XSS sanitizer, and 404 handler responses.
+```
+
+### Prompt 62: Comprehensive API End-to-End Testing with Sample Automated Requests
+```text
+Task: Build an automated integration verification test script executing real end-to-end HTTP requests against the complete API stack.
+
+Reference: Course Prompt 24 (Comprehensive API Testing with Sample Requests).
+
+Technical Requirements:
+1. Create `src/services/verify-full-api-integration.ts`:
+   - Initialize ephemeral HTTP server listener on dynamic port.
+   - Step 1: Hit `GET /api/v1/health` and verify `success: true`, `status: 'UP'`, `version: '1.0.0'`.
+   - Step 2: Hit `GET /` and verify `service: 'Sun Bird Corporation ERP API'`.
+   - Step 3: Test XSS middleware with malicious HTML and script injections.
+   - Step 4: Submit product review and verify `averageRating` recalculation.
+   - Step 5: Send chat message and verify phone/card regex masking and structured return.
+   - Step 6: Submit RMA claim and verify `RMA-2026-XXXX` sequence generation and admin resolution.
+   - Step 7: Hit invalid endpoint `GET /api/v1/invalid-route` and verify 404 RFC 7807 error.
+   - Step 8: Verify admin moderation overview metrics.
+2. Add npm script in `package.json`:
+   `"test:api-integration": "ts-node -r dotenv/config src/services/verify-full-api-integration.ts"`.
+3. Create Postman Collection v2.1.0:
+   - Provide `Docs/Sun-Bird-Corporation.postman_collection.json` containing pre-configured request templates for all 14 phases, organized into 9 modules with environment variables (`{{baseUrl}}`, `{{jwtToken}}`).
+
+Verification: Import `Sun-Bird-Corporation.postman_collection.json` into Postman and run `npm run test:api-integration` to verify all requests respond with clean HTTP status codes.
+```
+
+---
+
+*Document v1.1 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
+*Node.js · Express.js · TypeScript · MongoDB Atlas · Redis BullMQ · Next.js 16+*

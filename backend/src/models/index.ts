@@ -36,3 +36,7 @@ export * from './ApprovalRequest';
 export * from './AuditLog';
 export * from './VerificationLog';
 export * from './BannedNid';
+export * from './Review';
+export * from './ChatRoom';
+export * from './ChatMessage';
+export * from './DisputeClaim';

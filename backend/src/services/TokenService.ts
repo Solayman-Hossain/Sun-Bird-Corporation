@@ -53,7 +53,7 @@ export class TokenService {
     };
 
     return jwt.sign(payload, env.JWT_ACCESS_SECRET, {
-      expiresIn: '15m',
+      expiresIn: (env.JWT_ACCESS_EXPIRY || '15m') as any,
       algorithm: 'HS256',
     });
   }

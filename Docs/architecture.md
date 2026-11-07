@@ -566,6 +566,15 @@ To fulfill the mandatory Go-Live Acceptance Gate 1:
    $$\sum \text{Debit Balances} - \sum \text{Credit Balances} = 0.00\text{ BDT}$$
 4. Commits data atomically inside a MongoDB Atlas session transaction.
 
+### 6.8 Direct Client-Side S3 Media Upload Architecture (Pre-Signed URLs)
+To avoid overloading Express runtime memory and bandwidth with large binary file streams (product images, customer KYC NID scans, employee photos):
+1. **Request Pre-Signed URL:** Client requests a pre-signed upload URL via `POST /api/v1/media/presigned-url` providing `fileName`, `fileType`, and `folder` (`listings`, `nid`, or `selfies`).
+2. **Cryptographic Signing:** Backend validates MIME types (`image/webp`, `image/jpeg`, `image/png`), generates a unique object key (`${folder}/${uuid}_${fileName}`), and signs a temporary 5-minute PUT URL using `@aws-sdk/s3-request-presigner`.
+3. **Direct Cloud Upload:** Frontend uploads the image binary directly to AWS S3 / MinIO via HTTP `PUT`, bypassing Node.js server overhead completely.
+4. **Permanent & Secure Retrieval:**
+   - **Public Media (Catalog listings):** Persisted as canonical permanent S3/CloudFront URLs.
+   - **Private KYC Media (NID & selfies):** S3 bucket access is restricted; authorized admins request temporary pre-signed GET URLs via `POST /api/v1/media/presigned-read-url` (5-minute expiry).
+
 ---
 
 ## 7. Security Architecture & Threat Mitigation
@@ -641,5 +650,47 @@ The **Clean Layered Monolith Architecture** using **Next.js**, **Express.js**, a
 4. **Resilient Showroom POS:** Offline IndexedDB mode ensuring physical sales continue during internet outages with automated conflict resolution.
 5. **Governed Approvals & HR:** Automated GPS attendance, leave balance coordination, realized sales commission, and reducing balance loan recovery.
 6. **4-Pillar AI Intelligence:** Gemini 1.5 Pro integration for Comparative Statements, SEO product content, demand forecasting, and 24/7 smart customer support.
+
+---
+
+## 11. Real-time Communications, Reviews & RMA Governance Architecture
+
+```mermaid
+flowchart TD
+    Client[Storefront & Customer UI] -->|HTTP / WebSocket| App[Express app.ts Pipeline]
+    
+    subgraph Security_Middlewares[Global Middleware Stack]
+        App --> M1[helmet & cors]
+        M1 --> M2[compression & json/urlencoded]
+        M2 --> M3[cookieParser]
+        M3 --> M4[xssSanitizerMiddleware]
+        M4 --> M5[requestId & morgan logging]
+    end
+    
+    subgraph Subsystems[Specialized Communication & Governance Subsystems]
+        M5 -->|Chat Message| CS[ChatService: Regex Sanitizer & Masking]
+        CS -->|Decoupled Save| CR[(ChatRoom & ChatMessage)]
+        
+        M5 -->|Submit Review| RS[ReviewService: Aggregation Pipeline]
+        RS -->|Recalculate Avg| PM[(Product Model: averageRating)]
+        
+        M5 -->|RMA Claim| DS[DisputeService: Gapless RMA Seq]
+        DS -->|Create Ticket| DC[(DisputeClaim: RMA-2026-XXXX)]
+    end
+    
+    subgraph ERP_Admin[ERP Moderation & Operations]
+        CR -->|Last Msg Preview & Unread Count| Inbox[ERP Customer Support Inbox]
+        PM -->|Verify & Moderate| RevMod[ERP Reviews Moderation]
+        DC -->|Approve Replacement/Refund| RmaMod[ERP RMA Resolution Queue]
+    end
+```
+
+### Architectural Key Principles
+1. **Decoupled Chat & Message Metadata:** Conversation state (`ChatRoom`) is stored separately from chronological text history (`ChatMessage`), ensuring high-volume chat scaling without inflating document sizes.
+2. **Regex Safety Filters with Structured Returns:** Every message passes through pattern matching to intercept and mask credit card numbers and external URLs, emitting `{ sanitizedText, warnings, isBlocked }`.
+3. **Mongoose Rating Aggregation:** Star ratings are aggregated via atomic MongoDB pipelines (`$avg`, `$sum`) updating product master records immediately upon approval.
+4. **Strict Lifecycle & XSS Sanitization:** `xssSanitizerMiddleware` cleans dangerous HTML tags in-place on Express 5 req.query/req.body, while `server.ts` guarantees graceful teardown across HTTP, MongoDB, and Redis.
+
+---
 
 This document stands as the definitive, comprehensive, and production-ready architectural blueprint for direct implementation.

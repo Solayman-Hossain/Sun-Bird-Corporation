@@ -29,6 +29,13 @@ import erpCrmRouter from './erp/crmRoutes';
 import erpAuditRouter from './erp/auditRoutes';
 import erpWarehouseRouter from './erp/warehouseRoutes';
 import webhookRouter from './webhooks/webhookRoutes';
+import mediaRouter from './media.routes';
+import publicReviewRouter from './public/reviewRoutes';
+import publicChatRouter from './public/chatRoutes';
+import publicDisputeRouter from './public/disputeRoutes';
+import erpReviewRouter from './erp/reviewRoutes';
+import erpChatRouter from './erp/chatRoutes';
+import erpDisputeRouter from './erp/disputeRoutes';
 import { AuthController } from '../controllers/AuthController';
 import { InventoryController } from '../controllers/InventoryController';
 import { ProductController } from '../controllers/ProductController';
@@ -124,6 +131,27 @@ apiV1Router.use('/erp/warehouses', erpWarehouseRouter);
 
 // External Payment & Courier Webhooks mounted at /api/v1/webhooks
 apiV1Router.use('/webhooks', webhookRouter);
+
+// Media pre-signed URL upload & read endpoints mounted at /api/v1/media
+apiV1Router.use('/media', mediaRouter);
+
+// Public product reviews & ratings mounted at /api/v1/public/reviews (Prompt 18)
+apiV1Router.use('/public/reviews', publicReviewRouter);
+
+// Public live support chat mounted at /api/v1/public/chat (Slides 15, 20, 26, 31, 32, 37)
+apiV1Router.use('/public/chat', publicChatRouter);
+
+// Public RMA warranty & defective item disputes mounted at /api/v1/public/disputes (Prompt 19)
+apiV1Router.use('/public/disputes', publicDisputeRouter);
+
+// ERP Review Moderation Queue mounted at /api/v1/erp/reviews
+apiV1Router.use('/erp/reviews', erpReviewRouter);
+
+// ERP Customer Support Chat Inbox mounted at /api/v1/erp/chat
+apiV1Router.use('/erp/chat', erpChatRouter);
+
+// ERP Dispute Resolution & RMA Claims Queue mounted at /api/v1/erp/disputes (Prompt 20)
+apiV1Router.use('/erp/disputes', erpDisputeRouter);
 
 // Public warranty verification mounted at /api/v1/public/warranty
 const publicWarrantyRouter = Router();

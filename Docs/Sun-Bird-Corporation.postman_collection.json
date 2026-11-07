@@ -1,0 +1,576 @@
+﻿{
+  "info": {
+    "_postman_id": "c7a8b9e0-1234-4567-89ab-sunbird2026corp",
+    "name": "Sun Bird Corporation - Enterprise Cloud ERP & Storefront API",
+    "description": "Comprehensive Postman v2.1.0 collection covering all 14 phases and 60+ REST API endpoints for Sun Bird Corporation Integrated Cloud ERP, E-Commerce, POS, NBR Mushak-6.3 VAT, Logistics & Customer Care Platform.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "jwtToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sampleProductId",
+      "value": "6aef0af156dcdc20a8dea2e8",
+      "type": "string"
+    },
+    {
+      "key": "sampleRoomId",
+      "value": "6aef0af056dcdc20a8dea2ca",
+      "type": "string"
+    },
+    {
+      "key": "sampleClaimId",
+      "value": "6aef0af256dcdc20a8dea2f0",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health & Diagnostics",
+      "item": [
+        {
+          "name": "Health Check (System Status)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "health"]
+            },
+            "description": "Verifies server uptime, Node.js environment, MongoDB Atlas connection, and Redis cache state."
+          }
+        },
+        {
+          "name": "Root Service Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Returns corporate service identifier and current API version."
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Authentication & Security Flow",
+      "item": [
+        {
+          "name": "Customer OTP Request (Storefront)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"01711000000\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/auth/request-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "auth", "request-otp"]
+            }
+          }
+        },
+        {
+          "name": "Customer OTP Verification & JWT Issuance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"01711000000\",\n  \"otp\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/auth/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "auth", "verify-otp"]
+            }
+          }
+        },
+        {
+          "name": "ERP Staff & Director Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@sunbirdcorp.com\",\n  \"password\": \"YOUR_PASSWORD_HERE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/erp/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "erp", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Token Family Refresh",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"sample-refresh-token-uuid\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/refresh-token",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "refresh-token"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Master Medical Products & Stock",
+      "item": [
+        {
+          "name": "Get Public Storefront Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/products?category=All",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "products"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "All"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Master Product (ERP Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"MED-BPM-ARM\",\n  \"nameEn\": \"Digital Upper Arm Blood Pressure Monitor\",\n  \"nameBn\": \"à¦¡à¦¿à¦œà¦¿à¦Ÿà¦¾à¦² à¦¬à§à¦²à¦¾à¦¡ à¦ªà§à¦°à§‡à¦¸à¦¾à¦° à¦®à¦¾à¦ªà¦¾à¦° à¦®à§‡à¦¶à¦¿à¦¨\",\n  \"category\": \"Home Diagnostics\",\n  \"hsCode\": \"9018.90.00\",\n  \"baseUom\": \"PCS\",\n  \"brand\": \"Sun Bird Medical\",\n  \"isMedical\": true,\n  \"isExpirable\": false,\n  \"minStockQty\": 20,\n  \"retailPrice\": 2750,\n  \"showroomPrice\": 2500,\n  \"barcodes\": [\"8941234567890\"],\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/erp/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "erp", "products"]
+            }
+          }
+        },
+        {
+          "name": "Verify Medical Equipment Warranty (QR Code)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/warranty/verify/SN-BPM-2026-0089",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "warranty", "verify", "SN-BPM-2026-0089"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. E-Commerce Checkout & Logistics",
+      "item": [
+        {
+          "name": "Public Storefront Checkout (COD / SSLCOMMERZ)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Idempotency-Key",
+                "value": "idem-ord-test-001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Dr. Shahriar Rahman\",\n  \"customerMobile\": \"01711223344\",\n  \"customerEmail\": \"doctor@shahriar.care\",\n  \"deliveryAddress\": \"House 12, Road 4, Sector 7, Uttara, Dhaka\",\n  \"district\": \"Dhaka\",\n  \"paymentMethod\": \"COD\",\n  \"shippingFee\": 60,\n  \"items\": [\n    {\n      \"productId\": \"{{sampleProductId}}\",\n      \"sku\": \"MED-BPM-ARM\",\n      \"productName\": \"Digital Upper Arm BP Monitor\",\n      \"quantity\": 1,\n      \"unitPrice\": 2750,\n      \"uom\": \"PCS\"\n    }\n  ],\n  \"notes\": \"Urgent clinical supply\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/checkout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "checkout"]
+            }
+          }
+        },
+        {
+          "name": "Track Order & Courier Consignment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/track-order/ORD-2026-0091",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "track-order", "ORD-2026-0091"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Customer Support Chat & Safety Engine",
+      "item": [
+        {
+          "name": "Send Chat Message (Regex Masking & Safety)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Dhaka Care Hospital\",\n  \"customerPhone\": \"01811000000\",\n  \"senderType\": \"CUSTOMER\",\n  \"senderName\": \"Procurement Officer\",\n  \"text\": \"Urgent requirement for IV Cannula 20G. Call me at 01811000000 or card 4532-1234-5678-9010.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/chat/message",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "chat", "message"]
+            }
+          }
+        },
+        {
+          "name": "Get Conversation Messages (Chronological)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/chat/rooms/{{sampleRoomId}}/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "chat", "rooms", "{{sampleRoomId}}", "messages"]
+            }
+          }
+        },
+        {
+          "name": "ERP Support Inbox Summary (Last Message & Unread Count)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/erp/chat/inbox",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "erp", "chat", "inbox"]
+            }
+          }
+        },
+        {
+          "name": "Mark Chat Room Read (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"viewer\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/erp/chat/rooms/{{sampleRoomId}}/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "erp", "chat", "rooms", "{{sampleRoomId}}", "read"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Product Reviews & Ratings Engine",
+      "item": [
+        {
+          "name": "Submit Product Review (1-5 Stars)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{sampleProductId}}\",\n  \"reviewerName\": \"Prof. Dr. Mahmudul Hasan\",\n  \"reviewerPhone\": \"01711000111\",\n  \"rating\": 5,\n  \"title\": \"Clinical Grade Accuracy\",\n  \"reviewText\": \"Accurate diagnostic measurements and durable casing. Highly recommended for ICU and OPD.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "reviews"]
+            }
+          }
+        },
+        {
+          "name": "Get Approved Product Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/reviews/{{sampleProductId}}?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "reviews", "{{sampleProductId}}"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "ERP Review Moderation Queue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/erp/reviews?status=PENDING",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "erp", "reviews"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PENDING"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. RMA Warranty & Defect Claims Engine",
+      "item": [
+        {
+          "name": "Register RMA Warranty Claim",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"ORD-2026-0091\",\n  \"productSku\": \"MED-BPM-ARM\",\n  \"productName\": \"Digital Upper Arm BP Monitor\",\n  \"customerName\": \"Dr. Rafiqul Islam\",\n  \"customerPhone\": \"01711000000\",\n  \"claimType\": \"DEFECTIVE_PRODUCT\",\n  \"description\": \"LCD backlight flickering after 2 weeks of operation. Replacement requested.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/disputes/rma",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "disputes", "rma"]
+            }
+          }
+        },
+        {
+          "name": "Lookup Customer RMA Claims",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/public/disputes/lookup?q=01711000000",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "public", "disputes", "lookup"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "01711000000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "ERP RMA Moderation Queue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/erp/disputes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "erp", "disputes"]
+            }
+          }
+        },
+        {
+          "name": "Resolve RMA Claim (Approve Replacement)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED_REPLACEMENT\",\n  \"moderatorNotes\": \"Biomedical QA team confirmed unit defect. New replacement unit dispatched via Pathao Express.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/erp/disputes/{{sampleClaimId}}/resolve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "erp", "disputes", "{{sampleClaimId}}", "resolve"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Statutory Accounting & NBR VAT",
+      "item": [
+        {
+          "name": "Get Chart of Accounts (COA)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/erp/accounts/chart-of-accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "erp", "accounts", "chart-of-accounts"]
+            }
+          }
+        },
+        {
+          "name": "Post Journal Voucher (Balanced Dr == Cr)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"narration\": \"Sales revenue recognized from Storefront Order ORD-2026-0091 with 15% NBR VAT\",\n  \"lines\": [\n    {\n      \"accountCode\": \"1010\",\n      \"debit\": 3650,\n      \"credit\": 0,\n      \"narration\": \"Cash in Transit / COD collection\"\n    },\n    {\n      \"accountCode\": \"4010\",\n      \"debit\": 0,\n      \"credit\": 3173.91,\n      \"narration\": \"E-Commerce Medical Sales Revenue\"\n    },\n    {\n      \"accountCode\": \"2020\",\n      \"debit\": 0,\n      \"credit\": 476.09,\n      \"narration\": \"NBR Mushak-6.3 Output VAT Payable (15%)\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/erp/accounts/journal-entries",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "erp", "accounts", "journal-entries"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Media S3 Presigned Uploads",
+      "item": [
+        {
+          "name": "Generate Pre-Signed S3 Upload URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileName\": \"nebulizer-device-photo.webp\",\n  \"fileType\": \"image/webp\",\n  \"folder\": \"listings\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/media/presigned-url",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "media", "presigned-url"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+
+
+

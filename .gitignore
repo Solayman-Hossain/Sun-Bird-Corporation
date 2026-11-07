@@ -78,3 +78,5 @@ dump.rdb
 ehthumbs.db
 Thumbs.db
 [Dd]esktop.ini
+
+.env

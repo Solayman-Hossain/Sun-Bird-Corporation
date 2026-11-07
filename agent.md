@@ -52,8 +52,8 @@ Every file in the repository serves a distinct, authoritative purpose. Familiari
 | [`architecture.md`](file:///e:/Documents/Sun%20Bird%20Corporation/architecture.md) | System Architecture & Technical Blueprint | Layered Monolith pattern, Redis BullMQ queues, AWS S3 storage, SSLCOMMERZ, Pathao/Steadfast, Gemini 1.5 Pro AI. |
 | [`Database-Schema.md`](file:///e:/Documents/Sun%20Bird%20Corporation/Database-Schema.md) | **Single Source of Truth for Data Models** | Exact TypeScript interfaces, Mongoose schema definitions, single & compound explicit indexes, pre-save hooks for all **35 Collections**. |
 | [`Database.md`](file:///e:/Documents/Sun%20Bird%20Corporation/Database.md) | Database Design & ERD Reference | DFD Data Store mappings (D1–D12 + Aux), 35 Standard Chart of Accounts (1010–6510), sample journal entries, audit rules. |
-| [`api-spec.md`](file:///e:/Documents/Sun%20Bird%20Corporation/api-spec.md) | **API Contract Blueprint** | 50+ REST endpoints, HTTP methods, paths, request/response JSON schemas, error taxonomy (27 codes), version control & webhooks. |
-| [`prompt.md`](file:///e:/Documents/Sun%20Bird%20Corporation/prompt.md) | **Step-by-Step Implementation Guide** | 55 copy-pasteable, verified prompts structured across 10 sequential phases. |
+| [`api-spec.md`](file:///e:/Documents/Sun%20Bird%20Corporation/api-spec.md) | **API Contract Blueprint** | 60+ REST endpoints, HTTP methods, paths, request/response JSON schemas, error taxonomy (27 codes), version control & webhooks. |
+| [`prompt.md`](file:///e:/Documents/Sun%20Bird%20Corporation/prompt.md) | **Step-by-Step Implementation Guide** | 62 copy-pasteable, verified prompts structured across 15 sequential phases (Prompts 01–62). |
 
 ---
 
@@ -115,14 +115,13 @@ graph TD
 ## 4. Standard Directory & File Layout
 
 When implementing the backend codebase, enforce the following modular structure:
-
-```text
 backend/
 ├── src/
-│   ├── config/               # Database, Redis, Environment, Winston Logger
+│   ├── config/               # Database, Redis, Environment, Winston Logger, S3
 │   │   ├── env.ts            # Envalid environment variable schema
 │   │   ├── database.ts       # Mongoose connection & transaction helper
 │   │   ├── redis.ts          # ioredis client & distributed locks
+│   │   ├── s3.ts             # AWS S3 / MinIO storage client
 │   │   └── logger.ts         # Winston JSON structured logger
 │   ├── constants/            # COA codes, Quorum tiers, System constants
 │   ├── errors/               # Custom AppError hierarchy (RFC 7807)
@@ -148,6 +147,7 @@ backend/
 │   │   ├── ProductBatch.ts
 │   │   ├── JournalEntry.ts
 │   │   ├── ... (All 35 collections)
+│   │   └── BannedNid.ts
 │   ├── services/             # Pure domain business logic & transactions
 │   │   ├── AuthService.ts
 │   │   ├── InventoryService.ts
@@ -155,12 +155,16 @@ backend/
 │   │   ├── ProcurementService.ts
 │   │   ├── SalesService.ts
 │   │   ├── PayrollService.ts
+│   │   ├── s3.service.ts     # S3 pre-signed upload & read URL service
 │   │   └── QuorumService.ts
 │   ├── controllers/          # HTTP request handlers & response envelopes
+│   │   ├── media.controller.ts # Media upload & read URL handlers
+│   │   └── ...
 │   ├── routes/               # Express route declarations with Zod schemas
 │   │   ├── public/           # Storefront, customer auth, tracking
 │   │   ├── erp/              # Internal operational modules (RBAC protected)
 │   │   ├── portal/           # Vendor, Reseller, Employee self-service
+│   │   ├── media.routes.ts   # Media pre-signed URL endpoints (/api/v1/media)
 │   │   └── webhooks/         # SSLCOMMERZ IPN, Courier callbacks
 │   ├── queues/               # BullMQ workers (SMS, email, daily cron)
 │   ├── seeders/              # Master data initialization scripts
