@@ -1,0 +1,12 @@
+/* ========================================================
+   Sun Bird Corporation - Login Route Stylesheet (`/login/page.css`)
+   ======================================================== */
+
+.login-route-container {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+

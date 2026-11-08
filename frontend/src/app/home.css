@@ -1,0 +1,30 @@
+/* ========================================================
+   Sun Bird Corporation - Homepage Specific Stylesheet (`home.css`)
+   ======================================================== */
+
+.storefront-home-container {
+  min-height: 100vh;
+  background-color: var(--color-brand-bg, #faf8f5);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+  color: #1e293b;
+}
+
+.storefront-main-catalog {
+  flex: 1 1 0%;
+  max-width: 80rem;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.5rem 1rem;
+}
+
+.storefront-empty-state {
+  text-align: center;
+  padding: 5rem 1.5rem;
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  border: 1px solid #eae5df;
+}
+

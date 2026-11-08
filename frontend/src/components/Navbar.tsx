@@ -1,125 +1,234 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { ShoppingBag, ShieldCheck, PhoneCall, Lock, Search, HeartPulse, Truck, User } from 'lucide-react';
+import './Navbar.css';
+import {
+  Search,
+  ShoppingBag,
+  Heart,
+  User,
+  HeartPulse,
+  Menu,
+  X,
+  ChevronRight,
+  ShieldAlert,
+} from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import { Product } from '../types';
+import { INITIAL_PRODUCTS } from '../lib/initialProducts';
 
 interface NavbarProps {
   onSearch?: (q: string) => void;
   showSearch?: boolean;
-  onOpenErp?: () => void;
+  onOpenMobileMenu?: () => void;
+  onSelectProduct?: (product: Product) => void;
 }
 
-export function Navbar({ onSearch, showSearch = true, onOpenErp }: NavbarProps) {
+export function Navbar({
+  onSearch,
+  showSearch = true,
+  onOpenMobileMenu,
+  onSelectProduct,
+}: NavbarProps) {
   const { totalItems, setIsCartOpen } = useCart();
+  const { wishlistCount, setIsWishlistOpen } = useWishlist();
+
+  const [query, setQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  // Debounced search
+  useEffect(() => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      setIsSearchOpen(false);
+      onSearch?.('');
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      onSearch?.(query);
+      const q = query.toLowerCase().trim();
+      const matches = INITIAL_PRODUCTS.filter(
+        (p) =>
+          p.nameEn.toLowerCase().includes(q) ||
+          (p.nameBn && p.nameBn.includes(q)) ||
+          p.sku.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          (p.brand && p.brand.toLowerCase().includes(q))
+      ).slice(0, 5);
+
+      setSearchResults(matches);
+      setIsSearchOpen(true);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [query, onSearch]);
+
+  // Click outside to close search popover
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
-      {/* Top Statutory & Hotline Notification Bar */}
-      <div className="bg-emerald-950 text-emerald-100 text-xs py-1.5 px-4">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-medium text-[11px] sm:text-xs">
-              NBR Mushak-6.3 Statutory VAT Compliant • Genuine Imported Medical & Diagnostic Consumables
-            </span>
-          </div>
-          <div className="flex items-center gap-4 text-xs">
-            <a
-              href="tel:01811000001"
-              className="flex items-center gap-1 hover:text-white transition-colors"
-            >
-              <PhoneCall className="w-3.5 h-3.5 text-emerald-300" />
-              <span>Hotline: 01811-000001</span>
-            </a>
-            <span className="text-emerald-800">|</span>
-            <Link
-              href="/track"
-              className="flex items-center gap-1 text-emerald-300 hover:text-white font-medium"
-            >
-              <Truck className="w-3.5 h-3.5" />
-              <span>অর্ডার ট্র্যাকিং</span>
-            </Link>
-            <span className="text-emerald-800">|</span>
-            <Link
-              href="/erp"
-              className="flex items-center gap-1 text-amber-300 hover:text-amber-200 font-semibold cursor-pointer"
-            >
-              <Lock className="w-3 h-3" />
-              <span>ERP Portal</span>
-            </Link>
-          </div>
-        </div>
-      </div>
+    <header className="sticky top-0 z-40 bg-white border-b border-[#eae5df] shadow-xs">
+      <div className="max-w-7xl mx-auto px-4 py-3 sm:py-3.5 flex items-center justify-between gap-3 sm:gap-6">
+        {/* Mobile menu trigger */}
+        <button
+          onClick={onOpenMobileMenu}
+          aria-label="Open mobile navigation"
+          className="lg:hidden p-2 -ml-2 text-slate-700 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
 
-      {/* Main Header Bar */}
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-            <HeartPulse className="w-6 h-6 animate-pulse" />
+        {/* Brand Logo & Title */}
+        <Link href="/" className="flex items-center gap-3 shrink-0 group">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#1e3932] to-[#2d5248] flex items-center justify-center text-white shadow-md shadow-[#1e3932]/20 group-hover:scale-105 transition-transform">
+            <HeartPulse className="w-6 h-6 text-[#e6b980] animate-pulse" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold tracking-tight text-slate-900 font-serif">
+          <div className="hidden xs:block">
+            <div className="flex items-center gap-1.5">
+              <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 font-serif">
                 SUN BIRD
               </span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold tracking-wide uppercase">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#1e3932]/10 text-[#1e3932] font-semibold tracking-wider uppercase">
                 Healthcare
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 font-medium">
-              Enterprise Medical Equipment & Diagnostics
+            <p className="text-[11px] text-slate-500 font-medium tracking-tight">
+              Hospital Equipment & Diagnostics
             </p>
           </div>
         </Link>
 
-        {/* Search Bar */}
-        {showSearch && onSearch && (
-          <div className="hidden md:flex flex-1 max-w-md mx-6">
+        {/* Center Live Search Bar with Popover */}
+        {showSearch && (
+          <div ref={searchRef} className="flex-1 max-w-xl relative">
             <div className="relative w-full">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search Cannula, BP Machine, ECG Lead, Glucose, Masks..."
-                onChange={(e) => onSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onFocus={() => {
+                  if (searchResults.length > 0) setIsSearchOpen(true);
+                }}
+                placeholder="Search for products, brands, cannula, nebulizers..."
+                className="w-full pl-10 pr-10 py-2 sm:py-2.5 bg-[#faf8f5] border border-[#eae5df] rounded-full text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-[#1e3932] focus:ring-2 focus:ring-[#1e3932]/10 transition-all"
               />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              {query && (
+                <button
+                  onClick={() => setQuery('')}
+                  aria-label="Clear search"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
+
+            {/* Quick Results Popover */}
+            {isSearchOpen && searchResults.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-[#eae5df] overflow-hidden z-50 divide-y divide-slate-100 animate-in fade-in-50 slide-in-from-top-2">
+                <div className="px-4 py-2 bg-[#faf8f5] text-[11px] font-semibold uppercase text-slate-500 tracking-wider">
+                  Quick Matching Products ({searchResults.length})
+                </div>
+                {searchResults.map((product) => (
+                  <div
+                    key={product.sku}
+                    onClick={() => {
+                      setIsSearchOpen(false);
+                      onSelectProduct?.(product);
+                    }}
+                    className="p-3 flex items-center justify-between gap-3 hover:bg-[#faf8f5] cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
+                        <img
+                          src={product.imageUrl || '/placeholder-medical.jpg'}
+                          alt={product.nameEn}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs sm:text-sm font-medium text-slate-900 truncate">
+                          {product.nameEn}
+                        </p>
+                        <p className="text-[11px] text-slate-500 truncate">
+                          {product.category} • SKU: {product.sku}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-xs sm:text-sm font-bold text-[#1e3932]">
+                        ৳{product.retailPrice.toLocaleString()}
+                      </p>
+                      <span className="text-[10px] text-emerald-600 font-medium">In Stock</span>
+                    </div>
+                  </div>
+                ))}
+                <Link
+                  href="/#products"
+                  onClick={() => setIsSearchOpen(false)}
+                  className="block px-4 py-2.5 text-center text-xs font-semibold text-[#1e3932] hover:bg-slate-50 transition-colors"
+                >
+                  View all results →
+                </Link>
+              </div>
+            )}
           </div>
         )}
 
-        {/* Right Navigation & Cart */}
-        <div className="flex items-center gap-3">
-          <Link
-            href="/track"
-            className="hidden sm:flex items-center gap-1.5 text-xs text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg border border-slate-200 font-medium transition-colors"
-          >
-            <Truck className="w-4 h-4 text-emerald-600" />
-            <span>অর্ডার ট্র্যাক</span>
-          </Link>
-
+        {/* Right Action Icons (Account, Wishlist, Cart) */}
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+          {/* Account Button */}
           <Link
             href="/account"
-            className="hidden sm:flex items-center gap-1.5 text-xs text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg border border-slate-200 font-medium transition-colors"
+            className="flex items-center gap-1.5 text-slate-700 hover:text-[#1e3932] p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            title="Customer Account"
           >
-            <User className="w-4 h-4 text-slate-600" />
-            <span>একাউন্ট</span>
+            <User className="w-5 h-5" />
+            <span className="hidden md:inline text-xs sm:text-sm font-medium">Account</span>
           </Link>
 
-          {/* Cart Button */}
+          {/* Wishlist Button with Badge */}
           <button
-            onClick={() => setIsCartOpen(true)}
-            className="relative flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-lg font-medium text-sm transition-all shadow-sm shadow-emerald-600/30 cursor-pointer"
+            type="button"
+            onClick={() => setIsWishlistOpen(true)}
+            className="relative flex items-center gap-1.5 text-slate-700 hover:text-[#1e3932] p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+            title="Saved Medical Equipment"
+            aria-label="View saved wishlist"
           >
-            <ShoppingBag className="w-4 h-4" />
-            <span className="hidden sm:inline">কার্ট</span>
-            {totalItems > 0 && (
-              <span className="flex items-center justify-center min-w-5 h-5 px-1 bg-amber-400 text-slate-900 font-bold text-xs rounded-full">
-                {totalItems}
+            <Heart className="w-5 h-5" />
+            <span className="hidden md:inline text-xs sm:text-sm font-medium">Wishlist</span>
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 sm:top-1 sm:right-auto sm:static flex items-center justify-center min-w-4 h-4 sm:min-w-5 sm:h-5 px-1 bg-[#c89348] text-white font-bold text-[10px] sm:text-xs rounded-full">
+                {wishlistCount}
               </span>
             )}
+          </button>
+
+          {/* Cart Button with Dark Green Pill Badge */}
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="relative flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#1e3932] hover:bg-[#162f29] active:scale-95 text-white rounded-full font-medium text-xs sm:text-sm transition-all shadow-sm shadow-[#1e3932]/30 cursor-pointer"
+            aria-label="View shopping cart"
+          >
+            <ShoppingBag className="w-4 h-4 text-[#e6b980]" />
+            <span className="hidden sm:inline">Cart</span>
+            <span className="flex items-center justify-center min-w-5 h-5 px-1.5 bg-[#e6b980] text-slate-900 font-bold text-xs rounded-full">
+              {totalItems}
+            </span>
           </button>
         </div>
       </div>

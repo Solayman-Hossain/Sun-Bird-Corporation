@@ -1,0 +1,40 @@
+/* ========================================================
+   Sun Bird Corporation - Why Shop With Us Trust Strip Stylesheet
+   ======================================================== */
+
+.trust-feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  transition: all 0.2s ease;
+}
+
+.trust-feature-card:hover {
+  background-color: #faf8f5;
+  transform: translateY(-2px);
+}
+
+.trust-icon-box {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background-color: rgba(30, 57, 50, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.trust-feature-card:hover .trust-icon-box {
+  background-color: #1e3932;
+  color: #ffffff;
+}
+
+.trust-feature-card:hover .trust-icon-box svg {
+  color: #ffffff !important;
+}
+

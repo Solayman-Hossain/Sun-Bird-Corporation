@@ -1,0 +1,41 @@
+/* ========================================================
+   Sun Bird Corporation - Circular Category Filter Pills Stylesheet
+   ======================================================== */
+
+.category-filter-strip {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding: 1.5rem 0;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.category-filter-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.category-circular-pill {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  position: relative;
+}
+
+.category-circular-pill:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.category-circular-pill.active {
+  box-shadow: 0 0 0 3px #1e3932, 0 8px 20px rgba(30, 57, 50, 0.25);
+  transform: translateY(-4px) scale(1.05);
+}
+

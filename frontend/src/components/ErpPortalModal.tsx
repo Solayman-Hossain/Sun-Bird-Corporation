@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import './ErpPortalModal.css';
 import { X, Lock, ShieldCheck, Database, FileSpreadsheet, Layers, Boxes, ArrowUpRight } from 'lucide-react';
 
 interface ErpPortalModalProps {

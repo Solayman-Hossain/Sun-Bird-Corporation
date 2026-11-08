@@ -1,0 +1,52 @@
+/* ========================================================
+   Sun Bird Corporation - Customer Portal Tabs & Invoices Stylesheet
+   ======================================================== */
+
+.account-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #64748b;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.account-tab-btn:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.account-tab-btn.active {
+  background-color: #1e3932;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(30, 57, 50, 0.2);
+}
+
+.account-invoice-table-header {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+.account-address-card {
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.account-address-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+

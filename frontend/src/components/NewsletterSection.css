@@ -1,0 +1,52 @@
+/* ========================================================
+   Sun Bird Corporation - Newsletter Subscription Card Stylesheet
+   ======================================================== */
+
+.newsletter-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, #f5ede4 0%, #faf6f0 50%, #f4ebe1 100%);
+  border: 1px solid #eae5df;
+  padding: 2.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.newsletter-input {
+  width: 100%;
+  padding: 0.875rem 1.25rem 0.875rem 3rem;
+  border-radius: 9999px;
+  border: 1px solid #eae5df;
+  background-color: #ffffff;
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.newsletter-input:focus {
+  border-color: #1e3932;
+  box-shadow: 0 0 0 3px rgba(30, 57, 50, 0.12);
+}
+
+.newsletter-submit-btn {
+  padding: 0.875rem 1.75rem;
+  border-radius: 9999px;
+  background-color: #1e3932;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(30, 57, 50, 0.25);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.newsletter-submit-btn:hover {
+  background-color: #162f29;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(30, 57, 50, 0.35);
+}
+

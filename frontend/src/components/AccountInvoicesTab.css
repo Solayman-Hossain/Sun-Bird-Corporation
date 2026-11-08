@@ -1,0 +1,23 @@
+/* ========================================================
+   Sun Bird Corporation - Account Invoices & Mushak-6.3 Archive Stylesheet
+   ======================================================== */
+
+.account-invoices-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+}
+
+.account-invoice-table-header {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  color: #475569;
+  text-transform: uppercase;
+}
+

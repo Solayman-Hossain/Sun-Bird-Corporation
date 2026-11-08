@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <rect width="400" height="300" rx="20" fill="#fdf4ff"/>
+  <g transform="translate(60, 80) rotate(-15 150 60)">
+    <!-- Syringe Barrel -->
+    <rect x="50" y="40" width="130" height="40" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+    <!-- Calibration Markings -->
+    <line x1="70" y1="40" x2="70" y2="52" stroke="#64748b" stroke-width="2"/>
+    <line x1="90" y1="40" x2="90" y2="58" stroke="#0284c7" stroke-width="2"/>
+    <text x="90" y="70" font-family="monospace" font-size="8" fill="#0284c7" text-anchor="middle">1ml</text>
+    <line x1="110" y1="40" x2="110" y2="52" stroke="#64748b" stroke-width="2"/>
+    <line x1="130" y1="40" x2="130" y2="58" stroke="#0284c7" stroke-width="2"/>
+    <text x="130" y="70" font-family="monospace" font-size="8" fill="#0284c7" text-anchor="middle">3ml</text>
+    <line x1="150" y1="40" x2="150" y2="58" stroke="#0284c7" stroke-width="2"/>
+    <text x="150" y="70" font-family="monospace" font-size="8" fill="#0284c7" text-anchor="middle">5ml</text>
+    <!-- Plunger & Rubber Gasket -->
+    <rect x="155" y="44" width="18" height="32" rx="3" fill="#1e293b"/>
+    <rect x="173" y="55" width="60" height="10" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+    <rect x="233" y="45" width="8" height="30" rx="2" fill="#94a3b8"/>
+    <!-- Needle Hub & Stainless Needle -->
+    <polygon points="50,52 35,55 35,65 50,68" fill="#38bdf8"/>
+    <line x1="35" y1="60" x2="-25" y2="60" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <rect x="25" y="25" width="115" height="26" rx="6" fill="#fae8ff"/>
+  <text x="82" y="42" font-family="sans-serif" font-size="12" font-weight="bold" fill="#86198f" text-anchor="middle">STERILE 5ML</text>
+  <text x="200" y="250" font-family="sans-serif" font-size="15" font-weight="bold" fill="#701a75" text-anchor="middle">Disposable Sterile Syringe 5ml with Needle</text>
+  <text x="200" y="270" font-family="sans-serif" font-size="12" fill="#a21caf" text-anchor="middle">Ultra-Sharp Luer Lock Needle • Pyrogen Free • Box of 100</text>
+</svg>
+

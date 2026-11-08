@@ -1,0 +1,79 @@
+/* ========================================================
+   Sun Bird Corporation - 3-Step Checkout Modal Stylesheet
+   NBR Mushak-6.3 & 64 Districts Logistics
+   ======================================================== */
+
+.checkout-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.checkout-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 52rem;
+  max-height: 90vh;
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid #eae5df;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-stepper-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.checkout-stepper-item.active {
+  color: #1e3932;
+}
+
+.checkout-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  border: 1px solid #cbd5e1;
+  font-size: 0.8125rem;
+  color: #0f172a;
+  background-color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.checkout-input:focus {
+  border-color: #1e3932;
+  box-shadow: 0 0 0 3px rgba(30, 57, 50, 0.12);
+}
+
+.checkout-payment-card {
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 2px solid #e2e8f0;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checkout-payment-card:hover {
+  border-color: #94a3b8;
+}
+
+.checkout-payment-card.selected {
+  border-color: #1e3932;
+  background-color: rgba(30, 57, 50, 0.04);
+}
+

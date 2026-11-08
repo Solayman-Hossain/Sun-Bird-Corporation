@@ -1,0 +1,89 @@
+/* ========================================================
+   Sun Bird Corporation - Enterprise ERP Console Stylesheet
+   High-density slate theme with FEFO inventory & GL Ledger
+   ======================================================== */
+
+.erp-sidebar {
+  background-color: #0f172a;
+  color: #94a3b8;
+  border-right: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.erp-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #94a3b8;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.erp-nav-item:hover {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+.erp-nav-item.active {
+  background-color: #1e3932;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(30, 57, 50, 0.3);
+}
+
+.erp-metric-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.erp-metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+}
+
+.erp-table-container {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.erp-table {
+  width: 100%;
+  text-align: left;
+  font-size: 0.75rem;
+  border-collapse: collapse;
+}
+
+.erp-table th {
+  background-color: #f8fafc;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.6875rem;
+}
+
+.erp-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+}
+
+.erp-table tr:hover td {
+  background-color: #f8fafc;
+}
+

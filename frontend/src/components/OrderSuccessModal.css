@@ -1,0 +1,36 @@
+/* ========================================================
+   Sun Bird Corporation - Order Success & NBR Mushak-6.3 Print CSS
+   ======================================================== */
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #printable-mushak-challan,
+  #printable-mushak-challan * {
+    visibility: visible !important;
+  }
+  #printable-mushak-challan {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+.mushak-table-header {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  color: #1e293b;
+  text-transform: uppercase;
+}
+

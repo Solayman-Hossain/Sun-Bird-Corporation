@@ -1,0 +1,35 @@
+/* ========================================================
+   Sun Bird Corporation - Top Announcement Bar Stylesheet
+   ======================================================== */
+
+.announcement-bar-container {
+  background-color: #1e3932;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-bottom: 1px solid #2d5248;
+  position: relative;
+  z-index: 50;
+}
+
+.announcement-highlight-badge {
+  color: #e6b980;
+  font-weight: 600;
+}
+
+.announcement-dismiss-btn {
+  color: #94a3b8;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.announcement-dismiss-btn:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+

@@ -1,0 +1,116 @@
+/* ========================================================
+   Sun Bird Corporation - Footer Stylesheet
+   Dark Forest Medical Aesthetic (#162f29 / #1e3932)
+   ======================================================== */
+
+.footer-container {
+  background-color: #162f29;
+  color: #cbd5e1;
+  font-size: 0.75rem;
+  margin-top: auto;
+  border-top: 1px solid #23423a;
+  position: relative;
+  z-index: 10;
+}
+
+.footer-brand-title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+}
+
+.footer-motto {
+  color: #e6b980;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.footer-column-heading {
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  position: relative;
+  padding-bottom: 0.25rem;
+}
+
+.footer-column-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background-color: #c89348;
+  border-radius: 9999px;
+}
+
+.footer-link {
+  color: #94a3b8;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+.footer-support-card {
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  background-color: #1f3f37;
+  border: 1px solid #2d5248;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.footer-social-btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background-color: #1f3f37;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.footer-social-btn:hover {
+  background-color: #2c574c;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.footer-bottom-bar {
+  border-top: 1px solid #23423a;
+  background-color: #122722;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 0.6875rem;
+  color: #94a3b8;
+}
+
+.footer-app-badge {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  font-size: 0.625rem;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.footer-app-badge:hover {
+  background: rgba(0, 0, 0, 0.6);
+  border-color: #c89348;
+  color: #ffffff;
+}

@@ -1,0 +1,74 @@
+/* ========================================================
+   Sun Bird Corporation - Login & Registration Stylesheet (`LoginPage.css`)
+   ======================================================== */
+
+.login-page-card {
+  width: 100%;
+  max-width: 28rem;
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  border: 1px solid #eae5df;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+  padding: 2rem;
+  margin: 2rem auto;
+}
+
+.login-phone-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 4rem;
+  border-radius: 0.75rem;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.login-phone-input:focus {
+  border-color: #1e3932;
+  box-shadow: 0 0 0 3px rgba(30, 57, 50, 0.12);
+}
+
+.login-submit-btn {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #1e3932 0%, #162f29 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(30, 57, 50, 0.25);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.login-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 57, 50, 0.35);
+}
+
+.login-demo-chip {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #334155;
+  text-align: left;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.login-demo-chip:hover {
+  border-color: #1e3932;
+  background-color: rgba(30, 57, 50, 0.04);
+  color: #1e3932;
+}
+

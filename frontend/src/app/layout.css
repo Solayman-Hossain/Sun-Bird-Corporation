@@ -1,0 +1,60 @@
+/* ========================================================
+   Sun Bird Corporation - Root Layout Stylesheet (`layout.css`)
+   Global Clinical Architecture & Layout Container Utilities
+   ======================================================== */
+
+/* Root Layout Canvas */
+.app-root-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-brand-bg, #faf8f5);
+  color: var(--foreground, #1a1a1a);
+  position: relative;
+  overflow-x: clip;
+}
+
+/* Skip Navigation Link for Accessibility (a11y) */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background-color: #1e3932;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: 1rem;
+}
+
+/* Global Content Wrapper */
+.layout-content-wrapper {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+
+/* Global Section Divider */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #eae5df 20%, #eae5df 80%, transparent 100%);
+  margin: 2rem 0;
+}
+
+/* High-DPI & Mobile Viewport Fixes */
+@supports (-webkit-touch-callout: none) {
+  .app-root-layout {
+    min-height: -webkit-fill-available;
+  }
+}
+

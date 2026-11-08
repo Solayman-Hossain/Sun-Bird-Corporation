@@ -1,0 +1,65 @@
+/* ========================================================
+   Sun Bird Corporation - Cart Slide-Over Drawer Stylesheet
+   ======================================================== */
+
+.cart-drawer-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  max-width: 100%;
+  width: 28rem;
+  background-color: #ffffff;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.cart-progress-bar {
+  height: 6px;
+  width: 100%;
+  border-radius: 9999px;
+  background-color: #f1f5f9;
+  overflow: hidden;
+}
+
+.cart-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c89348 0%, #1e3932 100%);
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.cart-checkout-btn {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #1e3932 0%, #162f29 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(30, 57, 50, 0.3);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.cart-checkout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 57, 50, 0.4);
+}
+

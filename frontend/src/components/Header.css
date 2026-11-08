@@ -1,0 +1,31 @@
+/* ========================================================
+   Sun Bird Corporation - Master Header Stylesheet (`Header.css`)
+   Sticky Header Container, Announcement integration & Navigation
+   ======================================================== */
+
+.header-master-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.header-master-wrapper.scrolled {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+}
+
+.header-top-strip {
+  border-bottom: 1px solid #eae5df;
+}
+
+.header-nav-container {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+

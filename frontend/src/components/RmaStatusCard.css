@@ -1,0 +1,29 @@
+/* ========================================================
+   Sun Bird Corporation - Biomedical Warranty & RMA Stylesheet
+   ======================================================== */
+
+.rma-status-card {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.rma-timeline-step-circle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.rma-engineer-report-box {
+  background-color: #faf8f5;
+  border-radius: 1rem;
+  border: 1px solid #eae5df;
+  padding: 1.25rem;
+}
+

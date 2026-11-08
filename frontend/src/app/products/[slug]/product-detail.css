@@ -1,0 +1,43 @@
+/* ========================================================
+   Sun Bird Corporation - Product Detail Page Stylesheet (`product-detail.css`)
+   ======================================================== */
+
+.pdp-container {
+  min-height: 100vh;
+  background-color: #faf8f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.pdp-gallery-card {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  border: 1px solid #eae5df;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.pdp-spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.pdp-spec-table tr {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.pdp-spec-table td {
+  padding: 0.75rem 0.5rem;
+}
+
+.pdp-spec-table td:first-child {
+  font-weight: 600;
+  color: #475569;
+  width: 35%;
+}
+
+.pdp-spec-table td:last-child {
+  color: #0f172a;
+}
+

@@ -1,0 +1,35 @@
+/* ========================================================
+   Sun Bird Corporation - ERP Support & RMA Resolution Stylesheet
+   ======================================================== */
+
+.erp-support-split-pane {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .erp-support-split-pane {
+    grid-template-columns: 360px 1fr;
+  }
+}
+
+.erp-ticket-item {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.erp-ticket-item:hover {
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+.erp-ticket-item.active {
+  border-color: #1e3932;
+  background-color: rgba(30, 57, 50, 0.04);
+}
+

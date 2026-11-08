@@ -1,0 +1,29 @@
+/* ========================================================
+   Sun Bird Corporation - Account Addresses Tab Stylesheet
+   ======================================================== */
+
+.account-addresses-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .account-addresses-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.account-address-card {
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.account-address-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+

@@ -1,0 +1,25 @@
+/* ========================================================
+   Sun Bird Corporation - Product Detail Actions Stylesheet
+   ======================================================== */
+
+.pdp-action-btn-primary {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #1e3932 0%, #162f29 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(30, 57, 50, 0.25);
+  transition: all 0.2s ease;
+}
+
+.pdp-action-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 57, 50, 0.35);
+}
+

@@ -1,0 +1,71 @@
+/* ========================================================
+   Sun Bird Corporation - 24/7 Biomedical Support Chat Stylesheet
+   ======================================================== */
+
+.chat-floating-trigger {
+  position: fixed;
+  bottom: 5rem;
+  right: 1rem;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  background: linear-gradient(135deg, #1e3932 0%, #274c43 100%);
+  color: #ffffff;
+  border-radius: 9999px;
+  box-shadow: 0 20px 25px -5px rgba(30, 57, 50, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .chat-floating-trigger {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
+.chat-floating-trigger:hover {
+  background: linear-gradient(135deg, #162f29 0%, #1e3932 100%);
+  transform: translateY(-2px);
+}
+
+.chat-window-container {
+  position: fixed;
+  bottom: 4rem;
+  right: 0.5rem;
+  z-index: 50;
+  width: calc(100vw - 1rem);
+  max-width: 400px;
+  height: 550px;
+  max-height: 80vh;
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .chat-window-container {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+}
+
+.chat-message-bubble-user {
+  background: linear-gradient(135deg, #1e3932 0%, #162f29 100%);
+  color: #ffffff;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.chat-message-bubble-agent {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border-bottom-left-radius: 0.25rem;
+}
+

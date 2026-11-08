@@ -1,0 +1,33 @@
+/* ========================================================
+   Sun Bird Corporation - Master Storefront Layout Stylesheet (`Layout.css`)
+   Wrapper for Header, Sticky Navigation, Modals & Footer
+   ======================================================== */
+
+.storefront-layout-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-brand-bg, #faf8f5);
+  color: #1e293b;
+  position: relative;
+  overflow-x: clip;
+}
+
+.storefront-layout-main {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+
+.storefront-layout-bottom-spacer {
+  height: 4.5rem;
+}
+
+@media (min-width: 1024px) {
+  .storefront-layout-bottom-spacer {
+    display: none;
+  }
+}
+

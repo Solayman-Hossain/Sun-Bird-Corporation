@@ -1,0 +1,31 @@
+/* ========================================================
+   Sun Bird Corporation - Product Reviews & Ratings Stylesheet
+   ======================================================== */
+
+.review-card {
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background-color: #ffffff;
+  border: 1px solid #eae5df;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.review-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.review-rating-bar {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: #f1f5f9;
+  overflow: hidden;
+}
+
+.review-rating-bar-fill {
+  height: 100%;
+  background-color: #c89348;
+  border-radius: 9999px;
+}
+
