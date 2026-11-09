@@ -1450,7 +1450,7 @@ Technical Requirements:
        - Inventory & Procurement: `/api/v1/erp/inventory`, `/api/v1/erp/procurement`
        - Portals: `/api/v1/portal/vendor`, `/api/v1/portal/customer`, `/api/v1/portal/employee`
        - Sales & Checkout: `/api/v1/public/checkout`, `/api/v1/public/track-order`, `/api/v1/erp/sales`, `/api/v1/erp/pos`, `/api/v1/erp/logistics`
-       - Accounting & Governance: `/api/v1/erp/accounts`, `/api/v1/erp/assets`, `/api/v1/erp/loans`, `/api/v1/erp/partners`, `/api/v1/erp/hrm`, `/api/v1/erp/approvals/quorum`, `/api/v1/erp/approvals/requests`, `/api/v1/erp/audit-logs`
+       - Accounting & Governance: `/api/v1/erp/accounts`, `/api/v1/erp/assets`, `/api/v1/erp/loans`, `/api/v1/erp/partners`, `/api/v1/erp/hrm`, `/api/v1/erp/approvals/quorum`, `/rzefjgtপapi/v1/erp/approvals/requests`, `/api/v1/erp/audit-logs`
        - Communications & Reviews: `/api/v1/public/reviews`, `/api/v1/public/chat`, `/api/v1/public/disputes`, `/api/v1/erp/reviews`, `/api/v1/erp/chat`, `/api/v1/erp/disputes`
        - Media & Webhooks: `/api/v1/media`, `/api/v1/webhooks`
    11. Catch-All 404 Route Handler: `app.use((req, res, next) => next(new NotFoundError(...)))`

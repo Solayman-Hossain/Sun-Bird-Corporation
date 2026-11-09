@@ -249,3 +249,135 @@ export interface OrderConfirmation {
   estimatedDelivery: string;
   createdAt?: string;
 }
+
+// ── Dynamic Quotation, Invoice, Challan & Voucher Builder ──────────────────
+export interface DynamicDocumentColumn {
+  id: string;
+  label: string;
+  field: string;
+  width?: string;
+  align?: 'left' | 'center' | 'right';
+  isDeletable?: boolean;
+}
+
+export interface DynamicDocumentRow {
+  id: string;
+  [key: string]: string | number;
+}
+
+export interface DynamicDocument {
+  id: string;
+  docType: 'QUOTATION' | 'INVOICE' | 'CHALLAN' | 'VOUCHER';
+  docNumber: string;
+  date: string;
+  validUntil?: string;
+  clientName: string;
+  clientDesignation?: string;
+  clientCompany: string;
+  clientAddress: string;
+  subject: string;
+  salutation: string;
+  openingText: string;
+  columns: DynamicDocumentColumn[];
+  rows: DynamicDocumentRow[];
+  termsAndConditions: string[];
+  signatoryName: string;
+  signatoryDesignation: string;
+  signatoryCompany: string;
+  signatoryPhone: string;
+  hideHeaderFooterOnPadPrint: boolean;
+  notes?: string;
+}
+
+// ── Accounting, Income, Expense & Partnership Accounts ─────────────────────
+export interface IncomeExpenseItem {
+  id: string;
+  type: 'INCOME' | 'EXPENSE';
+  date: string;
+  category: string;
+  description: string;
+  amount: number;
+  paymentMethod: 'CASH' | 'BANK' | 'CHEQUE' | 'BKASH';
+  referenceNo?: string;
+  partnerId?: string;
+  receiptUrl?: string;
+}
+
+export interface PartnerAccount {
+  id: string;
+  partnerName: string;
+  phone: string;
+  email: string;
+  nidOrPassport: string;
+  role: 'Managing Partner' | 'General Partner' | 'Sleeping Partner';
+  sharePercentage: number; // e.g. 50%
+  initialCapital: number;
+  additionalInvestment: number;
+  accumulatedProfit: number;
+  totalDrawings: number;
+  currentCapitalBalance: number;
+  deedStartDate: string;
+  deedRegistrationNo: string;
+  bankAccountDetails: string;
+}
+
+export interface ProfitDistributionRecord {
+  id: string;
+  period: string; // e.g. "October 2026"
+  totalNetProfit: number;
+  distributedDate: string;
+  allocations: {
+    partnerId: string;
+    partnerName: string;
+    sharePercentage: number;
+    amount: number;
+  }[];
+}
+
+// ── HRM & Payroll ─────────────────────────────────────────────────────────
+export interface HrmEmployee {
+  id: string;
+  employeeCode: string;
+  name: string;
+  designation: string;
+  department: 'Sales & Marketing' | 'Biomedical & QC' | 'Warehouse & Logistics' | 'Finance & Accounts' | 'HR & Admin';
+  phone: string;
+  email: string;
+  joiningDate: string;
+  basicSalary: number;
+  houseRent: number;
+  medicalAllowance: number;
+  conveyance: number;
+  grossSalary: number;
+  bankAccountNo: string;
+  status: 'ACTIVE' | 'ON_LEAVE' | 'TERMINATED';
+  attendanceDays: number;
+}
+
+// ── Social Media & WhatsApp Global Settings ───────────────────────────────
+export interface SocialAndWhatsappSettings {
+  whatsappNumber: string; // e.g. "+8801751195752"
+  whatsappDefaultMessage: string;
+  facebookUrl: string;
+  linkedinUrl: string;
+  youtubeUrl: string;
+  instagramUrl: string;
+  isWhatsappWidgetActive: boolean;
+}
+
+// ── Banner Manager ────────────────────────────────────────────────────────
+export interface CustomBannerSlide {
+  id: number;
+  label: string;
+  heading: string;
+  description: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
+  image: string;
+  alt: string;
+  isActive: boolean;
+  sortOrder: number;
+}
+

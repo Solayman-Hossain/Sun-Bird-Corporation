@@ -1,50 +1,395 @@
 /* ========================================================
-   Sun Bird Corporation - Hero Banner Stylesheet
+   Sun Bird Corporation - 5-Slide Auto-Playing Hero Carousel
+   Design: Soft Dot Radial Pattern on Light Pink Background
    ======================================================== */
 
-.hero-banner-container {
+.hero-section-wrapper {
+  width: 100%;
+  max-width: 1720px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+@media (min-width: 640px) {
+  .hero-section-wrapper {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-section-wrapper {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Core Hero Container matching exact design specification */
+.hero {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #f5ede4 0%, #f7f1e9 50%, #faf5ee 100%);
-  border-radius: 1.5rem;
-  border: 1px solid #eae5df;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  background-color: #fbe0ea;
+  background-image: radial-gradient(rgba(212, 83, 126, 0.5) 1.9px, transparent 1.9px);
+  background-size: 22px 22px;
+  border: 1px solid rgba(212, 83, 126, 0.25);
+  outline: none;
+  box-shadow: 0 4px 16px rgba(153, 53, 86, 0.06);
 }
 
-.hero-headline {
-  font-family: var(--font-serif, Georgia, serif);
-  font-weight: 800;
-  color: #1a1a1a;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
+.hero:focus-visible {
+  ring: 2px solid #993556;
 }
 
-.hero-cta-btn {
-  padding: 0.875rem 1.5rem;
-  background-color: #1e3932;
-  color: #ffffff;
-  font-weight: 500;
-  font-size: 0.875rem;
-  border-radius: 9999px;
-  box-shadow: 0 4px 14px rgba(30, 57, 50, 0.25);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+/* Carousel Track / Slide Container */
+.hero-carousel-container {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+}
+
+@media (min-width: 768px) {
+  .hero-carousel-container {
+    height: 420px;
+    min-height: 420px;
+  }
+}
+
+/* Individual Slide */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 2.25rem 1.5rem 4rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(20px);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, visibility 0.5s;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .hero-slide {
+    padding: 2.5rem 4rem 2.5rem 4rem;
+  }
+}
+
+.hero-slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* Slide Content Layout */
+.hero-slide-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 1.75rem;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .hero-slide-grid {
+    grid-template-columns: 1.25fr 1fr;
+    gap: 3rem;
+  }
+}
+
+/* Text Content Column */
+.hero-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .hero-text-col {
+    text-align: left;
+    align-items: flex-start;
+  }
+}
+
+.hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(212, 83, 126, 0.3);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #72243E;
+  letter-spacing: 0.02em;
 }
 
-.hero-cta-btn:hover {
-  background-color: #162f29;
+.hero-heading {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 1.65rem;
+  line-height: 1.25;
+  font-weight: 800;
+  color: #4B1528;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .hero-heading {
+    font-size: 2.15rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-heading {
+    font-size: 2.65rem;
+  }
+}
+
+.hero-description {
+  font-size: 0.925rem;
+  line-height: 1.6;
+  color: #72243E;
+  margin: 0;
+  max-width: 540px;
+}
+
+@media (min-width: 768px) {
+  .hero-description {
+    font-size: 1.05rem;
+  }
+}
+
+/* CTA Button Group */
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .hero-actions {
+    flex-direction: row;
+    width: auto;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+/* Primary Button exact design specification */
+.hero-btn {
+  background: #993556;
+  color: #fff;
+  padding: 0.75rem 1.65rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(153, 53, 86, 0.25);
+  cursor: pointer;
+}
+
+.hero-btn:hover {
+  background: #7d2944;
+  color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(30, 57, 50, 0.35);
+  box-shadow: 0 6px 16px rgba(153, 53, 86, 0.35);
 }
 
-.hero-trust-badge {
+.hero-btn:active {
+  transform: translateY(0);
+}
+
+/* Secondary Button: transparent with 1px #4B1528 border */
+.hero-btn-secondary {
+  background: transparent;
+  color: #4B1528;
+  border: 1px solid #4B1528;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.hero-btn-secondary:hover {
+  background-color: rgba(75, 21, 40, 0.08);
+  color: #4B1528;
+  transform: translateY(-2px);
+}
+
+.hero-btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* Image Visual Column */
+.hero-image-col {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #334155;
+  justify-content: center;
+  position: relative;
+  width: 100%;
 }
 
+.hero-image-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 83, 126, 0.2);
+  box-shadow: 0 6px 20px rgba(153, 53, 86, 0.08);
+  width: 100%;
+  max-width: 320px;
+  height: 180px;
+}
+
+@media (min-width: 768px) {
+  .hero-image-card {
+    max-width: 400px;
+    height: 250px;
+    padding: 1.75rem;
+  }
+}
+
+.hero-product-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(75, 21, 40, 0.12));
+  transition: transform 0.4s ease;
+}
+
+.hero-slide.active .hero-product-img {
+  transform: scale(1.03);
+}
+
+/* Navigation Arrow Controls */
+.hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  color: #4B1528;
+  border: 1px solid rgba(212, 83, 126, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(153, 53, 86, 0.12);
+}
+
+.hero-arrow:hover {
+  background: #ffffff;
+  color: #993556;
+  border-color: #993556;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 4px 12px rgba(153, 53, 86, 0.2);
+}
+
+.hero-arrow-prev {
+  left: 0.75rem;
+}
+
+.hero-arrow-next {
+  right: 0.75rem;
+}
+
+@media (max-width: 767px) {
+  .hero-arrow {
+    width: 32px;
+    height: 32px;
+    opacity: 0.8;
+  }
+  .hero-arrow-prev {
+    left: 0.4rem;
+  }
+  .hero-arrow-next {
+    right: 0.4rem;
+  }
+}
+
+/* Dot Indicators */
+.hero-dots-container {
+  position: absolute;
+  bottom: 1rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.hero-dot {
+  height: 8px;
+  width: 8px;
+  border-radius: 9999px;
+  background-color: rgba(153, 53, 86, 0.3);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-dot:hover {
+  background-color: rgba(153, 53, 86, 0.6);
+}
+
+.hero-dot.active {
+  width: 28px;
+  background-color: #993556;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide {
+    transition: none !important;
+    transform: none !important;
+  }
+  .hero-dot {
+    transition: none !important;
+  }
+  .hero-btn,
+  .hero-btn-secondary,
+  .hero-arrow {
+    transition: none !important;
+    transform: none !important;
+  }
+}

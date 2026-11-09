@@ -17,6 +17,7 @@ import {
   Layers,
   Sparkles,
   Grid,
+  Boxes,
 } from 'lucide-react';
 import { MegaMenu, MEGA_MENU_COLUMNS } from './MegaMenu';
 
@@ -127,9 +128,17 @@ export function CategoryNav({
               href="/erp"
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200/60 font-semibold transition-all shadow-2xs"
             >
-              <Lock className="w-3 h-3 text-amber-700" />
+              <Boxes className="w-3 h-3 text-amber-700" />
               <span>ERP Portal</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            </Link>
+
+            <Link
+              href="/admin"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 text-white font-semibold transition-all shadow-2xs"
+            >
+              <ShieldCheck className="w-3 h-3 text-[#e6b980]" />
+              <span>Admin Console</span>
             </Link>
           </div>
         </div>
@@ -310,10 +319,22 @@ export function CategoryNav({
                 className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200/60 font-semibold text-xs"
               >
                 <div className="flex items-center gap-2">
-                  <Lock className="w-4 h-4 text-amber-700" />
+                  <Boxes className="w-4 h-4 text-amber-700" />
                   <span>এন্টারপ্রাইজ ইআরপি পোর্টাল</span>
                 </div>
                 <ChevronRight className="w-4 h-4 text-amber-600" />
+              </Link>
+
+              <Link
+                href="/admin"
+                onClick={onCloseMobileMenu}
+                className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-slate-900 text-white font-semibold text-xs"
+              >
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-[#e6b980]" />
+                  <span>সুপার অ্যাডমিন কনসোল</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400" />
               </Link>
             </div>
 

@@ -1,0 +1,71 @@
+/* Document & Quotation Builder CSS */
+.doc-builder-container {
+  width: 100%;
+}
+
+.printable-sheet {
+  min-height: 1050px;
+  background-color: #ffffff;
+  color: #0f172a;
+  box-sizing: border-box;
+}
+
+/* Screen hidden spacer */
+.hidden-screen {
+  display: block;
+}
+
+@media print {
+  body {
+    background: transparent !important;
+    color: #000 !important;
+  }
+
+  .no-print,
+  .admin-sidebar,
+  .admin-header,
+  header,
+  nav,
+  aside,
+  footer {
+    display: none !important;
+  }
+
+  .doc-builder-container {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .printable-sheet {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+  }
+
+  /* Pad print mode: creates blank space at top so paper with pre-printed logo/letterhead has room */
+  .pad-mode .pad-top-spacer {
+    display: block !important;
+    height: 140px !important;
+  }
+
+  /* Ensure table borders print crisp and clear */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  th, td {
+    border: 1px solid #334155 !important;
+  }
+
+  input, textarea {
+    border: none !important;
+    background: transparent !important;
+    color: #000 !important;
+  }
+}
+

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import './home.css';
 import { Navbar } from '../components/Navbar';
 import { CategoryNav } from '../components/CategoryNav';
@@ -24,7 +24,7 @@ import { MobileBottomNav } from '../components/MobileBottomNav';
 import { Product, OrderConfirmation } from '../types';
 import { getPublicProducts } from '../lib/api';
 import { INITIAL_PRODUCTS } from '../lib/initialProducts';
-import { HeartPulse } from 'lucide-react';
+import { HeartPulse, CheckCircle2, Loader2 } from 'lucide-react';
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
@@ -37,6 +37,11 @@ export default function HomePage() {
   const [isErpOpen, setIsErpOpen] = useState(false);
   const [isRmaOpen, setIsRmaOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Pagination & Pure Infinite Scroll state (5 products per row on cursor scroll)
+  const [catalogVisibleCount, setCatalogVisibleCount] = useState<number>(5);
+  const [isLoadingMoreCatalog, setIsLoadingMoreCatalog] = useState<boolean>(false);
+  const catalogSentinelRef = useRef<HTMLDivElement | null>(null);
 
   // Fetch live products from backend API
   useEffect(() => {
@@ -88,26 +93,85 @@ export default function HomePage() {
     });
   }, [products, selectedCategory, searchQuery]);
 
-  // Curated product sections for the storefront home
+  // Reset pagination whenever category or search filter changes
+  useEffect(() => {
+    setCatalogVisibleCount(5);
+  }, [selectedCategory, searchQuery]);
+
+  const loadMoreCatalogItems = useCallback(() => {
+    if (isLoadingMoreCatalog || catalogVisibleCount >= filteredProducts.length) return;
+    setIsLoadingMoreCatalog(true);
+    setTimeout(() => {
+      setCatalogVisibleCount((prev) => Math.min(prev + 5, filteredProducts.length));
+      setIsLoadingMoreCatalog(false);
+    }, 200);
+  }, [isLoadingMoreCatalog, catalogVisibleCount, filteredProducts.length]);
+
+  // Pure Infinite Scroll: Automatically loads next 5 products as user scrolls down with mouse/cursor
+  useEffect(() => {
+    if (catalogVisibleCount >= filteredProducts.length) return;
+
+    const sentinel = catalogSentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoadingMoreCatalog) {
+          loadMoreCatalogItems();
+        }
+      },
+      { threshold: 0.05, rootMargin: '250px' }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [catalogVisibleCount, filteredProducts.length, isLoadingMoreCatalog, loadMoreCatalogItems]);
+
+  // Window scroll listener fallback for cursor wheel rotation
+  useEffect(() => {
+    if (catalogVisibleCount >= filteredProducts.length) return;
+
+    const handleWindowScroll = () => {
+      const sentinel = catalogSentinelRef.current;
+      if (!sentinel || isLoadingMoreCatalog) return;
+
+      const rect = sentinel.getBoundingClientRect();
+      if (rect.top <= window.innerHeight + 250) {
+        loadMoreCatalogItems();
+      }
+    };
+
+    window.addEventListener('scroll', handleWindowScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleWindowScroll);
+  }, [catalogVisibleCount, filteredProducts.length, isLoadingMoreCatalog, loadMoreCatalogItems]);
+
+  // Curated product sections for the storefront home (5 items per row)
   const featuredProducts = useMemo(() => {
     const list = products.filter((p) => p.isFeatured);
-    return list.length > 0 ? list.slice(0, 4) : products.slice(0, 4);
+    return list.length >= 5 ? list : products;
   }, [products]);
 
   const newArrivals = useMemo(() => {
     const list = products.filter((p) => p.isNewArrival);
-    return list.length > 0 ? list.slice(0, 4) : products.slice(4, 8);
+    return list.length >= 5 ? list : products.slice(5);
   }, [products]);
 
   const bestSellers = useMemo(() => {
     const list = products.filter((p) => p.isBestSeller);
-    return list.length > 0 ? list.slice(0, 4) : products.slice(8, 12);
+    return list.length >= 5 ? list : products.slice(10);
   }, [products]);
+
+  const displayedCatalogProducts = useMemo(() => {
+    return filteredProducts.slice(0, catalogVisibleCount);
+  }, [filteredProducts, catalogVisibleCount]);
+
+  const hasMoreCatalog = catalogVisibleCount < filteredProducts.length;
+  const remainingCatalogCount = Math.max(0, filteredProducts.length - catalogVisibleCount);
 
   const isBrowsingAll = selectedCategory === 'All' && !searchQuery.trim();
 
   return (
-    <div className="min-h-screen bg-[#faf8f5] flex flex-col font-sans text-slate-800">
+    <div className="min-h-screen flex flex-col font-sans text-slate-800">
       {/* Navbar & Sticky Category Bar */}
       <Navbar
         onSearch={setSearchQuery}
@@ -126,7 +190,7 @@ export default function HomePage() {
       <HeroBanner />
 
       {/* Circular Category Pills Carousel */}
-      <div className="max-w-7xl mx-auto px-4 w-full">
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <CategoryFilter
           categories={categories}
           selectedCategory={selectedCategory}
@@ -136,7 +200,7 @@ export default function HomePage() {
       </div>
 
       {/* Main Storefront Product Section */}
-      <main id="products" className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-10">
+      <main id="products" className="flex-1 max-w-[1720px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">
         {!isBrowsingAll ? (
           /* Filtered Search / Category Catalog View */
           <div className="space-y-6">
@@ -161,7 +225,7 @@ export default function HomePage() {
             </div>
 
             {filteredProducts.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-3xl border border-[#eae5df] space-y-3">
+              <div className="text-center py-20 bg-white/95 rounded-3xl border border-[#eae5df] space-y-3">
                 <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
                   <HeartPulse className="w-8 h-8" />
                 </div>
@@ -180,21 +244,48 @@ export default function HomePage() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {filteredProducts.map((product) => (
-                  <ProductCard
-                    key={product.sku}
-                    product={product}
-                    onQuickView={setSelectedProduct}
-                  />
-                ))}
+              <div className="space-y-6">
+                {/* 5-Column High-Density Product Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 sm:gap-6">
+                  {displayedCatalogProducts.map((product) => (
+                    <ProductCard
+                      key={product.sku}
+                      product={product}
+                      onQuickView={setSelectedProduct}
+                    />
+                  ))}
+                </div>
+
+                {/* Pure Infinite Scroll Sentinel & Loader on Cursor Scroll */}
+                {hasMoreCatalog && (
+                  <div ref={catalogSentinelRef} className="py-6 flex flex-col items-center justify-center gap-2">
+                    {isLoadingMoreCatalog ? (
+                      <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/95 border border-[#eae5df] shadow-xs text-xs font-bold text-[#1e3932] animate-pulse">
+                        <Loader2 className="w-4 h-4 animate-spin text-[#993556]" />
+                        <span>স্ক্রল অনুযায়ী আরও পণ্য লোড হচ্ছে ({remainingCatalogCount}টি বাকি)...</span>
+                      </div>
+                    ) : (
+                      <div className="h-6 w-full" />
+                    )}
+                  </div>
+                )}
+
+                {/* All Products Displayed Completion Message */}
+                {!hasMoreCatalog && (
+                  <div className="text-center py-4">
+                    <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200 shadow-2xs">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>সকল {filteredProducts.length}টি পণ্য সফলভাবে প্রদর্শিত হয়েছে</span>
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
         ) : (
           /* Default Rich Homepage Layout Matching Design Reference */
           <>
-            {/* 1. Featured Products (4-Column Grid) */}
+            {/* 1. Featured Products (5-Column Grid with Auto-scroll on Cursor) */}
             <ProductSection
               id="featured"
               title="Featured Products"
@@ -202,12 +293,15 @@ export default function HomePage() {
               products={featuredProducts}
               onQuickView={setSelectedProduct}
               viewAllHref="#products"
+              initialLimit={5}
+              step={5}
+              enableAutoScroll={true}
             />
 
             {/* 2. Split Promotional Dual Banners */}
             <SplitPromoBanners onSelectCategory={setSelectedCategory} />
 
-            {/* 3. New Arrivals (4-Column Grid) */}
+            {/* 3. New Arrivals (5-Column Grid with Auto-scroll on Cursor) */}
             <ProductSection
               id="new-arrivals"
               title="New Arrivals"
@@ -215,9 +309,12 @@ export default function HomePage() {
               products={newArrivals}
               onQuickView={setSelectedProduct}
               viewAllHref="#products"
+              initialLimit={5}
+              step={5}
+              enableAutoScroll={true}
             />
 
-            {/* 4. Best Sellers (4-Column Grid) */}
+            {/* 4. Best Sellers (5-Column Grid with Auto-scroll on Cursor) */}
             <ProductSection
               id="best-sellers"
               title="Best Sellers"
@@ -225,6 +322,22 @@ export default function HomePage() {
               products={bestSellers}
               onQuickView={setSelectedProduct}
               viewAllHref="#products"
+              initialLimit={5}
+              step={5}
+              enableAutoScroll={true}
+            />
+
+            {/* 5. Complete Inventory Feed with Continuous 5-by-5 Auto-Loading on Cursor Scroll */}
+            <ProductSection
+              id="all-catalog"
+              title="All Certified Medical Equipment"
+              subtitle="সান বার্ড কর্পোরেশনের সকল ডিজিডিএ নিবন্ধিত ডায়াগনস্টিক ও সার্জিক্যাল ডিভাইসের সম্পূর্ণ তালিকা"
+              products={products}
+              onQuickView={setSelectedProduct}
+              viewAllHref="#products"
+              initialLimit={5}
+              step={5}
+              enableAutoScroll={true}
             />
           </>
         )}

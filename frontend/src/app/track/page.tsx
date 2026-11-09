@@ -379,7 +379,7 @@ function TrackOrderContent() {
 
 export default function TrackOrderPage() {
   return (
-    <div className="min-h-screen bg-[#faf8f5] flex flex-col font-sans text-slate-800">
+    <div className="min-h-screen flex flex-col font-sans text-slate-800">
       <Navbar showSearch={false} />
 
       <Suspense

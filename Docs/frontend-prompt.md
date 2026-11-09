@@ -1356,4 +1356,152 @@ Verification:
 Execute `npm run build` and ensure zero TypeScript errors and exit code 0.
 ```
 
+---
+
+### Prompt 45: Auto-Playing 5-Slide Hero Carousel & 5-Column Full-Page Grid
+```text
+Task: Replace the static hero banner with a 5-slide auto-playing carousel banner, enlarge category pills, expand layout to full-page width (max-w-[1600px]), render 5 products per row, and update live support chat triggers.
+
+File Targets:
+- `frontend/src/components/HeroBanner.tsx`
+- `frontend/src/components/HeroBanner.css`
+- `frontend/src/components/CategoryFilter.tsx`
+- `frontend/src/components/ProductSection.tsx`
+- `frontend/src/components/CustomerSupportChat.tsx`
+- `frontend/src/app/page.tsx`
+
+Requirements:
+1. 5-Slide Carousel Banner:
+   - Built exclusively with React hooks (useState, useEffect, useRef, useCallback) and plain CSS (no carousel libraries).
+   - Design: Light pink background (#fbe0ea) with soft radial dot pattern (#d4537e, 1.9px at 22px 22px).
+   - Heading color #4B1528, supporting text #72243E, primary button #993556, secondary button transparent with 1px #4B1528 border.
+   - 5 slides with concise Bangla content for ICU beds, patient monitors, autoclave sterilizers, oxygen concentrators, and RMA warranty support.
+   - Auto-play every 5s with 0.5s transition, pause on hover/tab hide, swipe gestures, keyboard arrows, and prefers-reduced-motion support.
+   - Next.js <Image> with priority on slide 1.
+2. 5-Column Full-Page Product Grid:
+   - Expand main page container to max-w-[1600px].
+   - Upgrade catalog and section grids to `grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 sm:gap-6` (5 products per line).
+3. Live Support Chat:
+   - Update floating button to "লাইভ চ্যাট করুন".
+   - Greeting text: "আসসালামু আলাইকুম! সান বার্ড কর্পোরেশনে স্বাগতম। অর্ডার, ওয়ারেন্টি বা পণ্য, কোন বিষয়ে সাহায্য লাগবে?".
+   - Enforce brand name "Sun Bird Corporation" throughout all views.
+
+Verification:
+Execute `npm run lint` and `npm run build`; confirm 31/31 routes generate with 0 errors.
+```
+
+---
+
+### Prompt 46: Complete Admin Dashboard & ERP Sub-Routes Modularization
+```text
+Task: Complete Admin Dashboard (/admin) and ERP Portal (/erp) modular route structure, cross-navigation, and sub-page routing for all modules.
+
+File Targets:
+- `frontend/src/app/admin/page.tsx`
+- `frontend/src/app/admin/orders/page.tsx`
+- `frontend/src/app/admin/inventory/page.tsx`
+- `frontend/src/app/admin/accounting/page.tsx`
+- `frontend/src/app/admin/support/page.tsx`
+- `frontend/src/app/admin/users/page.tsx`
+- `frontend/src/app/admin/settings/page.tsx`
+- `frontend/src/app/admin/lc/page.tsx`
+- `frontend/src/app/erp/page.tsx`
+- `frontend/src/app/erp/orders/page.tsx`
+- `frontend/src/app/erp/inventory/page.tsx`
+- `frontend/src/app/erp/accounting/page.tsx`
+- `frontend/src/app/erp/support/page.tsx`
+- `frontend/src/app/erp/lc/page.tsx`
+- `frontend/src/components/AdminPage.tsx`
+- `frontend/src/components/CategoryNav.tsx`
+- `frontend/src/components/erp/ErpInventoryView.tsx`
+
+Requirements:
+1. Admin Dashboard (`/admin`):
+   - Super Admin console with dark slate (#0f172a / #020617) theme.
+   - Modules: Overview KPIs, Order Processing, FEFO Inventory, General Ledger (NBR Mushak-6.3), Import L/C Tracker, RMA & Support Desk, User Accounts & RBAC, DGDA & Tax Settings.
+   - Top action bar with quick cross-links: "ERP Portal" (`/erp`), "Storefront" (`/`), and database sync toast trigger.
+2. ERP Portal (`/erp`):
+   - Enterprise operations suite with branch selector (Tejgaon, Chittagong, Sylhet).
+   - Top action bar with quick cross-links: "Admin Console" (`/admin`), "স্টোরফ্রন্ট" (`/`), and stock sync toast trigger.
+3. Dedicated Sub-Route Pages:
+   - Create physical route pages for every module under both `/erp/` and `/admin/` so direct URLs (e.g. `/admin/orders`, `/erp/inventory`) render the corresponding view seamlessly.
+4. Header & Navigation Integration:
+   - Provide direct one-click desktop and mobile navigation pills for both "Admin Console" and "ERP Portal" in CategoryNav.
+5. Hydration & Turbopack Compliance:
+   - Eliminate non-deterministic render-time `new Date()` calls in Client Components to ensure 100% stable pre-rendering.
+
+Verification:
+Execute `npm run lint` (0 errors) and `npm run build` (exit code 0; 43/43 routes generated successfully).
+```
+
+---
+
+### Prompt 47: Product Entry, Dynamic Document Builder (Pad Print Mode), Accounts & Partnership, HRM, Social/WhatsApp & Banner Management
+```text
+Task: Implement comprehensive ERP & Admin enhancements:
+1. Product Entry (eCommerce + ERP Catalog sync)
+2. Dynamic Quotation, Invoice, Challan & Voucher Builder with custom column/row modifiers and Letterhead/Pad print mode (hiding header/footer)
+3. Accounts with Income/Expense Tracker & Partnership Deed / Profit Distribution
+4. HRM & Monthly Payroll Disbursement
+5. Social Media & WhatsApp Business configuration with Storefront Floating WhatsApp Button
+6. Manual Banner & Carousel Slider Manager
+
+File Targets:
+- `frontend/src/types/index.ts`
+- `frontend/src/components/erp/ErpDocumentBuilderView.tsx`
+- `frontend/src/components/erp/ErpDocumentBuilderView.css`
+- `frontend/src/components/erp/ErpProductEntryView.tsx`
+- `frontend/src/components/erp/ErpProductEntryView.css`
+- `frontend/src/components/erp/ErpHrmView.tsx`
+- `frontend/src/components/erp/ErpHrmView.css`
+- `frontend/src/components/erp/ErpBannerManagerView.tsx`
+- `frontend/src/components/erp/ErpBannerManagerView.css`
+- `frontend/src/components/erp/ErpAccountingView.tsx`
+- `frontend/src/components/WhatsAppFloatingButton.tsx`
+- `frontend/src/components/WhatsAppFloatingButton.css`
+- `frontend/src/components/HeroBanner.tsx`
+- `frontend/src/components/Footer.tsx`
+- `frontend/src/components/AdminPage.tsx`
+- `frontend/src/app/layout.tsx`
+- `frontend/src/app/erp/page.tsx`
+- `frontend/src/app/admin/page.tsx`
+- `frontend/src/app/erp/documents/page.tsx`
+- `frontend/src/app/erp/products/page.tsx`
+- `frontend/src/app/erp/hrm/page.tsx`
+- `frontend/src/app/erp/banners/page.tsx`
+- `frontend/src/app/admin/documents/page.tsx`
+- `frontend/src/app/admin/products/page.tsx`
+- `frontend/src/app/admin/hrm/page.tsx`
+- `frontend/src/app/admin/banners/page.tsx`
+
+Requirements:
+1. Product Entry (Storefront + ERP):
+   - Add/edit products with SKU, title (EN + BN), category, pricing (sale, MRP, cost), stock quantity, batch, expiry date, DGDA DAR, specifications.
+   - Synchronizes to local catalog and dispatches real-time update events.
+2. Dynamic Document Builder (Quotation, Invoice, Challan, Voucher):
+   - Replicates exact layout of Somorita Hospital Price Offer letter (PDF).
+   - Dynamic table: Add/remove rows, add/remove columns, rename column headers.
+   - Every column and every cell is inline editable.
+   - "Office Letterhead / Pad Print Mode" toggle: Hides logo, company name, address header, and footer, leaving clean top margin so it prints seamlessly on pre-printed company letterhead pads.
+   - 1-click presets: "সমরিতা কোটেশন", "ট্যাক্স ইনভয়েস", "ডেলিভারি চালান".
+3. Accounts, Income/Expense & Partnership:
+   - Daily Income & Expense tracker with net cash flow calculation.
+   - Partnership capital management: Partner shares (%), invested capital, profit distribution, cash drawings, current capital balance, and deed summary.
+4. HRM & Payroll:
+   - Employee directory with designations, departments, contact, and gross salary.
+   - Monthly salary sheet generator and payroll disbursement.
+5. Social Media, WhatsApp & Floating Chat:
+   - Configure WhatsApp number, default message, Facebook, LinkedIn, YouTube, Instagram.
+   - Floating WhatsApp button on storefront with direct link to `https://wa.me/...`.
+   - Dynamic update of social links in Footer.
+6. Banner & Carousel Manager:
+   - Full CRUD for homepage carousel banner slides (heading, label, description, button labels/links, image).
+   - Live synchronization with HeroBanner component.
+
+Verification:
+Execute `npm run lint` (0 errors) and `npm run build` (exit code 0; 51/51 routes generated successfully).
+```
+
+
+
 

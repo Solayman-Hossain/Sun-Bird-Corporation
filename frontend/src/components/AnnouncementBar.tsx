@@ -59,7 +59,7 @@ export function AnnouncementBar() {
           <a
             href="tel:+8801711000000"
             className="flex items-center gap-1.5 text-[#e6b980] hover:text-white transition-colors font-medium"
-            title="Call Sun Bird Biomedical 24/7 Hotline"
+            title="Call Sun Bird Corporation 24/7 Hotline"
           >
             <PhoneCall className="w-3.5 h-3.5 text-[#e6b980]" />
             <span className="whitespace-nowrap">Hotline: +880 1711-000000</span>

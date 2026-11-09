@@ -29,7 +29,7 @@ export default function RmaWarrantyPortalPage() {
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#faf8f5] flex flex-col font-sans text-slate-800">
+    <div className="min-h-screen flex flex-col font-sans text-slate-800">
       <Navbar showSearch={false} />
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-10 space-y-8">

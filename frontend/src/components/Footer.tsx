@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import './Footer.css';
 import {
@@ -12,7 +12,10 @@ import {
   Award,
   Truck,
   ExternalLink,
+  MessageCircle,
 } from 'lucide-react';
+import { DEFAULT_SOCIAL_SETTINGS } from './erp/ErpBannerManagerView';
+import { SocialAndWhatsappSettings } from '../types';
 
 function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -47,6 +50,27 @@ function TwitterIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export function Footer() {
+  const [social, setSocial] = useState<SocialAndWhatsappSettings>(DEFAULT_SOCIAL_SETTINGS);
+
+  useEffect(() => {
+    const loadSocial = () => {
+      if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem('sbc_social_settings');
+        if (saved) {
+          try {
+            setSocial(JSON.parse(saved));
+          } catch {
+            // ignore
+          }
+        }
+      }
+    };
+    loadSocial();
+    window.addEventListener('sbc_social_updated', loadSocial);
+    return () => window.removeEventListener('sbc_social_updated', loadSocial);
+  }, []);
+
+  const cleanWhatsappNumber = social.whatsappNumber.replace(/[^0-9]/g, '');
   return (
     <footer className="bg-[#162f29] text-slate-300 text-xs mt-auto border-t border-[#23423a]">
       {/* Upper Main Footer Grid */}
@@ -71,10 +95,10 @@ export function Footer() {
               Direct importer and licensed distributor of DGDA-approved hospital equipment, surgical consumables, and home diagnostic medical devices across Bangladesh.
             </p>
 
-            {/* Social Icons */}
+            {/* Social Icons & WhatsApp */}
             <div className="flex items-center gap-3 pt-2">
               <a
-                href="https://facebook.com"
+                href={social.facebookUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="w-8 h-8 rounded-lg bg-[#1f3f37] hover:bg-[#2c574c] text-slate-300 hover:text-white flex items-center justify-center transition-colors"
@@ -83,7 +107,7 @@ export function Footer() {
                 <FacebookIcon className="w-4 h-4" />
               </a>
               <a
-                href="https://linkedin.com"
+                href={social.linkedinUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="w-8 h-8 rounded-lg bg-[#1f3f37] hover:bg-[#2c574c] text-slate-300 hover:text-white flex items-center justify-center transition-colors"
@@ -92,7 +116,7 @@ export function Footer() {
                 <LinkedinIcon className="w-4 h-4" />
               </a>
               <a
-                href="https://youtube.com"
+                href={social.youtubeUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="w-8 h-8 rounded-lg bg-[#1f3f37] hover:bg-[#2c574c] text-slate-300 hover:text-white flex items-center justify-center transition-colors"
@@ -101,13 +125,14 @@ export function Footer() {
                 <YoutubeIcon className="w-4 h-4" />
               </a>
               <a
-                href="https://twitter.com"
+                href={`https://wa.me/${cleanWhatsappNumber}?text=${encodeURIComponent(social.whatsappDefaultMessage)}`}
                 target="_blank"
                 rel="noreferrer"
-                className="w-8 h-8 rounded-lg bg-[#1f3f37] hover:bg-[#2c574c] text-slate-300 hover:text-white flex items-center justify-center transition-colors"
-                aria-label="Twitter"
+                className="w-8 h-8 rounded-lg bg-[#25D366]/20 hover:bg-[#25D366]/30 text-emerald-400 hover:text-white flex items-center justify-center transition-colors border border-emerald-500/30"
+                aria-label="WhatsApp"
+                title="Chat on WhatsApp"
               >
-                <TwitterIcon className="w-4 h-4" />
+                <MessageCircle className="w-4 h-4" />
               </a>
             </div>
           </div>

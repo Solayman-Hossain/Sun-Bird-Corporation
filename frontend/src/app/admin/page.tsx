@@ -2,12 +2,16 @@
 
 import React from 'react';
 import './page.css';
-import { AdminPage } from '../../components/AdminPage';
+import { AdminPage, AdminTab } from '../../components/AdminPage';
 
-export default function AdminRoutePage() {
+interface AdminRoutePageProps {
+  initialTab?: AdminTab;
+}
+
+export default function AdminRoutePage({ initialTab = 'overview' }: AdminRoutePageProps) {
   return (
     <div className="admin-route-wrapper">
-      <AdminPage />
+      <AdminPage initialTab={initialTab} />
     </div>
   );
 }

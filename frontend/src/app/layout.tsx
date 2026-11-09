@@ -7,6 +7,7 @@ import { WishlistProvider } from '../context/WishlistContext';
 import { ToastProvider } from '../context/ToastContext';
 import { AuthProvider } from '../context/AuthContext';
 import { AnnouncementBar } from '../components/AnnouncementBar';
+import { WhatsAppFloatingButton } from '../components/WhatsAppFloatingButton';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -99,13 +100,14 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="app-root-layout min-h-full flex flex-col bg-[#faf8f5] text-slate-800">
+      <body className="app-root-layout min-h-full flex flex-col text-slate-800">
         <ToastProvider>
           <AuthProvider>
             <WishlistProvider>
               <CartProvider>
                 <AnnouncementBar />
                 {children}
+                <WhatsAppFloatingButton />
               </CartProvider>
             </WishlistProvider>
           </AuthProvider>

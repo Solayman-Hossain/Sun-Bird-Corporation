@@ -75,7 +75,7 @@ export function CustomerSupportChat() {
     {
       id: 'welcome-1',
       sender: 'agent',
-      text: 'আসসালামু আলাইকুম! সান বার্ড বায়োমেডিকেল সাপোর্ট ডেস্কে স্বাগতম। আপনি কি কোনো মেডিকেল ইকুইপমেন্ট অর্ডার বা ওয়ারেন্টি ক্লেইম সম্পর্কে জানতে চান?',
+      text: 'আসসালামু আলাইকুম! সান বার্ড কর্পোরেশনে স্বাগতম। অর্ডার, ওয়ারেন্টি বা পণ্য, কোন বিষয়ে সাহায্য লাগবে?',
       timestamp: 'Just now',
     },
   ]);
@@ -176,7 +176,7 @@ export function CustomerSupportChat() {
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#1e3932] animate-ping" />
           </div>
           <span className="text-xs font-bold tracking-wide hidden sm:inline">
-            বায়োমেডিকেল সাপোর্ট (Live)
+            লাইভ চ্যাট করুন
           </span>
           {unreadCount > 0 && (
             <span className="flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-extrabold bg-[#c89348] text-slate-950 rounded-full shadow-xs animate-bounce">
@@ -199,7 +199,7 @@ export function CustomerSupportChat() {
               <div>
                 <div className="flex items-center gap-1.5">
                   <h3 className="font-bold text-sm tracking-tight font-serif">
-                    Sun Bird Biomedical Support
+                    Sun Bird Corporation Support
                   </h3>
                   <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold uppercase">
                     Online 24/7

@@ -1,5 +1,6 @@
 /* ========================================================
    Sun Bird Corporation - Product Curated Section Stylesheet
+   5-Column High-Density Clinical Equipment Grid & Load More
    ======================================================== */
 
 .product-section-header {
@@ -7,19 +8,26 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 1rem;
-  border-bottom: 1px solid #eae5df;
+  border-bottom: 1px solid rgba(212, 83, 126, 0.25);
   padding-bottom: 0.75rem;
 }
 
 .product-section-grid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 @media (min-width: 640px) {
   .product-section-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .product-section-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -29,3 +37,35 @@
   }
 }
 
+@media (min-width: 1280px) {
+  .product-section-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.load-more-btn {
+  padding: 0.85rem 2rem;
+  background-color: #1e3932;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  box-shadow: 0 4px 14px rgba(30, 57, 50, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.load-more-btn:hover {
+  background-color: #162f29;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 57, 50, 0.35);
+}
+
+.load-more-btn:active {
+  transform: translateY(0);
+}

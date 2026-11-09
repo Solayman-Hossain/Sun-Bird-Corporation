@@ -37,9 +37,27 @@ import { ErpOrdersView } from '../../components/erp/ErpOrdersView';
 import { ErpInventoryView } from '../../components/erp/ErpInventoryView';
 import { ErpAccountingView } from '../../components/erp/ErpAccountingView';
 import { ErpSupportView } from '../../components/erp/ErpSupportView';
+import { ErpDocumentBuilderView } from '../../components/erp/ErpDocumentBuilderView';
+import { ErpProductEntryView } from '../../components/erp/ErpProductEntryView';
+import { ErpHrmView } from '../../components/erp/ErpHrmView';
+import { ErpBannerManagerView } from '../../components/erp/ErpBannerManagerView';
 import { useToast } from '../../context/ToastContext';
 
-type ErpTab = 'overview' | 'orders' | 'inventory' | 'accounting' | 'lc' | 'support';
+export type ErpTab =
+  | 'overview'
+  | 'documents'
+  | 'products'
+  | 'orders'
+  | 'inventory'
+  | 'accounting'
+  | 'hrm'
+  | 'banners'
+  | 'lc'
+  | 'support';
+
+export interface ErpDashboardPageProps {
+  initialTab?: ErpTab;
+}
 
 const IMPORT_LC_DATA = [
   {
@@ -74,8 +92,8 @@ const IMPORT_LC_DATA = [
   },
 ];
 
-export default function ErpDashboardPage() {
-  const [activeTab, setActiveTab] = useState<ErpTab>('overview');
+export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboardPageProps) {
+  const [activeTab, setActiveTab] = useState<ErpTab>(initialTab);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedBranch, setSelectedBranch] = useState('Tejgaon Central Depot (Dhaka)');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -159,6 +177,14 @@ export default function ErpDashboardPage() {
           </div>
 
           <Link
+            href="/admin"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 transition-colors ml-2"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Admin Console</span>
+          </Link>
+
+          <Link
             href="/"
             className="hidden lg:flex items-center gap-1 text-xs text-slate-400 hover:text-white ml-2 pl-2 border-l border-slate-800"
           >
@@ -179,9 +205,13 @@ export default function ErpDashboardPage() {
           <div className="p-3 space-y-1.5">
             {[
               { id: 'overview' as ErpTab, label: 'Overview & Metrics', labelBn: 'ড্যাশবোর্ড সারাংশ', icon: TrendingUp },
+              { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
+              { id: 'products' as ErpTab, label: 'Product Entry & Catalog', labelBn: 'প্রডাক্ট এন্ট্রি (ইকমার্স+ইআরপি)', icon: Boxes },
               { id: 'orders' as ErpTab, label: 'Order Processing', labelBn: 'অর্ডার ও কুরিয়ার কিউ', icon: Package },
               { id: 'inventory' as ErpTab, label: 'Inventory & FEFO', labelBn: 'ইনভেন্টরি ও FEFO মেয়াদ', icon: Boxes },
-              { id: 'accounting' as ErpTab, label: 'Double-Entry GL', labelBn: 'জেনারেল লেজার ও ট্রায়াল', icon: FileSpreadsheet },
+              { id: 'accounting' as ErpTab, label: 'Accounts & Partnership', labelBn: 'আয়-ব্যয় ও পার্টনারশিপ', icon: DollarSign },
+              { id: 'hrm' as ErpTab, label: 'HRM & Payroll', labelBn: 'এইচ আর ও পে-রোল', icon: User },
+              { id: 'banners' as ErpTab, label: 'Banners & Social', labelBn: 'ব্যানার ও সোশ্যাল মিডিয়া', icon: Menu },
               { id: 'lc' as ErpTab, label: 'Import L/C Tracker', labelBn: 'আমদানি এল/সি ট্র্যাকার', icon: Ship },
               { id: 'support' as ErpTab, label: 'RMA & Support Desk', labelBn: 'RMA ওয়ারেন্টি ও ইনবক্স', icon: ShieldAlert },
             ].map((item) => {
@@ -333,14 +363,26 @@ export default function ErpDashboardPage() {
             </div>
           )}
 
+          {/* TAB: Document & Quotation Builder */}
+          {activeTab === 'documents' && <ErpDocumentBuilderView />}
+
+          {/* TAB: Product Entry */}
+          {activeTab === 'products' && <ErpProductEntryView />}
+
           {/* TAB 2: Order Processing (Prompt 35) */}
           {activeTab === 'orders' && <ErpOrdersView />}
 
           {/* TAB 3: Inventory & FEFO (Prompt 36) */}
           {activeTab === 'inventory' && <ErpInventoryView />}
 
-          {/* TAB 4: Double-Entry Accounting & Trial Balance (Prompt 37) */}
+          {/* TAB 4: Double-Entry Accounting & Partnership */}
           {activeTab === 'accounting' && <ErpAccountingView />}
+
+          {/* TAB: HRM & Payroll */}
+          {activeTab === 'hrm' && <ErpHrmView />}
+
+          {/* TAB: Banner & Social Manager */}
+          {activeTab === 'banners' && <ErpBannerManagerView />}
 
           {/* TAB 5: Import L/C Tracker */}
           {activeTab === 'lc' && (

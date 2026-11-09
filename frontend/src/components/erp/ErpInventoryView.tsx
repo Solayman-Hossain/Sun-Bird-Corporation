@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import './ErpInventoryView.css';
 import {
   Boxes,
@@ -121,12 +121,16 @@ export function ErpInventoryView() {
 
   const { showToast } = useToast();
 
-  const today = new Date();
+  const [currentDate, setCurrentDate] = useState<Date>(() => new Date('2026-11-09T00:00:00Z'));
+
+  useEffect(() => {
+    setCurrentDate(new Date());
+  }, []);
 
   // Helper to calculate days until expiry
   const getExpiryStatus = (expiryStr: string) => {
     const expDate = new Date(expiryStr);
-    const diffTime = expDate.getTime() - today.getTime();
+    const diffTime = expDate.getTime() - currentDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {

@@ -180,7 +180,7 @@ export function RmaClaimModal({
                 ওয়ারেন্টি রিপ্লেসমেন্ট ক্লেইম (RMA Claim Form)
               </h3>
               <p className="text-[11px] text-slate-300">
-                Sun Bird Biomedical Service & Replacement Guarantee
+                Sun Bird Corporation Service & Replacement Guarantee
               </p>
             </div>
           </div>

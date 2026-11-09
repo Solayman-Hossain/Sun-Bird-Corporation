@@ -141,7 +141,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf8f5] flex flex-col font-sans text-slate-800">
+    <div className="min-h-screen flex flex-col font-sans text-slate-800">
       {/* Inject Structured Data */}
       <script
         type="application/ld+json"
