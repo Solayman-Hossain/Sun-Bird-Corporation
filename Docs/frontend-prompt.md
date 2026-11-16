@@ -1762,3 +1762,73 @@ Verification & Testing:
   - Backend API: `http://localhost:5000/api/v1/health` (Status UP, HTTP 200).
   - Frontend ERP Route: `http://localhost:3000/erp/products` (HTTP 200).
 ```
+
+```markdown
+### Prompt 54: SUN BIRD ERP – MODULE 05: PURCHASE & SUPPLIER MANAGEMENT
+
+Objective:
+Implement an enterprise-level Purchase and Supplier Management system within Sun Bird Corporation ERP without rebuilding the application, redesigning existing layouts, or duplicating database master collections.
+
+Architecture & Scope:
+- Complete Procurement Pipeline: Multi-item Purchase Requisitions with Maker-Checker approval, Goods Receive Notes (GRN) with inspection states, FEFO stock batches in ProductBatch, StockLedger movements, Purchase Invoices with 3-way matching, automated double-entry GL vouchers (DR 1300 Inventory, CR 2100 AP), Supplier Payments (DR 2100 AP, CR 1100 Cash/Bank), and Purchase Returns.
+- Supplier Financial Intelligence: Running balance Supplier Ledger (debit/credit tracking), 5-bucket Accounts Payable (AP) aging summary (Current, 1-30, 31-60, 61-90, 90+ days), and duplicate vendor prevention.
+- 18-Submodule Expandable Accordion: Integrated under the Purchase & Suppliers navigation section.
+
+Files Created & Updated:
+- `backend/src/models/PurchaseRequisition.ts`: Purchase Requisition Mongoose model.
+- `backend/src/models/GoodsReceiveNote.ts`: Goods Receive Note (GRN) Mongoose model with inspection status.
+- `backend/src/models/PurchaseInvoice.ts`: Purchase Invoice / Bill Mongoose model.
+- `backend/src/models/SupplierPayment.ts`: Supplier Payment voucher Mongoose model.
+- `backend/src/models/PurchaseReturn.ts`: Purchase Return / Debit Note Mongoose model.
+- `backend/src/models/Supplier.ts`: Added organizationId and bin to Supplier model.
+- `backend/src/models/PurchaseOrder.ts`: Added organizationId to PurchaseOrder model.
+- `backend/src/models/index.ts`: Exported new models.
+- `backend/src/services/PurchaseRequisitionService.ts`: Requisition lifecycle and conversion to PO.
+- `backend/src/services/GrnService.ts`: Physical receipt, quality inspection, and FEFO stock generation.
+- `backend/src/services/PurchaseInvoiceService.ts`: Bill entry, matching, GL posting, and AP aging summary.
+- `backend/src/services/SupplierPaymentService.ts`: Payment vouchers, multi-invoice settlement, and GL posting.
+- `backend/src/services/PurchaseReturnService.ts`: Return debit notes and inventory adjustment.
+- `backend/src/services/PurchaseDashboardService.ts`: Aggregated procurement metrics and spend trends.
+- `backend/src/services/SupplierService.ts`: Added getSupplierLedger, getSupplierStats, checkDuplicateSupplier.
+- `backend/src/services/verify-purchase-service.ts`: 38-assertion automated test suite.
+- `backend/src/controllers/PurchaseController.ts`: REST controller for purchase operations.
+- `backend/src/routes/erp/purchaseRoutes.ts`: Mounted at `/api/v1/erp/purchase`.
+- `backend/src/routes/index.ts`: Registered purchase router.
+- `frontend/src/types/index.ts`: Added Purchase types, submodules, and interfaces.
+- `frontend/src/services/purchase.service.ts`: Frontend client service for purchase operations.
+- `frontend/src/services/index.ts`: Exported `purchaseService`.
+- `frontend/src/components/erp/ErpPurchaseView.tsx`: Full interactive React component supporting all 18 submodules.
+- `frontend/src/components/erp/ErpPurchaseView.css`: Sun Bird theme (#1e3932 Forest Green, #c89348 Warm Gold).
+- `frontend/src/app/erp/page.tsx`: Sidebar accordion integration with 18 submodules and main view rendering.
+- `frontend/src/app/erp/purchase/page.tsx`: Direct route wrapper.
+- `frontend/src/app/admin/purchase/page.tsx`: Admin route wrapper.
+
+Submodules Implemented (18 Submodules):
+1. Purchase Dashboard: Live procurement KPI metrics (Suppliers, PRs, POs, GRNs, AP Aging, Monthly Spend Trend).
+2. Purchase Requisitions: Departmental purchase requests with Maker-Checker submission.
+3. Requisition Approval: Two-tier approval queue with Maker-Checker governance.
+4. RFQ Sourcing: Request for Quotation broadcast to suppliers.
+5. Supplier Quotations: Bid submission, terms, MOQs, and unit rates.
+6. Comparative Statements: Automated CS side-by-side bid evaluation.
+7. Purchase Orders: Official purchase order documents, tracking, and fulfillment.
+8. Goods Receive Notes (GRN): Physical receiving against POs with FEFO batch creation.
+9. Quality Inspection: QC pass, partial, reject, and damage inspection tracking.
+10. Purchase Invoices: Supplier tax invoice entry, matching, and GL posting.
+11. Supplier Payments: Payment settlement vouchers and bank transfers.
+12. Purchase Returns: Defective returns, debit notes, and inventory write-backs.
+13. Supplier Directory: Comprehensive vendor profiles, TIN, BIN, and banking information.
+14. Supplier Ledger: Running statement of account with running balance.
+15. Accounts Payable Aging: 5-bucket aging report (Current, 1-30, 31-60, 61-90, 90+ days).
+16. Import LC Tracker: Letter of credit customs clearing and landed cost tracking.
+17. Purchase Reports: Spend analysis, supplier ratings, and product cost trends.
+18. Purchase Settings: Approval limits, default warehouses, and document sequencing.
+
+Verification & Testing:
+- Backend Test Suite: `verify-purchase-service.ts` (38 Passed / 0 Failed).
+- Backend TypeScript Check: `tsc` / `npm run build` (Exit code 0, zero errors).
+- Frontend TypeScript Check: Next.js build (`npm run build`) succeeded with 58/58 static pages generated cleanly.
+- Live Routes:
+  - Backend API: `http://localhost:5000/api/v1/erp/purchase/dashboard`
+  - Frontend ERP Route: `http://localhost:3000/erp/purchase` (HTTP 200).
+  - Frontend Admin Route: `http://localhost:3000/admin/purchase` (HTTP 200).
+```

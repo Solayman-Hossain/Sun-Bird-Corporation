@@ -238,7 +238,7 @@ async function runProductCatalogVerificationSuite() {
       testActorId
     );
     assert(Boolean(updatedSeo.seo?.slug), 'SEO slug generated and stored');
-    assert(updatedSeo.seo?.seoTitle?.includes('Price in Bangladesh'), 'SEO title verified');
+    assert(Boolean(updatedSeo.seo?.seoTitle?.includes('Price in Bangladesh')), 'SEO title verified');
 
     // -------------------------------------------------------------------------
     // TEST GROUP 9: Website Publishing & Module 03 Approval Integration

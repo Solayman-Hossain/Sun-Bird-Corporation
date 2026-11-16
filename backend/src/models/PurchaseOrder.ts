@@ -23,6 +23,7 @@ export interface IPOItem {
 export interface IPurchaseOrder extends Document {
   _id: Types.ObjectId;
   poNumber: string;
+  organizationId?: Types.ObjectId;
   csId?: Types.ObjectId;
   supplierId: Types.ObjectId;
   poDate: Date;
@@ -98,6 +99,10 @@ export const PurchaseOrderSchema = new Schema<IPurchaseOrder>(
       required: true,
       trim: true,
       uppercase: true,
+    },
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
     },
     csId: {
       type: Schema.Types.ObjectId,

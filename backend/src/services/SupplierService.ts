@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { Types, PipelineStage } from 'mongoose';
 import { SupplierModel, ISupplier, SupplierType, SupplierCurrency } from '../models/Supplier';
 import { UserModel } from '../models/User';
 import {
@@ -265,6 +265,252 @@ export class SupplierService {
       limit,
       totalPages: Math.ceil(total / limit),
     };
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // Module 05 Extensions
+  // ─────────────────────────────────────────────────────────
+
+  /**
+   * Supplier ledger: running balance from PurchaseInvoice + SupplierPayment + PurchaseReturn
+   */
+  public static async getSupplierLedger(
+    supplierId: string,
+    orgId: string,
+    filters?: { startDate?: string; endDate?: string; page?: number; limit?: number }
+  ) {
+    if (!Types.ObjectId.isValid(supplierId)) throw new NotFoundError('Supplier', supplierId);
+    if (!Types.ObjectId.isValid(orgId)) throw new ValidationError('Invalid orgId');
+
+    const supplierObjId = new Types.ObjectId(supplierId);
+    const orgObjId = new Types.ObjectId(orgId);
+
+    const supplier = await SupplierModel.findOne({ _id: supplierObjId, organizationId: orgObjId });
+    if (!supplier) throw new NotFoundError('Supplier', supplierId);
+
+    // Dynamic model loads
+    let PurchaseInvoiceModel: any;
+    let SupplierPaymentModel: any;
+    let PurchaseReturnModel: any;
+    try {
+      [PurchaseInvoiceModel, SupplierPaymentModel, PurchaseReturnModel] = await Promise.all([
+        import('../models/PurchaseInvoice.js').then((m) => m.PurchaseInvoiceModel),
+        import('../models/SupplierPayment.js').then((m) => m.SupplierPaymentModel),
+        import('../models/PurchaseReturn.js').then((m) => m.PurchaseReturnModel),
+      ]);
+    } catch {
+      logger.warn('Some purchase models not yet available for ledger computation.');
+    }
+
+    const dateMatch: Record<string, any> = {};
+    if (filters?.startDate) dateMatch.$gte = new Date(filters.startDate);
+    if (filters?.endDate) dateMatch.$lte = new Date(filters.endDate);
+    const hasDateFilter = Object.keys(dateMatch).length > 0;
+
+    const ledgerEntries: Array<{
+      date: Date;
+      type: 'INVOICE' | 'PAYMENT' | 'RETURN';
+      reference: string;
+      debit: number;
+      credit: number;
+    }> = [];
+
+    // Invoices (DR: add to payable)
+    if (PurchaseInvoiceModel) {
+      const invQuery: Record<string, any> = {
+        supplierId: supplierObjId,
+        organizationId: orgObjId,
+        status: { $in: ['POSTED', 'PARTIALLY_PAID', 'PAID', 'OVERDUE'] },
+      };
+      if (hasDateFilter) invQuery.invoiceDate = dateMatch;
+      const invoices = await PurchaseInvoiceModel.find(invQuery).lean();
+      for (const inv of invoices) {
+        ledgerEntries.push({
+          date: inv.invoiceDate,
+          type: 'INVOICE',
+          reference: inv.invoiceNumber,
+          debit: inv.grandTotal,
+          credit: 0,
+        });
+      }
+    }
+
+    // Payments (CR: reduce payable)
+    if (SupplierPaymentModel) {
+      const payQuery: Record<string, any> = {
+        supplierId: supplierObjId,
+        organizationId: orgObjId,
+        status: 'POSTED',
+      };
+      if (hasDateFilter) payQuery.paymentDate = dateMatch;
+      const payments = await SupplierPaymentModel.find(payQuery).lean();
+      for (const pay of payments) {
+        ledgerEntries.push({
+          date: pay.paymentDate,
+          type: 'PAYMENT',
+          reference: pay.paymentNumber,
+          debit: 0,
+          credit: pay.paymentAmount,
+        });
+      }
+    }
+
+    // Returns (CR: reduce payable)
+    if (PurchaseReturnModel) {
+      const retQuery: Record<string, any> = {
+        supplierId: supplierObjId,
+        organizationId: orgObjId,
+        status: 'POSTED',
+      };
+      if (hasDateFilter) retQuery.returnDate = dateMatch;
+      const returns = await PurchaseReturnModel.find(retQuery).lean();
+      for (const ret of returns) {
+        ledgerEntries.push({
+          date: ret.returnDate,
+          type: 'RETURN',
+          reference: ret.returnNumber,
+          debit: 0,
+          credit: ret.totalReturnValue,
+        });
+      }
+    }
+
+    // Sort by date
+    ledgerEntries.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+    // Compute running balance
+    let runningBalance = 0;
+    const ledgerWithBalance = ledgerEntries.map((entry) => {
+      runningBalance += entry.debit - entry.credit;
+      return { ...entry, runningBalance };
+    });
+
+    // Pagination
+    const page = Math.max(1, filters?.page || 1);
+    const limit = Math.min(100, Math.max(1, filters?.limit || 20));
+    const total = ledgerWithBalance.length;
+    const paginated = ledgerWithBalance.slice((page - 1) * limit, page * limit);
+
+    return {
+      supplier: { _id: supplier._id, companyName: supplier.companyName, supplierCode: supplier.supplierCode },
+      entries: paginated,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      closingBalance: runningBalance,
+    };
+  }
+
+  /**
+   * Supplier stats: total, active, inactive, by type
+   */
+  public static async getSupplierStats(
+    orgId: string,
+    dateRange?: { startDate?: string; endDate?: string }
+  ) {
+    if (!Types.ObjectId.isValid(orgId)) throw new ValidationError('Invalid orgId');
+
+    const matchStage: Record<string, any> = { organizationId: new Types.ObjectId(orgId) };
+    if (dateRange?.startDate || dateRange?.endDate) {
+      matchStage.createdAt = {};
+      if (dateRange.startDate) matchStage.createdAt.$gte = new Date(dateRange.startDate);
+      if (dateRange.endDate) matchStage.createdAt.$lte = new Date(dateRange.endDate);
+    }
+
+    const pipeline: PipelineStage[] = [
+      { $match: matchStage },
+      {
+        $group: {
+          _id: '$supplierType',
+          count: { $sum: 1 },
+          active: { $sum: { $cond: [{ $eq: ['$isActive', true] }, 1, 0] } },
+          inactive: { $sum: { $cond: [{ $eq: ['$isActive', false] }, 1, 0] } },
+        },
+      },
+      { $sort: { count: -1 } },
+    ];
+
+    const byType = await SupplierModel.aggregate<{
+      _id: string;
+      count: number;
+      active: number;
+      inactive: number;
+    }>(pipeline);
+
+    const totals = byType.reduce(
+      (acc, r) => {
+        acc.total += r.count;
+        acc.active += r.active;
+        acc.inactive += r.inactive;
+        return acc;
+      },
+      { total: 0, active: 0, inactive: 0 }
+    );
+
+    return {
+      ...totals,
+      byType: byType.map((r) => ({
+        supplierType: r._id,
+        count: r.count,
+        active: r.active,
+        inactive: r.inactive,
+      })),
+    };
+  }
+
+  /**
+   * Check for duplicate supplier by phone, email, or BIN (org-scoped)
+   */
+  public static async checkDuplicateSupplier(
+    dto: { phone?: string; email?: string; bin?: string },
+    orgId: string
+  ) {
+    if (!Types.ObjectId.isValid(orgId)) throw new ValidationError('Invalid orgId');
+
+    const checks: Record<string, any>[] = [];
+    if (dto.phone) checks.push({ phone: dto.phone.trim(), organizationId: new Types.ObjectId(orgId) });
+    if (dto.email) checks.push({ email: dto.email.trim().toLowerCase(), organizationId: new Types.ObjectId(orgId) });
+    if (dto.bin) checks.push({ bin: dto.bin.trim(), organizationId: new Types.ObjectId(orgId) });
+
+    if (checks.length === 0) return { isDuplicate: false, matches: [] };
+
+    const matches = await SupplierModel.find({ $or: checks })
+      .select('companyName supplierCode email phone bin organizationId')
+      .lean();
+
+    return {
+      isDuplicate: matches.length > 0,
+      matches,
+    };
+  }
+
+  /**
+   * Org-scoped supplier update
+   */
+  public static async updateSupplierWithOrg(
+    id: string,
+    dto: UpdateSupplierDTO,
+    orgId: string,
+    userId: string
+  ) {
+    if (!Types.ObjectId.isValid(id)) throw new NotFoundError('Supplier', id);
+    if (!Types.ObjectId.isValid(orgId)) throw new ValidationError('Invalid orgId');
+
+    const supplier = await SupplierModel.findOne({
+      _id: new Types.ObjectId(id),
+      organizationId: new Types.ObjectId(orgId),
+    });
+    if (!supplier) throw new NotFoundError('Supplier', id);
+
+    Object.assign(supplier, {
+      ...dto,
+      userId: userId ? new Types.ObjectId(userId) : supplier.userId,
+    });
+    await supplier.save();
+
+    logger.info(`Supplier updated: ${supplier.supplierCode} by user ${userId}`);
+    return supplier;
   }
 }
 

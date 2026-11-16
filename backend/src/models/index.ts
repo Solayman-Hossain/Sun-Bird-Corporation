@@ -47,6 +47,11 @@ export * from './ApprovalDelegation';
 export * from './Category';
 export * from './Brand';
 export * from './ProductAttribute';
+export * from './PurchaseRequisition';
+export * from './GoodsReceiveNote';
+export * from './PurchaseInvoice';
+export * from './SupplierPayment';
+export * from './PurchaseReturn';
 
 
 

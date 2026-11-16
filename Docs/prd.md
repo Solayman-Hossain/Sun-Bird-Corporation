@@ -970,3 +970,40 @@ Support multiple operating entities, parent/subsidiary companies, and sister tra
 
 
 
+
+
+---
+
+## 27. Enterprise Purchase & Supplier Management (Module 05)
+
+### 27.1 End-to-End Procurement Lifecycle
+- **Purchase Requisitions (PR):** Multi-item purchase requests with priority levels (Low, Normal, High, Urgent), estimated pricing, and Maker-Checker approval workflow via Module 03 before PO generation.
+- **Goods Receive Notes (GRN):** Physical inventory receipt with quality inspection (Passed, Partial, Rejected, Damaged), FEFO batch creation in `ProductBatch`, and atomic `StockLedger` movements (`GRN_IN`).
+- **Purchase Invoices (PINV):** Supplier tax invoice recording with 3-way matching validation and automated double-entry GL journal vouchers (`DR 1300 Inventory, CR 2100 Accounts Payable`).
+- **Supplier Payments (SPAY):** Payment settlement vouchers with multi-invoice allocation, reducing outstanding balances and posting GL vouchers (`DR 2100 Accounts Payable, CR 1100 Cash/Bank`).
+- **Purchase Returns (PRTN):** Defective product return to vendor with stock reversal, debit note issuance, and AP liability reduction.
+
+### 27.2 Supplier Financial Intelligence & AP Aging
+- **Supplier Ledger:** Running balance statement tracking invoices (debits), payments (credits), and returns (credits) with live closing balances.
+- **Accounts Payable (AP) Aging:** 5-bucket aging report classifying payables into Current (0 days), 1-30 days, 31-60 days, 61-90 days, and 90+ days past due.
+- **Duplicate Vendor Prevention:** Proactive checks preventing duplicate suppliers based on phone, email, and 11-digit BIN.
+
+### 27.3 Implemented Submodules (18 Submodules)
+1. **Purchase Dashboard:** Comprehensive procurement KPIs (Total Suppliers, PRs, POs, GRNs, AP Outstanding, Overdue, Spend Trends).
+2. **Purchase Requisitions:** Departmental requisition authoring and item estimation.
+3. **Requisition Approval:** Maker-Checker approval queue for purchase requests.
+4. **RFQ Sourcing:** Request for Quotation broadcast to registered vendors.
+5. **Supplier Quotations:** Supplier bid recording with unit rates, MOQs, and delivery timelines.
+6. **Comparative Statements (CS):** Side-by-side bid analysis and winner recommendation.
+7. **Purchase Orders (PO):** Formal purchase orders with quorum approvals and fulfillment tracking.
+8. **Goods Receive Notes (GRN):** Warehouse shipment receiving and stock batch creation.
+9. **Quality Inspection:** Physical and laboratory inspection status tracking.
+10. **Purchase Invoices:** Supplier bills with 3-way matching and GL integration.
+11. **Supplier Payments:** Payment vouchers and bank disbursement recording.
+12. **Purchase Returns:** Debit notes and defective stock write-backs.
+13. **Supplier Directory:** Vendor directory with BIN, TIN, bank accounts, and contact details.
+14. **Supplier Ledger:** Running account statement and transaction history.
+15. **Accounts Payable Aging:** Overdue liability analysis across 5 time buckets.
+16. **Import LC Tracker:** Letter of credit tracking, customs duty, and landed costs.
+17. **Purchase Reports & Analytics:** Spend analysis, vendor performance, and price trends.
+18. **Purchase Settings:** Procurement policies, approval thresholds, and document number sequences.

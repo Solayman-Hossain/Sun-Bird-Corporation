@@ -35,6 +35,7 @@ import {
   ShieldAlert,
   Users,
   KeyRound,
+  ShoppingCart,
 } from 'lucide-react';
 import { ErpOrdersView } from '../../components/erp/ErpOrdersView';
 import { ErpInventoryView } from '../../components/erp/ErpInventoryView';
@@ -48,7 +49,8 @@ import { ErpOrganizationView, OrgSubmodule } from '../../components/erp/ErpOrgan
 import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUserManagementView';
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
-import { ProductCatalogSubmodule } from '../../types';
+import { ErpPurchaseView } from '../../components/erp/ErpPurchaseView';
+import { ProductCatalogSubmodule, PurchaseSubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -56,8 +58,9 @@ export type ErpTab =
   | 'organization'
   | 'users'
   | 'approvals'
-  | 'documents'
   | 'products'
+  | 'purchase'
+  | 'documents'
   | 'orders'
   | 'inventory'
   | 'accounting'
@@ -116,6 +119,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isApprovalMenuExpanded, setIsApprovalMenuExpanded] = useState<boolean>(true);
   const [productSubmodule, setProductSubmodule] = useState<ProductCatalogSubmodule>('product-dashboard');
   const [isProductMenuExpanded, setIsProductMenuExpanded] = useState<boolean>(true);
+  const [purchaseSubmodule, setPurchaseSubmodule] = useState<PurchaseSubmodule>('purchase-dashboard');
+  const [isPurchaseMenuExpanded, setIsPurchaseMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -552,6 +557,87 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
               )}
             </div>
 
+            {/* 6. Expandable Purchase & Supplier Management Section (Module 05) */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeTab !== 'purchase') setActiveTab('purchase');
+                  setIsPurchaseMenuExpanded(!isPurchaseMenuExpanded);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'purchase'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+                title="Purchase & Supplier Management"
+              >
+                <div className="flex items-center gap-3 truncate">
+                  <ShoppingCart
+                    className={`w-4 h-4 shrink-0 ${activeTab === 'purchase' ? 'text-[#e6b980]' : 'text-slate-400'}`}
+                  />
+                  {isSidebarOpen && (
+                    <div className="text-left truncate">
+                      <span className="block leading-tight">Purchase & Suppliers</span>
+                      <span className="text-[10px] opacity-75 font-normal block">ক্রয় ও সরবরাহকারী</span>
+                    </div>
+                  )}
+                </div>
+                {isSidebarOpen && (
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 shrink-0 transition-transform ${
+                      isPurchaseMenuExpanded ? 'rotate-180 text-[#e6b980]' : 'text-slate-500'
+                    }`}
+                  />
+                )}
+              </button>
+
+              {/* 18 Submodules Accordion for Purchase */}
+              {isSidebarOpen && isPurchaseMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5">
+                  {[
+                    { id: 'purchase-dashboard' as PurchaseSubmodule, label: '1. Purchase Dashboard' },
+                    { id: 'purchase-requisitions' as PurchaseSubmodule, label: '2. Requisitions (PR)' },
+                    { id: 'requisition-approval' as PurchaseSubmodule, label: '3. PR Approval' },
+                    { id: 'rfq-management' as PurchaseSubmodule, label: '4. RFQ Sourcing' },
+                    { id: 'supplier-quotations' as PurchaseSubmodule, label: '5. Quotations' },
+                    { id: 'comparative-statements' as PurchaseSubmodule, label: '6. CS Analysis' },
+                    { id: 'purchase-orders' as PurchaseSubmodule, label: '7. Purchase Orders (PO)' },
+                    { id: 'goods-receive-notes' as PurchaseSubmodule, label: '8. GRN Receiving' },
+                    { id: 'quality-inspection' as PurchaseSubmodule, label: '9. Inspection & QC' },
+                    { id: 'purchase-invoices' as PurchaseSubmodule, label: '10. Bills & Invoices' },
+                    { id: 'supplier-payments' as PurchaseSubmodule, label: '11. Supplier Payments' },
+                    { id: 'purchase-returns' as PurchaseSubmodule, label: '12. Purchase Returns' },
+                    { id: 'supplier-directory' as PurchaseSubmodule, label: '13. Suppliers' },
+                    { id: 'supplier-ledger' as PurchaseSubmodule, label: '14. Supplier Ledger' },
+                    { id: 'payables-aging' as PurchaseSubmodule, label: '15. AP Aging' },
+                    { id: 'import-lc-tracker' as PurchaseSubmodule, label: '16. Import LC' },
+                    { id: 'purchase-reports' as PurchaseSubmodule, label: '17. Reports & Analytics' },
+                    { id: 'purchase-settings' as PurchaseSubmodule, label: '18. Purchase Settings' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'purchase' && purchaseSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('purchase');
+                          setPurchaseSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {/* Standard ERP Modules */}
             {[
               { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
@@ -740,6 +826,14 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
             <ErpProductCatalogView
               initialSubmodule={productSubmodule}
               onNavigateToSubmodule={(sub) => setProductSubmodule(sub)}
+            />
+          )}
+
+          {/* TAB: Purchase & Supplier Management (Module 05) */}
+          {activeTab === 'purchase' && (
+            <ErpPurchaseView
+              currentSubmodule={purchaseSubmodule}
+              onSubmoduleChange={(sub) => setPurchaseSubmodule(sub)}
             />
           )}
 

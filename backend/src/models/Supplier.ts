@@ -18,6 +18,8 @@ export interface ISupplier extends Document {
   bankDetails?: string;
   swiftCode?: string;
   userId?: Types.ObjectId; // Linked portal user account
+  organizationId?: Types.ObjectId;
+  bin?: string;
   historicalMetrics?: {
     totalOrders: number;
     onTimeDeliveryRate: number; // Percentage 0 - 100
@@ -92,6 +94,14 @@ export const SupplierSchema = new Schema<ISupplier>(
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+    },
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+    },
+    bin: {
+      type: String,
+      trim: true,
     },
     historicalMetrics: {
       totalOrders: { type: Number, default: 0, min: 0 },

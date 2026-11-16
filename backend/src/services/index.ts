@@ -95,5 +95,26 @@ export * from './BrandService';
 export * from './ProductAttributeService';
 export * from './ProductCatalogService';
 
+// ─── Module 05: Purchase & Supplier Management ───────────────────────────────
+export * from './PurchaseRequisitionService';
+export { PurchaseRequisitionService } from './PurchaseRequisitionService';
 
+export * from './GrnService';
+export { GrnService } from './GrnService';
+
+export * from './PurchaseInvoiceService';
+export { PurchaseInvoiceService } from './PurchaseInvoiceService';
+
+export * from './SupplierPaymentService';
+export { SupplierPaymentService } from './SupplierPaymentService';
+
+export * from './PurchaseReturnService';
+export { PurchaseReturnService } from './PurchaseReturnService';
+
+export * from './PurchaseDashboardService';
+export { PurchaseDashboardService } from './PurchaseDashboardService';
+
+// SupplierService already exported via its own file — extended with Module 05 methods
+export * from './SupplierService';
+export { default as SupplierService } from './SupplierService';
 

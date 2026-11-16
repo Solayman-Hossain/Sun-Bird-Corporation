@@ -1,0 +1,328 @@
+/* ==========================================================================
+   SUN BIRD ERP — MODULE 05: PURCHASE & SUPPLIER MANAGEMENT STYLES
+   Forest Green (#1e3932) & Warm Gold (#c89348)
+   ========================================================================== */
+
+.erp-purchase-container {
+  padding: 1.5rem;
+  min-height: calc(100vh - 4rem);
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.erp-purchase-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .erp-purchase-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.erp-purchase-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1e3932;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.erp-purchase-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  background: #e6b980;
+  color: #1e3932;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Submodule Tabs Bar */
+.erp-purchase-tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 0.35rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  scrollbar-width: thin;
+}
+
+.erp-purchase-tab-btn {
+  white-space: nowrap;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.erp-purchase-tab-btn:hover {
+  color: #1e3932;
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+}
+
+.erp-purchase-tab-btn.active {
+  background: #1e3932;
+  color: #e6b980;
+  border-color: #1e3932;
+  box-shadow: 0 2px 4px rgba(30, 57, 50, 0.25);
+}
+
+/* Metric Cards Grid */
+.erp-purchase-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.erp-purchase-stat-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 1.15rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.erp-purchase-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #c89348;
+}
+
+.erp-purchase-stat-card.green::before {
+  background: #1e3932;
+}
+
+.erp-purchase-stat-card.red::before {
+  background: #ef4444;
+}
+
+.erp-purchase-stat-card.amber::before {
+  background: #f59e0b;
+}
+
+.erp-purchase-stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.erp-purchase-stat-val {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 0.25rem;
+}
+
+.erp-purchase-stat-sub {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+}
+
+/* Card Section */
+.erp-purchase-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.erp-purchase-card-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: #fafafa;
+}
+
+.erp-purchase-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e3932;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Table */
+.erp-purchase-table-wrapper {
+  overflow-x: auto;
+}
+
+.erp-purchase-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.erp-purchase-table th {
+  background: #f1f5f9;
+  padding: 0.75rem 1rem;
+  color: #475569;
+  font-weight: 700;
+  border-bottom: 1px solid #cbd5e1;
+  white-space: nowrap;
+}
+
+.erp-purchase-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.erp-purchase-table tr:hover {
+  background: #f8fafc;
+}
+
+/* Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-pill.draft {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.status-pill.submitted, .status-pill.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-pill.approved, .status-pill.posted, .status-pill.paid, .status-pill.passed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pill.partially_paid, .status-pill.partially_converted, .status-pill.partial {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.status-pill.rejected, .status-pill.cancelled, .status-pill.failed, .status-pill.overdue {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Action Buttons */
+.btn-primary {
+  background: #1e3932;
+  color: #ffffff;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: #284c43;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+/* Filter controls */
+.filter-input {
+  border: 1px solid #cbd5e1;
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  color: #334155;
+  outline: none;
+  background: #ffffff;
+}
+
+.filter-input:focus {
+  border-color: #1e3932;
+  box-shadow: 0 0 0 2px rgba(30, 57, 50, 0.15);
+}
+
+/* Modal Overlay */
+.erp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.erp-modal-card {
+  background: #ffffff;
+  border-radius: 0.75rem;
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #e2e8f0;
+}

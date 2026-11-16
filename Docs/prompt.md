@@ -1615,5 +1615,36 @@ Verification: Execute `src/services/verify-product-catalog-service.ts` (35 asser
 
 ---
 
-*Document v1.3 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
+### Prompt 67: SUN BIRD ERP – MODULE 05: PURCHASE & SUPPLIER MANAGEMENT
+```text
+Task: Develop an enterprise-grade Purchase and Supplier Management system inside Sun Bird Corporation ERP without rebuilding or redesigning existing modules.
+
+Technical Requirements:
+1. End-to-End Procurement Lifecycle:
+   - Purchase Requisition (PR): Multi-item requisitions with estimated cost, department tracking, Maker-Checker submission to Module 03, approval workflows, and conversion to PO.
+   - Goods Receive Note (GRN): Physical receiving, quality inspection status (Passed, Partial, Rejected, Damaged), FEFO batch creation in ProductBatch, and atomic StockLedger movements (GRN_IN).
+   - Purchase Invoice (PINV): Supplier bill entry, 3-way matching validation (PO, GRN, Bill), automated double-entry GL voucher posting (DR Inventory 1300, CR Accounts Payable 2100).
+   - Supplier Payment (SPAY): Multi-invoice allocation, payment voucher posting (DR Accounts Payable 2100, CR Cash/Bank 1100), running balance reduction, and invoice status updates (PARTIALLY_PAID / PAID).
+   - Purchase Return (PRTN): Defective product return to vendor with stock reversal, debit note issuance, and AP liability reduction.
+2. Supplier Extended Intelligence:
+   - Running balance Supplier Ledger (DR Invoices, CR Payments, CR Returns) with closing balance.
+   - Accounts Payable (AP) aging analysis bucketed into Current (0 days), 1-30, 31-60, 61-90, and 90+ days past due.
+   - Duplicate vendor prevention checking phone, email, and 11-digit BIN across the organization.
+3. 18 Submodules Accordion & Full ERP Integration:
+   - Under Purchase, introduce an expandable accordion with 18 submodules:
+     1. Purchase Dashboard, 2. Purchase Requisitions, 3. Requisition Approval, 4. RFQ Sourcing, 5. Supplier Quotations, 6. Comparative Statements, 7. Purchase Orders, 8. Goods Receive Notes (GRN), 9. Quality Inspection, 10. Purchase Invoices, 11. Supplier Payments, 12. Purchase Returns, 13. Supplier Directory, 14. Supplier Ledger, 15. AP Aging Analysis, 16. Import LC Tracker, 17. Purchase Reports, 18. Purchase Settings.
+4. Backend & Frontend Implementation:
+   - Models: `backend/src/models/PurchaseRequisition.ts`, `GoodsReceiveNote.ts`, `PurchaseInvoice.ts`, `SupplierPayment.ts`, `PurchaseReturn.ts`, enhanced `Supplier.ts`, and `PurchaseOrder.ts`.
+   - Services: `backend/src/services/PurchaseRequisitionService.ts`, `GrnService.ts`, `PurchaseInvoiceService.ts`, `SupplierPaymentService.ts`, `PurchaseReturnService.ts`, `PurchaseDashboardService.ts`, extended `SupplierService.ts`.
+   - Controller & Routes: `backend/src/controllers/PurchaseController.ts`, `backend/src/routes/erp/purchaseRoutes.ts` mounted at `/api/v1/erp/purchase`.
+   - Automated Verification: `backend/src/services/verify-purchase-service.ts` (38 assertions passed, 0 failed).
+   - Frontend: `frontend/src/types/index.ts`, `frontend/src/services/purchase.service.ts`, `frontend/src/components/erp/ErpPurchaseView.tsx`, `frontend/src/components/erp/ErpPurchaseView.css`.
+   - Routing: Integrated into `frontend/src/app/erp/page.tsx`, `frontend/src/app/erp/purchase/page.tsx`, and `frontend/src/app/admin/purchase/page.tsx`.
+
+Verification: Execute `src/services/verify-purchase-service.ts` (38 assertions passed, 0 failed), run `npm run build` on both frontend (58/58 static pages generated) and backend, and verify HTTP 200 on `/erp/purchase`.
+```
+
+---
+
+*Document v1.4 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
 *Node.js · Express.js · TypeScript · MongoDB Atlas · Redis BullMQ · Next.js 16+*

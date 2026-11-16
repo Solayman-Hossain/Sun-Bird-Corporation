@@ -13,3 +13,4 @@ export * from './organization.service';
 export * from './userManagement.service';
 export * from './approval.service';
 export * from './productCatalog.service';
+export * from './purchase.service';

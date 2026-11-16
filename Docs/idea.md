@@ -95,3 +95,4 @@ Integrate double-entry accounting, attendance/salary system, and AI smart featur
 - **Module 02:** User Lifecycle, 17 Standard Configurable Roles & 11×12 Granular Permission Matrix.
 - **Module 03:** Multi-Tier Approval Workflow Engine, Maker–Checker Governance, Delegation & Immutable Audit Trail.
 - **Module 04:** Product Entry & E-Commerce Catalog Management, Dynamic Stock Aggregation, Category Tree & Publication Governance.
+- **Module 05:** Purchase & Supplier Management, End-to-End Procurement Lifecycle (PR, GRN, PINV, SPAY, PRTN), Supplier Ledger & AP Aging.

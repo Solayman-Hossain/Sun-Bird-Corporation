@@ -980,3 +980,214 @@ export interface BulkImportResult {
   failedCount: number;
   errors: Array<{ row: number; sku: string; error: string }>;
 }
+
+
+// =========================================================
+// MODULE 05: PURCHASE & SUPPLIER MANAGEMENT TYPES
+// =========================================================
+
+export type PurchaseSubmodule =
+  | 'purchase-dashboard'
+  | 'purchase-requisitions'
+  | 'requisition-approval'
+  | 'rfq-management'
+  | 'supplier-quotations'
+  | 'comparative-statements'
+  | 'purchase-orders'
+  | 'goods-receive-notes'
+  | 'quality-inspection'
+  | 'purchase-invoices'
+  | 'supplier-payments'
+  | 'purchase-returns'
+  | 'supplier-directory'
+  | 'supplier-ledger'
+  | 'payables-aging'
+  | 'import-lc-tracker'
+  | 'purchase-reports'
+  | 'purchase-settings';
+
+export interface PurchaseDashboardMetrics {
+  totalSuppliers: number;
+  activeSuppliers: number;
+  inactiveSuppliers: number;
+  totalRequisitions: number;
+  pendingRequisitions: number;
+  pendingQuotations: number;
+  pendingApprovals: number;
+  totalPOs: number;
+  openPOs: number;
+  partiallyReceivedPOs: number;
+  completedPOs: number;
+  totalGRNs: number;
+  totalInvoices: number;
+  pendingInvoices: number;
+  totalPurchaseValue: number;
+  outstandingPayables: number;
+  overduePayables: number;
+  totalPayments: number;
+  totalReturns: number;
+  totalReturnValue: number;
+  monthlyPurchaseTrend: Array<{ month: string; amount: number; count: number }>;
+  topPurchasedProducts: Array<{ sku: string; productName: string; totalQty: number; totalSpend: number }>;
+  supplierWiseSummary: Array<{ supplierId: string; supplierName: string; supplierCode: string; totalSpend: number; poCount: number }>;
+}
+
+export interface PurchaseRequisitionItem {
+  _id: string;
+  requisitionNumber: string;
+  department: string;
+  requisitionDate: string;
+  requiredDeliveryDate: string;
+  priority: 'LOW' | 'NORMAL' | 'HIGH' | 'URGENT';
+  status: 'DRAFT' | 'SUBMITTED' | 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'RETURNED' | 'PARTIALLY_CONVERTED' | 'FULLY_CONVERTED' | 'CANCELLED';
+  items: Array<{
+    productId: string;
+    sku: string;
+    productName: string;
+    requestedQty: number;
+    uom: string;
+    estimatedUnitPrice: number;
+    estimatedTotal: number;
+    reason?: string;
+    convertedQty: number;
+  }>;
+  notes?: string;
+  requestedBy?: { _id: string; fullName: string; email: string };
+  warehouseId?: { _id: string; name: string };
+  createdAt: string;
+}
+
+export interface GoodsReceiveNoteItem {
+  _id: string;
+  grnNumber: string;
+  receivingDate: string;
+  status: 'DRAFT' | 'POSTED' | 'REVERSED';
+  purchaseOrderId: { _id: string; poNumber: string };
+  supplierId: { _id: string; companyName: string; supplierCode: string };
+  warehouseId: { _id: string; name: string };
+  totalAcceptedValue: number;
+  items: Array<{
+    productId: string;
+    sku: string;
+    productName: string;
+    orderedQty: number;
+    currentReceivedQty: number;
+    acceptedQty: number;
+    rejectedQty: number;
+    damagedQty: number;
+    uom: string;
+    batchNumber?: string;
+    expiryDate?: string;
+    unitCost: number;
+    inspectionStatus: 'PENDING' | 'PASSED' | 'FAILED' | 'PARTIAL';
+  }>;
+  receivingNotes?: string;
+  postedAt?: string;
+  createdAt: string;
+}
+
+export interface PurchaseInvoiceItem {
+  _id: string;
+  invoiceNumber: string;
+  supplierInvoiceNumber: string;
+  invoiceDate: string;
+  dueDate: string;
+  currency: string;
+  subtotal: number;
+  totalTax: number;
+  grandTotal: number;
+  paidAmount: number;
+  outstandingAmount: number;
+  status: 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'POSTED' | 'PARTIALLY_PAID' | 'PAID' | 'OVERDUE' | 'CANCELLED';
+  matchingStatus: 'UNMATCHED' | 'MATCHED' | 'DISCREPANCY';
+  supplierId: { _id: string; companyName: string; supplierCode: string; phone?: string; email?: string };
+  purchaseOrderId?: { _id: string; poNumber: string };
+  items: Array<{
+    sku: string;
+    productName: string;
+    qty: number;
+    uom: string;
+    unitPrice: number;
+    lineTotal: number;
+  }>;
+  createdAt: string;
+}
+
+export interface SupplierPaymentItem {
+  _id: string;
+  paymentNumber: string;
+  paymentDate: string;
+  paymentMethod: 'CASH' | 'BANK_TRANSFER' | 'CHEQUE' | 'MOBILE_BANKING' | 'OTHER';
+  paymentAmount: number;
+  currency: string;
+  chequeNumber?: string;
+  status: 'DRAFT' | 'POSTED' | 'REVERSED' | 'CANCELLED';
+  supplierId: { _id: string; companyName: string; supplierCode: string };
+  allocations: Array<{
+    invoiceId: string;
+    allocatedAmount: number;
+  }>;
+  notes?: string;
+  createdAt: string;
+}
+
+export interface PurchaseReturnItem {
+  _id: string;
+  returnNumber: string;
+  returnDate: string;
+  reason: string;
+  status: 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'POSTED' | 'REJECTED' | 'CANCELLED';
+  supplierId: { _id: string; companyName: string; supplierCode: string };
+  totalReturnValue: number;
+  items: Array<{
+    sku: string;
+    productName: string;
+    returnedQty: number;
+    uom: string;
+    unitCost: number;
+    lineTotal: number;
+  }>;
+  createdAt: string;
+}
+
+export interface SupplierLedgerEntry {
+  date: string;
+  type: 'INVOICE' | 'PAYMENT' | 'RETURN';
+  reference: string;
+  debit: number;
+  credit: number;
+  runningBalance: number;
+}
+
+export interface SupplierLedgerResponse {
+  supplier: { _id: string; companyName: string; supplierCode: string };
+  entries: SupplierLedgerEntry[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  closingBalance: number;
+}
+
+export interface PayablesSummaryResponse {
+  suppliers: Array<{
+    supplierId: string;
+    supplierName: string;
+    supplierCode: string;
+    totalOutstanding: number;
+    current: number;
+    bucket_1_30: number;
+    bucket_31_60: number;
+    bucket_61_90: number;
+    bucket_90_plus: number;
+    invoiceCount: number;
+  }>;
+  totals: {
+    totalOutstanding: number;
+    current: number;
+    bucket_1_30: number;
+    bucket_31_60: number;
+    bucket_61_90: number;
+    bucket_90_plus: number;
+  };
+}
