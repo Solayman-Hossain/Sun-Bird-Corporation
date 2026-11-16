@@ -11,14 +11,28 @@ export type UserType =
 export interface IUser extends Document {
   _id: Types.ObjectId;
   fullName: string;
+  username?: string;
   email: string;
   mobile: string;
+  employeeId?: string;
+  profileImage?: string;
+  department?: string;
+  designation?: string;
   passwordHash?: string;
   totpSecret?: string;
   userType: UserType;
   roleId?: Types.ObjectId;
+  assignedRoles?: Types.ObjectId[];
   branchId?: Types.ObjectId;
   warehouseId?: Types.ObjectId;
+  authorizedOrganizations?: Types.ObjectId[];
+  defaultOrganizationId?: Types.ObjectId;
+  status?: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'LOCKED';
+  failedLoginAttempts?: number;
+  lockoutUntil?: Date;
+  passwordExpiresAt?: Date;
+  forcePasswordChange?: boolean;
+  createdBy?: Types.ObjectId;
   isActive: boolean;
   lastLoginAt?: Date;
   hardwareFingerprint?: string;
@@ -31,6 +45,27 @@ export const UserSchema = new Schema<IUser>(
     fullName: {
       type: String,
       required: true,
+      trim: true,
+    },
+    username: {
+      type: String,
+      trim: true,
+      sparse: true,
+    },
+    employeeId: {
+      type: String,
+      trim: true,
+    },
+    profileImage: {
+      type: String,
+      trim: true,
+    },
+    department: {
+      type: String,
+      trim: true,
+    },
+    designation: {
+      type: String,
       trim: true,
     },
     email: {
@@ -59,6 +94,12 @@ export const UserSchema = new Schema<IUser>(
       type: Schema.Types.ObjectId,
       ref: 'Role',
     },
+    assignedRoles: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Role',
+      },
+    ],
     branchId: {
       type: Schema.Types.ObjectId,
       ref: 'Warehouse',
@@ -66,6 +107,39 @@ export const UserSchema = new Schema<IUser>(
     warehouseId: {
       type: Schema.Types.ObjectId,
       ref: 'Warehouse',
+    },
+    authorizedOrganizations: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Organization',
+      },
+    ],
+    defaultOrganizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+    },
+    status: {
+      type: String,
+      enum: ['ACTIVE', 'INACTIVE', 'SUSPENDED', 'LOCKED'],
+      default: 'ACTIVE',
+    },
+    failedLoginAttempts: {
+      type: Number,
+      default: 0,
+    },
+    lockoutUntil: {
+      type: Date,
+    },
+    passwordExpiresAt: {
+      type: Date,
+    },
+    forcePasswordChange: {
+      type: Boolean,
+      default: false,
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
     isActive: {
       type: Boolean,

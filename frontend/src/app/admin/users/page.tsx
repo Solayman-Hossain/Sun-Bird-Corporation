@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import AdminRoutePage from '../page';
+import ErpUsersPage from '../../erp/users/page';
 
 export default function AdminUsersPage() {
-  return <AdminRoutePage initialTab="users" />;
+  return <ErpUsersPage />;
 }
-

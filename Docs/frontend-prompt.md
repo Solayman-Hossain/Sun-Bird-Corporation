@@ -1502,6 +1502,197 @@ Verification:
 Execute `npm run lint` (0 errors) and `npm run build` (exit code 0; 51/51 routes generated successfully).
 ```
 
+### Prompt 49: Sun Bird ERP – Project Protection & Foundation Audit Blueprint
+```text
+Task: Complete an exhaustive, non-destructive enterprise audit of the entire Sun Bird Corporation architecture (Frontend, Backend, Database, APIs, Security, Protection Rules) and produce Docs/ERP-UPGRADE-AUDIT.md.
+
+Strict Protection Rules:
+1. Do not redesign the existing website (localhost:3000).
+2. Do not redesign the existing ERP dashboard (localhost:3000/erp).
+3. Do not remove existing sidebar modules.
+4. Do not delete existing files, components, API routes, services, models or database collections.
+5. Do not create duplicate Product, Customer, Supplier or Inventory master collections.
+6. Do not reset or drop the MongoDB database.
+7. Do not replace the existing authentication system without verified technical necessity.
+8. Reuse existing components, services, models and APIs wherever possible.
+9. Maintain backward compatibility.
+10. Never expose database credentials, JWT secrets or API keys.
+
+Deliverables:
+- Created Docs/ERP-UPGRADE-AUDIT.md covering 10 required architectural domains.
+```
+
+### Prompt 50: Module 01: Multi-Organization Profile Management System
+```text
+Task: Implement Module 01: Organization Profile Management inside Sun Bird ERP with multi-organization support, 12 submodules, dynamic database aggregation, branding studio, bank & MFS accounts, authorized signatures, official stamps, document studio branding integration, and tenant isolation middleware.
+
+File Targets:
+- `backend/src/models/Organization.ts`
+- `backend/src/models/index.ts`
+- `backend/src/models/User.ts`
+- `backend/src/validators/organization.validator.ts`
+- `backend/src/services/OrganizationService.ts`
+- `backend/src/services/index.ts`
+- `backend/src/services/verify-organization-service.ts`
+- `backend/src/middlewares/organizationScope.ts`
+- `backend/src/controllers/OrganizationController.ts`
+- `backend/src/routes/erp/organizationRoutes.ts`
+- `backend/src/routes/index.ts`
+- `frontend/src/types/index.ts`
+- `frontend/src/services/organization.service.ts`
+- `frontend/src/services/index.ts`
+- `frontend/src/components/erp/ErpOrganizationView.tsx`
+- `frontend/src/components/erp/ErpOrganizationView.css`
+- `frontend/src/components/erp/ErpDocumentBuilderView.tsx`
+- `frontend/src/app/erp/page.tsx`
+- `frontend/src/app/erp/organizations/page.tsx`
+- `frontend/src/app/admin/organizations/page.tsx`
+- `frontend/.env.local`
+
+Submodules Implemented:
+1. Organization Dashboard (Live metrics: Total, Active, Inactive, Default, Sales, Purchases, Inventory, Receivables, Payables, Breakdown)
+2. Organization List (Search, filter, status toggles, default switcher)
+3. Add Organization (Full BD-compliant legal entity registration)
+4. Organization Profile (Details & contact management)
+5. Logo & Branding (Multi-logo, letterhead BG, brand colors, header/footer, pad print mode default)
+6. Bank Information (Multiple bank & MFS accounts with routing, SWIFT, default account)
+7. Signature Management (Authorized personnel, designation, signature image, applicable doc types)
+8. Stamp Management (Official corporate seals, approval stamps, paid/received stamps)
+9. Document Configuration (Prefixes, stamp/signature toggles, payment instructions)
+10. Organization Settings (Timezone, currency, default status)
+11. Organization Financial Settings (VAT %, FEFO toggle, costing method)
+12. Activity Logs (Tamper-proof audit logs from AuditLogModel)
+
+Verification:
+- Backend: `verify-organization-service.ts` (26 Passed / 0 Failed).
+- Backend TypeScript: `npx tsc --noEmit` (Exit code 0).
+- Frontend Build: `npm run build` (Exit code 0; 53/53 routes static & PPR).
+- Endpoints HTTP Status: `http://localhost:3000/erp/organizations` (HTTP 200).
+```
+
+### Prompt 51: Module 02: User, Roles & Advanced Permission Management System
+```text
+Task: Implement Module 02: User, Roles & Advanced Permission Management inside Sun Bird ERP with 12 submodules, granular RBAC permission matrix (11 modules x 12 actions), 17 enterprise standard role presets, multi-tenancy organization access control, session revocation, brute-force lockout, and tamper-proof audit trails.
+
+Strict Protection Compliance:
+- Existing models (User, Role, RefreshToken, LoginHistory) upgraded without breaking existing schemas or dropping collections.
+- Full backward compatibility maintained for existing authentication and authorization tokens.
+- Design aligned with Sun Bird Corporation identity (#1e3932 Forest Green, #c89348 Warm Gold).
+
+File Targets:
+- `backend/src/models/User.ts` (Extended with username, employeeId, department, designation, assignedRoles, status, lockoutUntil, failedLoginAttempts, forcePasswordChange)
+- `backend/src/models/Role.ts` (Enhanced actions, assignedOrganizations)
+- `backend/src/models/LoginHistory.ts` (Created login_history collection model)
+- `backend/src/models/index.ts`
+- `backend/src/config/permissionRegistry.ts` (Comprehensive 11-module permission registry + 17 standard role presets)
+- `backend/src/services/UserService.ts` (Full user management lifecycle, bcrypt hashing, status transitions, lockout, session revocation, live analytics)
+- `backend/src/services/RoleService.ts` (CRUD, permission matrix management, role duplication, system role protection, standard role seeding)
+- `backend/src/services/index.ts`
+- `backend/src/services/verify-user-management-service.ts` (Exhaustive 34-assertion automated test suite)
+- `backend/src/controllers/UserController.ts`
+- `backend/src/controllers/RoleController.ts`
+- `backend/src/routes/erp/userRoutes.ts`
+- `backend/src/routes/erp/roleRoutes.ts`
+- `frontend/src/types/index.ts` (ErpUser, ErpRole, UserDashboardMetrics, UserActiveSession, UserLoginHistoryItem, PermissionMatrixModuleDef)
+- `frontend/src/services/userManagement.service.ts`
+- `frontend/src/components/erp/ErpUserManagementView.tsx` (12 comprehensive submodules + visual interactive permission matrix)
+- `frontend/src/components/erp/ErpUserManagementView.css`
+- `frontend/src/app/erp/page.tsx` (Expandable sidebar navigation with 12 submodules + main content routing)
+- `frontend/src/app/erp/users/page.tsx`
+- `frontend/src/app/admin/users/page.tsx`
+
+Submodules Implemented:
+1. User Dashboard: Live metric cards (Total Users, Active, Suspended/Locked, Configured Roles, Active Sessions, Failed Logins), departmental and role breakdown, recent logins.
+2. User List: Search by name/email/username/employee ID, status & role filters, action buttons (View, Edit, Suspend/Activate, Unlock, Reset Password).
+3. Create New User: Full BD staff onboarding form with password hashing, department, designation, role assignment, and organization tenancy multi-select.
+4. User Profile: Complete profile inspect view with credentials, active JWT sessions, assigned company permissions, and account unlock triggers.
+5. Role Management: RBAC cards with system-role protection guards, assigned user counts, duplication modal, and delete protections.
+6. Permission Management: Interactive visual permission matrix across 11 modules and 12 granular actions, with Select All, Deselect All, and dangerous action warnings.
+7. Organization Access: Assign single or multiple company scopes per user and designate primary default organization.
+8. Module Access Control: Security catalog explaining operational boundaries and action scopes.
+9. Login History: Authentication audit trail capturing timestamp, user email, IP address, device user-agent, status (SUCCESS/FAILED/BLOCKED), and failure reason.
+10. Active Sessions: Inspection and individual or bulk revocation of active JWT refresh tokens.
+11. User Activity Logs: Audit trail of user creation, updates, password resets, role changes, and permission adjustments.
+12. Password & Security Policies: Corporate password rules (bcrypt 12-rounds, 5-attempt brute-force lockout, 7-day revolving refresh tokens, forced password change on first login).
+
+Verification:
+- Backend Test Suite: `verify-user-management-service.ts` (34 Passed / 0 Failed).
+- Backend TypeScript: `npx tsc --noEmit` (Exit code 0, zero errors).
+- Frontend TypeScript: `npx tsc --noEmit` (Exit code 0, zero errors).
+- Direct Routes Tested: `/erp/users` and `/admin/users` wired directly to ErpUserManagementView.
+```
 
 
 
+
+
+
+
+```markdown
+### Prompt 52: SUN BIRD ERP – MODULE 03: ADVANCED APPROVAL WORKFLOW & AUDIT MANAGEMENT
+
+Objective:
+Implement an enterprise-grade Approval Workflow and Centralized Tamper-Proof Audit Management System for Sun Bird Corporation ERP without rebuilding or redesigning existing modules.
+
+Architecture & Scope:
+- Multi-Level Configurable Workflow Engine: Sequential, parallel, amount-based threshold tiers, role/user-based approvers, SLA deadlines, and auto-escalation.
+- Strict Maker-Checker Rule: Request creators (Makers) are strictly forbidden from approving or rejecting their own requests at any tier.
+- Circular Delegation Prevention: Approvers can delegate authority for scheduled leaves/periods, with automated cycle detection preventing circular delegation loops.
+- Centralized Tamper-Proof Audit Trail: Append-only immutable audit logging capturing actor snapshots, IP, before/after JSON diffs, with pre-hooks blocking update/delete mutations.
+- Multi-Tenancy Scoping: Seamlessly integrated with Module 01 (Organizations) and Module 02 (Users & Roles).
+
+Components & Files Created/Updated:
+- `backend/src/models/AuditLog.ts`: Extended with actorNameSnapshot, organizationId, module, entityType, entityId, requestId, before/after metadata, and mutation blocking pre-hooks.
+- `backend/src/models/ApprovalRequest.ts`: Upgraded with workflow tracking, multi-tier levels, SLA dates, overdue flags, decision history with timestamps and comments.
+- `backend/src/models/ApprovalWorkflow.ts`: Multi-tier workflow definitions with amount boundaries, SLA hours, assigned roles, and auto-escalation triggers.
+- `backend/src/models/ApprovalDelegation.ts`: Time-bounded delegation rules with module scopes and circular detection.
+- `backend/src/models/index.ts`
+- `backend/src/services/AuditLogService.ts`
+- `backend/src/services/ApprovalWorkflowService.ts`: CRUD, hierarchical matching (`findMatchingWorkflow`), and default workflow seeder covering 7 operational domains.
+- `backend/src/services/ApprovalDelegationService.ts`: Time-bounded delegation management with circular graph traversal check (`detectCircularDelegation`).
+- `backend/src/services/ApprovalService.ts`: Core Maker-Checker engine, dashboard aggregation, sequential tier progression, decisions (`APPROVE`, `REJECT`, `RETURN`, `REQUEST_INFO`), cancellation, and overdue SLA monitoring.
+- `backend/src/services/AuditService.ts`: Audit log querying, field diff calculations, and compliance report aggregation.
+- `backend/src/services/index.ts`
+- `backend/src/services/verify-approval-service.ts`: Exhaustive 31-assertion automated verification suite.
+- `backend/src/controllers/ApprovalController.ts`
+- `backend/src/controllers/ApprovalWorkflowController.ts`
+- `backend/src/controllers/AuditLogController.ts`
+- `backend/src/routes/erp/approvalRoutes.ts`
+- `backend/src/routes/erp/workflowRoutes.ts`
+- `backend/src/routes/erp/auditRoutes.ts`
+- `backend/src/routes/index.ts`
+- `frontend/src/types/index.ts`: Added ApprovalRequestItem, ApprovalDashboardMetrics, ApprovalWorkflowItem, ApprovalDelegationItem, AuditLogItem, AuditReportMetrics.
+- `frontend/src/services/approval.service.ts`: REST API client for approval dashboard, requests, workflows, delegations, and audit logs.
+- `frontend/src/components/erp/ErpApprovalAuditView.tsx`: Full interactive React view implementing all 15 submodules with bilingual BD/EN support.
+- `frontend/src/components/erp/ErpApprovalAuditView.css`: Cohesive styling adhering to Sun Bird palette (#1e3932 Forest Green, #c89348 Warm Gold).
+- `frontend/src/app/erp/page.tsx`: Integrated expandable "Approval & Audit" section in the sidebar with 15 submodules and connected main content tab.
+- `frontend/src/app/erp/approvals/page.tsx`: Direct route for `/erp/approvals`.
+- `frontend/src/app/admin/approvals/page.tsx`: Direct route for `/admin/approvals`.
+
+Submodules Implemented (15 Submodules):
+1. Approval Dashboard: Real-time database metrics (Total, Pending, Approved, Rejected, Cancelled, Overdue, My Pending, Avg Approval Time) with priority and status breakdown.
+2. My Pending Approvals: Filtered view of requests awaiting action from the logged-in user or their delegated roles, with Quick Action modal (Approve, Reject, Return for Correction, Request More Info).
+3. My Submitted Requests: Requests initiated by the user with real-time level progress, status badges, and Maker cancellation capability.
+4. All Approval Requests: Comprehensive administrator oversight table with multi-criteria filters (organization, module, status, priority, search).
+5. Approval Workflow Configuration: Visual cards for active workflows across Purchase, Sales, Accounting, Inventory, HR, and LC domains with tier inspection.
+6. Approval Levels: Hierarchical multi-level progression inspector detailing amount thresholds and designated role approvals.
+7. Approval Matrix: Comprehensive matrix view mapping organizational operational modules to approver roles, minimum thresholds, and escalation SLAs.
+8. Delegation Management: Delegation setup modal allowing approvers to delegate signing authority during leave with date boundaries and circular chain protection.
+9. Approval History: Full chronological log of all historical approval and rejection decisions with timestamps, comments, and actors.
+10. Rejected Requests: Dedicated log of all declined requests with reason analysis and resubmission requirements.
+11. Cancelled Requests: Log of Maker-cancelled requests with audit timestamps.
+12. Audit Trail: Centralized tamper-proof audit log table displaying actor snapshots, action types, entity references, IP addresses, and before/after JSON diffs.
+13. Audit Reports: Statistical compliance breakdown showing event distribution across modules and user activity.
+14. Approval Notifications: Alert hub for overdue requests, tier advances, and pending items requiring immediate attention.
+15. Approval Settings: System governance configuration panel detailing Maker-Checker enforcement, auto-escalation rules, and audit immutability flags.
+
+Verification & Testing:
+- Backend Test Suite: `verify-approval-service.ts` (31 Passed / 0 Failed).
+- Backend TypeScript Check: `npx tsc --noEmit` (Exit code 0, zero errors).
+- Frontend TypeScript Check: `npx tsc --noEmit` (Exit code 0, zero errors).
+- Production Build: Next.js build (`npm run build`) succeeded with 56/56 static pages generated cleanly.
+- Live Endpoints Verified:
+  - Backend API: `http://localhost:5000/api/v1/health` (Status UP, HTTP 200).
+  - Frontend ERP Route: `http://localhost:3000/erp/approvals` (HTTP 200).
+  - Frontend Admin Route: `http://localhost:3000/admin/approvals` (HTTP 200).
+```

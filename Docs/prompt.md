@@ -1491,5 +1491,92 @@ Verification: Import `Sun-Bird-Corporation.postman_collection.json` into Postman
 
 ---
 
-*Document v1.1 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
+## Phase 15: Enterprise Core & Foundation Upgrades (Production Modules)
+
+### Prompt 63: SUN BIRD ERP – MODULE 01: ORGANIZATION PROFILE MANAGEMENT
+```text
+Task: Develop a centralized, multi-organization profile management system within the existing SUN BIRD ERP without rebuilding or redesigning existing architecture.
+
+Technical Requirements:
+1. Multi-Organization Domain Architecture:
+   - Support multiple legal operating companies under a single management system with tenant isolation.
+   - Organization attributes: organizationCode (unique), legalName, displayName, organizationType, registrationNumber, tradeLicenseNumber, tinNumber, binNumber, vatRegistrationNumber, email, phone, alternatePhone, website, address, city, district, postalCode, country (default: Bangladesh), logo, status (ACTIVE/INACTIVE), isDefault (strictly singular default enforcement), financialYearStart, currency (default: BDT), timezone.
+2. Sidebar Integration:
+   - Preserve existing ERP sidebar styling and structure.
+   - Add expandable 'Organization Management' (প্রতিষ্ঠানের ব্যবস্থাপনা) section with 12 submodules:
+     1. Organization Dashboard, 2. Organization List, 3. Add Organization, 4. Organization Profile, 5. Logo & Branding, 6. Bank Information, 7. Signature Management, 8. Stamp Management, 9. Document Configuration, 10. Organization Settings, 11. Financial Settings, 12. Activity Logs.
+3. Backend Models & Services:
+   - `backend/src/models/Organization.ts`: Multi-tenant Mongoose schema with banking details, document branding templates, official digital stamps, authorized signers, and validation rules.
+   - `backend/src/services/OrganizationService.ts`: CRUD operations, default organization assignment guard, logo/stamp/signature management, activity logging.
+   - `backend/src/controllers/OrganizationController.ts`: RESTful endpoints mounted at `/api/v1/erp/organizations`.
+4. Frontend Components & Routes:
+   - `frontend/src/components/erp/ErpOrganizationView.tsx`: Comprehensive 12-submodule React interface with bilingual English/Bengali UI and real-time validation.
+   - `frontend/src/components/erp/ErpOrganizationView.css`: Unified styling with Forest Green (#1e3932) & Warm Gold (#c89348).
+   - Routes: `/erp/organizations` and `/admin/organizations`.
+
+Verification: Execute `src/services/verify-organization-service.ts` (100% assertions passed) and verify zero compilation errors in `tsc --noEmit`.
+```
+
+### Prompt 64: SUN BIRD ERP – MODULE 02: USER, ROLES & ADVANCED PERMISSION MANAGEMENT
+```text
+Task: Implement an enterprise-level User Management, Role Management, and Granular Permission Matrix system with multi-organization tenant access control.
+
+Technical Requirements:
+1. User Lifecycle & Access Control:
+   - Fields: fullName, username, email, phone, employeeId, department, designation, assignedOrganizations, defaultOrganization, assignedRoles, status (ACTIVE, INACTIVE, SUSPENDED, LOCKED), lastLogin, passwordExpiry, failedLoginAttempts, lockedUntil.
+   - Features: Create, edit, activate, suspend, unlock, password reset, force password change on first login, session revocation.
+2. Configurable Role-Based Access Control (RBAC):
+   - 17 Standard Configurable Roles: Super Admin, System Admin, Managing Director, General Manager, Finance Manager, Accounts Officer, Sales Manager, Sales Executive, Purchase Manager, Store Manager, Inventory Officer, HR Manager, HR Officer, E-commerce Manager, Customer Support, Auditor, Viewer.
+   - System-protected role guards preventing deletion or privilege stripping of core administrative roles.
+3. Interactive Permission Matrix:
+   - Visual matrix across 11 modules: Organization, Users, Inventory, Sales, Purchasing, Accounting, HR, E-commerce, LC, Support, Approvals.
+   - 12 granular operations: VIEW, CREATE, EDIT, DELETE, EXPORT, IMPORT, APPROVE, REJECT, PRINT, ATTACH, CANCEL, OVERRIDE.
+4. Security & Audit Logging:
+   - BCrypt 12-round hashing, brute-force 5-attempt auto-lockout (30 min duration).
+   - Refresh token session inspection and revocation (`user_sessions` collection).
+   - Detailed login history auditing (`login_history` collection) with IP, user-agent, and status.
+5. Backend & Frontend Implementation:
+   - `backend/src/models/User.ts`, `backend/src/models/Role.ts`, `backend/src/models/UserSession.ts`, `backend/src/models/LoginHistory.ts`.
+   - `backend/src/services/UserService.ts`, `backend/src/services/RoleService.ts`, `backend/src/services/verify-user-management-service.ts`.
+   - `backend/src/controllers/UserController.ts`, `backend/src/controllers/RoleController.ts`.
+   - `frontend/src/components/erp/ErpUserManagementView.tsx` (12 submodules), `frontend/src/components/erp/ErpUserManagementView.css`.
+   - Routes: `/erp/users` and `/admin/users`.
+
+Verification: Execute `src/services/verify-user-management-service.ts` (34 assertions passed) and confirm clean TypeScript compilation.
+```
+
+### Prompt 65: SUN BIRD ERP – MODULE 03: ADVANCED APPROVAL WORKFLOW & AUDIT MANAGEMENT
+```text
+Task: Develop an enterprise-level Approval Workflow and Centralized Tamper-Proof Audit Management System for Sun Bird Corporation ERP.
+
+Technical Requirements:
+1. Configurable Multi-Tier Workflow Engine:
+   - Support sequential and parallel approval tiers, amount-based threshold tiers, role/user-based approver assignments, auto-escalation SLAs.
+   - Domains supported: Purchasing, Sales, Accounting, Inventory, HR/Payroll, Import/LC, E-commerce.
+2. Strict Maker–Checker Governance:
+   - Request creator (`makerId`) is strictly forbidden from approving, rejecting, or reviewing their own request at any level.
+   - Enforced at service layer throwing RFC 7807 ForbiddenError.
+3. Delegation Management with Circular Prevention:
+   - Time-bounded delegation of approval authority for scheduled leaves/absences.
+   - Automated cycle detection using depth-first graph traversal preventing circular delegation chains.
+4. Centralized Immutable Audit Trail:
+   - Tamper-proof append-only `audit_logs` collection.
+   - Pre-hooks on Mongoose schema blocking update and delete mutations (`blockMutation`).
+   - Automated Before/After JSON field diff calculation (`computeFieldDiffs`).
+5. Sidebar & UI Integration (15 Submodules):
+   - Under System Administration, add 'Approval & Audit Management' (অনুমোদন ও অডিট ব্যবস্থাপনা) with 15 submodules:
+     1. Approval Dashboard, 2. My Pending Approvals, 3. My Submitted Requests, 4. All Approval Requests, 5. Approval Workflow Configuration, 6. Approval Levels, 7. Approval Matrix, 8. Delegation Management, 9. Approval History, 10. Rejected Requests, 11. Cancelled Requests, 12. Audit Trail, 13. Audit Reports, 14. Approval Notifications, 15. Approval Settings.
+6. Backend & Frontend Implementation:
+   - `backend/src/models/ApprovalRequest.ts`, `backend/src/models/ApprovalWorkflow.ts`, `backend/src/models/ApprovalDelegation.ts`, `backend/src/models/AuditLog.ts`.
+   - `backend/src/services/ApprovalService.ts`, `backend/src/services/ApprovalWorkflowService.ts`, `backend/src/services/ApprovalDelegationService.ts`, `backend/src/services/AuditService.ts`, `backend/src/services/verify-approval-service.ts`.
+   - `backend/src/controllers/ApprovalController.ts`, `backend/src/controllers/ApprovalWorkflowController.ts`, `backend/src/controllers/AuditLogController.ts`.
+   - `frontend/src/components/erp/ErpApprovalAuditView.tsx`, `frontend/src/components/erp/ErpApprovalAuditView.css`.
+   - Direct Routes: `/erp/approvals` and `/admin/approvals`.
+
+Verification: Execute `src/services/verify-approval-service.ts` (31 assertions passed, 0 failed), run `npm run build` with 56/56 pages cleanly generated, and verify HTTP 200 on live routes.
+```
+
+---
+
+*Document v1.2 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
 *Node.js · Express.js · TypeScript · MongoDB Atlas · Redis BullMQ · Next.js 16+*

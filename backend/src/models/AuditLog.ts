@@ -4,11 +4,18 @@ export interface IAuditLog extends Document {
   _id: Types.ObjectId;
   actorId: Types.ObjectId;
   actorRole: string;
+  actorNameSnapshot?: string;
+  organizationId?: Types.ObjectId;
+  module?: string;
   action: string;
   targetCollection: string;
   targetId: Types.ObjectId;
+  entityType?: string;
+  entityId?: Types.ObjectId;
+  requestId?: string;
   beforeSnapshot?: any;
   afterSnapshot?: any;
+  metadata?: any;
   ipAddress?: string;
   userAgent?: string;
   notes?: string;
@@ -28,6 +35,19 @@ export const AuditLogSchema = new Schema<IAuditLog>(
       required: true,
       trim: true,
     },
+    actorNameSnapshot: {
+      type: String,
+      trim: true,
+    },
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+    },
+    module: {
+      type: String,
+      trim: true,
+      uppercase: true,
+    },
     action: {
       type: String,
       required: true,
@@ -43,10 +63,24 @@ export const AuditLogSchema = new Schema<IAuditLog>(
       type: Schema.Types.ObjectId,
       required: true,
     },
+    entityType: {
+      type: String,
+      trim: true,
+    },
+    entityId: {
+      type: Schema.Types.ObjectId,
+    },
+    requestId: {
+      type: String,
+      trim: true,
+    },
     beforeSnapshot: {
       type: Schema.Types.Mixed,
     },
     afterSnapshot: {
+      type: Schema.Types.Mixed,
+    },
+    metadata: {
       type: Schema.Types.Mixed,
     },
     ipAddress: {
@@ -70,6 +104,8 @@ export const AuditLogSchema = new Schema<IAuditLog>(
 // Explicit Indexes matching Database-Schema.md §7.6 and Prompt 43
 AuditLogSchema.index({ targetCollection: 1, targetId: 1 });
 AuditLogSchema.index({ actorId: 1 });
+AuditLogSchema.index({ organizationId: 1 });
+AuditLogSchema.index({ module: 1 });
 AuditLogSchema.index({ createdAt: -1 });
 
 // ── Prompt 46 Immutability Guard: Enforce Append-Only Write-Once Audit Trail ───

@@ -6,6 +6,9 @@ import logger from '../config/logger';
 export interface AuditEntryDTO {
   actorId: string | Types.ObjectId;
   actorRole: string;
+  actorNameSnapshot?: string;
+  organizationId?: string | Types.ObjectId;
+  module?: string;
   action: string;
   targetCollection: string;
   targetId: string | Types.ObjectId;
@@ -51,6 +54,9 @@ export class AuditLogService {
     const log = new AuditLogModel({
       actorId: new Types.ObjectId(entry.actorId),
       actorRole: entry.actorRole || 'SYSTEM',
+      actorNameSnapshot: entry.actorNameSnapshot,
+      organizationId: entry.organizationId ? new Types.ObjectId(entry.organizationId) : undefined,
+      module: entry.module,
       action: entry.action.trim().toUpperCase(),
       targetCollection: entry.targetCollection.trim(),
       targetId: new Types.ObjectId(entry.targetId),

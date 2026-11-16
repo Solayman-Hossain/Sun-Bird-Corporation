@@ -28,10 +28,13 @@ import {
   MailCheck,
   Ship,
   ChevronRight,
+  ChevronDown,
   Menu,
   X,
   ExternalLink,
   ShieldAlert,
+  Users,
+  KeyRound,
 } from 'lucide-react';
 import { ErpOrdersView } from '../../components/erp/ErpOrdersView';
 import { ErpInventoryView } from '../../components/erp/ErpInventoryView';
@@ -41,10 +44,16 @@ import { ErpDocumentBuilderView } from '../../components/erp/ErpDocumentBuilderV
 import { ErpProductEntryView } from '../../components/erp/ErpProductEntryView';
 import { ErpHrmView } from '../../components/erp/ErpHrmView';
 import { ErpBannerManagerView } from '../../components/erp/ErpBannerManagerView';
+import { ErpOrganizationView, OrgSubmodule } from '../../components/erp/ErpOrganizationView';
+import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUserManagementView';
+import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
   | 'overview'
+  | 'organization'
+  | 'users'
+  | 'approvals'
   | 'documents'
   | 'products'
   | 'orders'
@@ -97,6 +106,12 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedBranch, setSelectedBranch] = useState('Tejgaon Central Depot (Dhaka)');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [orgSubmodule, setOrgSubmodule] = useState<OrgSubmodule>('dashboard');
+  const [isOrgMenuExpanded, setIsOrgMenuExpanded] = useState<boolean>(true);
+  const [userSubmodule, setUserSubmodule] = useState<UserSubmodule>('user-dashboard');
+  const [isUserMenuExpanded, setIsUserMenuExpanded] = useState<boolean>(true);
+  const [approvalSubmodule, setApprovalSubmodule] = useState<ApprovalSubmodule>('approval-dashboard');
+  const [isApprovalMenuExpanded, setIsApprovalMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -202,9 +217,259 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
           }`}
         >
           {/* Navigation Links */}
-          <div className="p-3 space-y-1.5">
+          <div className="p-3 space-y-1.5 overflow-y-auto no-scrollbar flex-1">
+            {/* 1. Overview */}
+            <button
+              type="button"
+              onClick={() => setActiveTab('overview')}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                activeTab === 'overview'
+                  ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                  : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+              }`}
+              title="Overview & Metrics"
+            >
+              <TrendingUp
+                className={`w-4 h-4 shrink-0 ${activeTab === 'overview' ? 'text-[#e6b980]' : 'text-slate-400'}`}
+              />
+              {isSidebarOpen && (
+                <div className="text-left truncate">
+                  <span className="block leading-tight">Overview & Metrics</span>
+                  <span className="text-[10px] opacity-75 font-normal block">ড্যাশবোর্ড সারাংশ</span>
+                </div>
+              )}
+            </button>
+
+            {/* 2. Expandable Organization Management Section */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeTab !== 'organization') setActiveTab('organization');
+                  setIsOrgMenuExpanded(!isOrgMenuExpanded);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'organization'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+                title="Organization Management"
+              >
+                <div className="flex items-center gap-3 truncate">
+                  <Building2
+                    className={`w-4 h-4 shrink-0 ${activeTab === 'organization' ? 'text-[#e6b980]' : 'text-slate-400'}`}
+                  />
+                  {isSidebarOpen && (
+                    <div className="text-left truncate">
+                      <span className="block leading-tight">Organization Management</span>
+                      <span className="text-[10px] opacity-75 font-normal block">প্রতিষ্ঠানের ব্যবস্থাপনা</span>
+                    </div>
+                  )}
+                </div>
+                {isSidebarOpen && (
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 shrink-0 transition-transform ${
+                      isOrgMenuExpanded ? 'rotate-180 text-[#e6b980]' : 'text-slate-500'
+                    }`}
+                  />
+                )}
+              </button>
+
+              {/* 12 Submodules Accordion */}
+              {isSidebarOpen && isOrgMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5">
+                  {[
+                    { id: 'dashboard' as OrgSubmodule, label: '1. Org Dashboard' },
+                    { id: 'list' as OrgSubmodule, label: '2. Organization List' },
+                    { id: 'add' as OrgSubmodule, label: '3. Add Organization' },
+                    { id: 'profile' as OrgSubmodule, label: '4. Organization Profile' },
+                    { id: 'branding' as OrgSubmodule, label: '5. Logo & Branding' },
+                    { id: 'banks' as OrgSubmodule, label: '6. Bank Information' },
+                    { id: 'signatures' as OrgSubmodule, label: '7. Signature Management' },
+                    { id: 'stamps' as OrgSubmodule, label: '8. Stamp Management' },
+                    { id: 'documents' as OrgSubmodule, label: '9. Document Configuration' },
+                    { id: 'settings' as OrgSubmodule, label: '10. Organization Settings' },
+                    { id: 'financials' as OrgSubmodule, label: '11. Financial Settings' },
+                    { id: 'logs' as OrgSubmodule, label: '12. Activity Logs' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'organization' && orgSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('organization');
+                          setOrgSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* 3. Expandable User & Access Management Section */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeTab !== 'users') setActiveTab('users');
+                  setIsUserMenuExpanded(!isUserMenuExpanded);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'users'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+                title="User & Access Management"
+              >
+                <div className="flex items-center gap-3 truncate">
+                  <Users
+                    className={`w-4 h-4 shrink-0 ${activeTab === 'users' ? 'text-[#e6b980]' : 'text-slate-400'}`}
+                  />
+                  {isSidebarOpen && (
+                    <div className="text-left truncate">
+                      <span className="block leading-tight">User & Access Control</span>
+                      <span className="text-[10px] opacity-75 font-normal block">ব্যবহারকারী ও এক্সেস</span>
+                    </div>
+                  )}
+                </div>
+                {isSidebarOpen && (
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 shrink-0 transition-transform ${
+                      isUserMenuExpanded ? 'rotate-180 text-[#e6b980]' : 'text-slate-500'
+                    }`}
+                  />
+                )}
+              </button>
+
+              {/* 12 Submodules Accordion for Users */}
+              {isSidebarOpen && isUserMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5">
+                  {[
+                    { id: 'user-dashboard' as UserSubmodule, label: '1. User Dashboard' },
+                    { id: 'user-list' as UserSubmodule, label: '2. User List' },
+                    { id: 'create-user' as UserSubmodule, label: '3. Create New User' },
+                    { id: 'user-profile' as UserSubmodule, label: '4. User Profile' },
+                    { id: 'role-management' as UserSubmodule, label: '5. Role Management' },
+                    { id: 'permission-management' as UserSubmodule, label: '6. Permission Matrix' },
+                    { id: 'organization-access' as UserSubmodule, label: '7. Org Access' },
+                    { id: 'module-access-control' as UserSubmodule, label: '8. Module Access' },
+                    { id: 'login-history' as UserSubmodule, label: '9. Login History' },
+                    { id: 'active-sessions' as UserSubmodule, label: '10. Active Sessions' },
+                    { id: 'user-activity-logs' as UserSubmodule, label: '11. User Activity Logs' },
+                    { id: 'security-policies' as UserSubmodule, label: '12. Security Policies' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'users' && userSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('users');
+                          setUserSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* 4. Expandable Approval & Audit Management Section */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeTab !== 'approvals') setActiveTab('approvals');
+                  setIsApprovalMenuExpanded(!isApprovalMenuExpanded);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'approvals'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+                title="Approval & Audit Management"
+              >
+                <div className="flex items-center gap-3 truncate">
+                  <ShieldCheck
+                    className={`w-4 h-4 shrink-0 ${activeTab === 'approvals' ? 'text-[#e6b980]' : 'text-slate-400'}`}
+                  />
+                  {isSidebarOpen && (
+                    <div className="text-left truncate">
+                      <span className="block leading-tight">Approval & Audit</span>
+                      <span className="text-[10px] opacity-75 font-normal block">অনুমোদন ও অডিট</span>
+                    </div>
+                  )}
+                </div>
+                {isSidebarOpen && (
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 shrink-0 transition-transform ${
+                      isApprovalMenuExpanded ? 'rotate-180 text-[#e6b980]' : 'text-slate-500'
+                    }`}
+                  />
+                )}
+              </button>
+
+              {/* 15 Submodules Accordion for Approvals */}
+              {isSidebarOpen && isApprovalMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5">
+                  {[
+                    { id: 'approval-dashboard' as ApprovalSubmodule, label: '1. Approval Dashboard' },
+                    { id: 'my-pending' as ApprovalSubmodule, label: '2. My Pending Approvals' },
+                    { id: 'my-submitted' as ApprovalSubmodule, label: '3. My Submitted Requests' },
+                    { id: 'all-requests' as ApprovalSubmodule, label: '4. All Approval Requests' },
+                    { id: 'workflow-config' as ApprovalSubmodule, label: '5. Workflow Config' },
+                    { id: 'approval-levels' as ApprovalSubmodule, label: '6. Approval Levels' },
+                    { id: 'approval-matrix' as ApprovalSubmodule, label: '7. Approval Matrix' },
+                    { id: 'delegation-management' as ApprovalSubmodule, label: '8. Delegation Management' },
+                    { id: 'approval-history' as ApprovalSubmodule, label: '9. Approval History' },
+                    { id: 'rejected-requests' as ApprovalSubmodule, label: '10. Rejected Requests' },
+                    { id: 'cancelled-requests' as ApprovalSubmodule, label: '11. Cancelled Requests' },
+                    { id: 'audit-trail' as ApprovalSubmodule, label: '12. Audit Trail' },
+                    { id: 'audit-reports' as ApprovalSubmodule, label: '13. Audit Reports' },
+                    { id: 'approval-notifications' as ApprovalSubmodule, label: '14. Notifications' },
+                    { id: 'approval-settings' as ApprovalSubmodule, label: '15. Approval Settings' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'approvals' && approvalSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('approvals');
+                          setApprovalSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Standard ERP Modules */}
             {[
-              { id: 'overview' as ErpTab, label: 'Overview & Metrics', labelBn: 'ড্যাশবোর্ড সারাংশ', icon: TrendingUp },
               { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
               { id: 'products' as ErpTab, label: 'Product Entry & Catalog', labelBn: 'প্রডাক্ট এন্ট্রি (ইকমার্স+ইআরপি)', icon: Boxes },
               { id: 'orders' as ErpTab, label: 'Order Processing', labelBn: 'অর্ডার ও কুরিয়ার কিউ', icon: Package },
@@ -361,6 +626,27 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
                 </div>
               </div>
             </div>
+          )}
+
+          {/* TAB: Organization Profile Management (Module 01) */}
+          {activeTab === 'organization' && (
+            <ErpOrganizationView initialSubmodule={orgSubmodule} />
+          )}
+
+          {/* TAB: User, Roles & Advanced Permission Management (Module 02) */}
+          {activeTab === 'users' && (
+            <ErpUserManagementView
+              initialSubmodule={userSubmodule}
+              onNavigateToSubmodule={(sub) => setUserSubmodule(sub)}
+            />
+          )}
+
+          {/* TAB: Approval Workflow & Audit Management (Module 03) */}
+          {activeTab === 'approvals' && (
+            <ErpApprovalAuditView
+              initialSubmodule={approvalSubmodule}
+              onNavigateToSubmodule={(sub) => setApprovalSubmodule(sub)}
+            />
           )}
 
           {/* TAB: Document & Quotation Builder */}

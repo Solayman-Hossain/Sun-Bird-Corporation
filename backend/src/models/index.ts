@@ -40,3 +40,9 @@ export * from './Review';
 export * from './ChatRoom';
 export * from './ChatMessage';
 export * from './DisputeClaim';
+export * from './Organization';
+export * from './LoginHistory';
+export * from './ApprovalWorkflow';
+export * from './ApprovalDelegation';
+
+

@@ -8,3 +8,5 @@ export * from './media.service';
 export * from './kyc.service';
 export * from './listing.service';
 export * from './report.service';
+export * from './organization.service';
+

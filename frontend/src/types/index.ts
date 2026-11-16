@@ -381,3 +381,420 @@ export interface CustomBannerSlide {
   sortOrder: number;
 }
 
+// ── Module 01: Organization Profile Management ────────────────────────────
+export type OrganizationType =
+  | 'PROPRIETORSHIP'
+  | 'PARTNERSHIP'
+  | 'PRIVATE_LIMITED'
+  | 'PUBLIC_LIMITED'
+  | 'GOVERNMENT'
+  | 'NGO'
+  | 'OTHER';
+
+export type OrganizationStatus = 'ACTIVE' | 'INACTIVE';
+
+export interface OrganizationBankAccount {
+  bankId: string;
+  bankName: string;
+  branchName: string;
+  accountName: string;
+  accountNumber: string;
+  routingNumber?: string;
+  swiftCode?: string;
+  accountType: 'CURRENT' | 'SAVINGS' | 'MFS' | 'OTHER';
+  mfsProvider?: 'NONE' | 'BKASH' | 'NAGAD' | 'ROCKET' | 'UPAY';
+  currency: string;
+  paymentInstructions?: string;
+  isActive: boolean;
+  isDefault: boolean;
+}
+
+export interface OrganizationSignatory {
+  signatoryId: string;
+  personName: string;
+  designation: string;
+  signatureImageUrl: string;
+  isActive: boolean;
+  applicableDocuments: string[];
+}
+
+export interface OrganizationStamp {
+  stampId: string;
+  stampName: string;
+  stampType: 'OFFICIAL' | 'APPROVAL' | 'PAID' | 'RECEIVED';
+  stampImageUrl: string;
+  isActive: boolean;
+}
+
+export interface OrganizationBranding {
+  logoUrl?: string;
+  altLogoUrl?: string;
+  faviconUrl?: string;
+  letterheadBgUrl?: string;
+  primaryColor?: string;
+  accentColor?: string;
+  documentHeader?: string;
+  documentFooter?: string;
+  padPrintDefault?: boolean;
+}
+
+export interface OrganizationDocumentConfig {
+  quotationPrefix?: string;
+  invoicePrefix?: string;
+  challanPrefix?: string;
+  receiptPrefix?: string;
+  poPrefix?: string;
+  showWatermark?: boolean;
+  showStampOnInvoice?: boolean;
+  showSignatureOnQuotation?: boolean;
+  showBankDetailsOnInvoice?: boolean;
+  defaultNotes?: string;
+  termsAndConditions?: string[];
+}
+
+export interface OrganizationFinancialSettings {
+  vatPercent?: number;
+  taxIdentificationType?: string;
+  allowNegativeStock?: boolean;
+  enableFefo?: boolean;
+  defaultCostingMethod?: 'FIFO' | 'FEFO' | 'WEIGHTED_AVERAGE';
+  fiscalYearMonths?: number;
+  retainedEarningsAccountCode?: string;
+}
+
+export interface Organization {
+  _id: string;
+  organizationCode: string;
+  legalName: string;
+  displayName: string;
+  organizationType: OrganizationType;
+  registrationNumber?: string;
+  tradeLicenseNumber?: string;
+  tinNumber?: string;
+  binNumber?: string;
+  vatRegistrationNumber?: string;
+  email: string;
+  phone: string;
+  alternatePhone?: string;
+  website?: string;
+  address: string;
+  city: string;
+  district: string;
+  postalCode?: string;
+  country: string;
+  logo?: string;
+  status: OrganizationStatus;
+  isDefault: boolean;
+  financialYearStart: string;
+  currency: string;
+  timezone: string;
+  branding: OrganizationBranding;
+  bankAccounts: OrganizationBankAccount[];
+  signatories: OrganizationSignatory[];
+  stamps: OrganizationStamp[];
+  documentConfig: OrganizationDocumentConfig;
+  financialSettings: OrganizationFinancialSettings;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface OrgDashboardStats {
+  totalOrganizations: number;
+  activeOrganizations: number;
+  inactiveOrganizations: number;
+  defaultOrganization: {
+    _id: string;
+    organizationCode: string;
+    displayName: string;
+  } | null;
+  financialMetrics: {
+    totalSales: number;
+    totalPurchases: number;
+    inventoryValuation: number;
+    totalReceivables: number;
+    totalPayables: number;
+  };
+  organizationBreakdown: Array<{
+    organizationId: string;
+    organizationCode: string;
+    displayName: string;
+    status: string;
+    isDefault: boolean;
+    sales: number;
+    purchases: number;
+    inventory: number;
+    receivables: number;
+    payables: number;
+  }>;
+}
+
+export interface OrgActivityLog {
+  _id: string;
+  action: string;
+  actorRole: string;
+  targetCollection: string;
+  targetId: string;
+  beforeSnapshot?: any;
+  afterSnapshot?: any;
+  notes?: string;
+  createdAt: string;
+}
+
+// ==========================================
+// MODULE 02: USER, ROLES & PERMISSIONS TYPES
+// ==========================================
+
+export type ErpUserStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'LOCKED';
+export type ErpUserType = 'SUPER_ADMIN' | 'ADMIN' | 'STAFF' | 'CUSTOMER' | 'VENDOR';
+
+export interface RolePermissionRule {
+  module: string;
+  actions: string[];
+}
+
+export interface ErpRole {
+  _id: string;
+  roleName: string;
+  slug: string;
+  description?: string;
+  permissions: RolePermissionRule[];
+  isSystemRole: boolean;
+  isActive: boolean;
+  assignedUsersCount?: number;
+  assignedUsers?: any[];
+  assignedOrganizations?: string[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ErpUser {
+  _id: string;
+  fullName: string;
+  username?: string;
+  email: string;
+  mobile: string;
+  employeeId?: string;
+  profileImage?: string;
+  department?: string;
+  designation?: string;
+  userType: ErpUserType;
+  roleId?: ErpRole | string;
+  assignedRoles?: ErpRole[] | string[];
+  authorizedOrganizations?: any[];
+  defaultOrganizationId?: any;
+  status: ErpUserStatus;
+  isActive: boolean;
+  failedLoginAttempts?: number;
+  lockoutUntil?: string;
+  passwordExpiresAt?: string;
+  forcePasswordChange?: boolean;
+  lastLogin?: string;
+  hardwareFingerprint?: string;
+  createdBy?: any;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface UserDashboardMetrics {
+  totalUsers: number;
+  activeUsers: number;
+  inactiveUsers: number;
+  suspendedUsers: number;
+  lockedUsers: number;
+  totalRoles: number;
+  activeSessions: number;
+  failedLoginAttemptsCount: number;
+  usersByDepartment: Array<{ department: string; count: number }>;
+  usersByRole: Array<{ roleName: string; count: number }>;
+  recentLogins: any[];
+  recentlyCreatedUsers: any[];
+}
+
+export interface UserActiveSession {
+  _id: string;
+  userId: string;
+  ipAddress?: string;
+  userAgent?: string;
+  expiresAt: string;
+  createdAt: string;
+}
+
+export interface UserLoginHistoryItem {
+  _id: string;
+  userId: string;
+  email?: string;
+  ipAddress?: string;
+  userAgent?: string;
+  status: 'SUCCESS' | 'FAILED' | 'BLOCKED';
+  failureReason?: string;
+  createdAt: string;
+}
+
+export interface PermissionMatrixModuleDef {
+  moduleId: string;
+  moduleNameEn: string;
+  moduleNameBn: string;
+  description: string;
+  actions: Array<{
+    action: string;
+    actionLabelEn: string;
+    actionLabelBn: string;
+    isDangerous?: boolean;
+  }>;
+}
+
+// =========================================================================
+// MODULE 03: ADVANCED APPROVAL WORKFLOW & AUDIT MANAGEMENT TYPES
+// =========================================================================
+
+export type ApprovalRequestStatus =
+  | 'DRAFT'
+  | 'SUBMITTED'
+  | 'PENDING'
+  | 'UNDER_REVIEW'
+  | 'PARTIALLY_APPROVED'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'RETURNED_FOR_CORRECTION'
+  | 'CANCELLED'
+  | 'EXPIRED'
+  | 'ESCALATED'
+  | 'COMPLETED';
+
+export type ApprovalPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+export type ApprovalDecisionAction = 'APPROVE' | 'REJECT' | 'RETURN' | 'REQUEST_INFO' | 'DELEGATE';
+
+export interface ApprovalDecisionRecord {
+  level: number;
+  actorId: any;
+  actorName: string;
+  actorRole: string;
+  action: ApprovalDecisionAction;
+  comment?: string;
+  delegatedTo?: any;
+  signatureHash?: string;
+  timestamp: string;
+}
+
+export interface ApprovalRequestItem {
+  _id: string;
+  requestCode: string;
+  documentType: string;
+  documentId: string;
+  documentRef: string;
+  organizationId?: any;
+  module: string;
+  transactionType: string;
+  transactionAmount: number;
+  priority: ApprovalPriority;
+  requestedBy: any;
+  makerId?: any;
+  makerName?: string;
+  requestedAt: string;
+  workflowId?: any;
+  currentLevel: number;
+  totalLevels: number;
+  assignedApproverId?: any;
+  assignedRoleId?: any;
+  currentStatus: ApprovalRequestStatus;
+  dueDate?: string;
+  isOverdue?: boolean;
+  attachments?: string[];
+  decisionHistory: ApprovalDecisionRecord[];
+  transactionSnapshot?: any;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApprovalDashboardMetrics {
+  totalRequests: number;
+  pendingCount: number;
+  approvedCount: number;
+  rejectedCount: number;
+  cancelledCount: number;
+  returnedCount: number;
+  overdueCount: number;
+  myPendingCount: number;
+  averageApprovalHours: number;
+  moduleBreakdown: Array<{ module: string; count: number; totalAmount: number }>;
+  orgBreakdown: Array<{ organizationName: string; count: number; pending: number }>;
+  recentRequests: ApprovalRequestItem[];
+}
+
+export interface WorkflowLevelConfig {
+  levelNumber: number;
+  levelName: string;
+  approverType: 'USER' | 'ROLE';
+  approverId?: any;
+  roleId?: any;
+  roleSlug?: string;
+  requiredCount: number;
+  isParallel?: boolean;
+  slaHours?: number;
+}
+
+export interface ApprovalWorkflowItem {
+  _id: string;
+  workflowName: string;
+  workflowCode: string;
+  organizationId?: any;
+  module: string;
+  transactionType: string;
+  minAmount: number;
+  maxAmount: number;
+  approvalLevels: WorkflowLevelConfig[];
+  autoEscalation: boolean;
+  escalateAfterHours?: number;
+  escalateToRoleId?: any;
+  effectiveDate?: string;
+  expiryDate?: string;
+  isActive: boolean;
+  createdBy?: any;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ApprovalDelegationItem {
+  _id: string;
+  originalApproverId: any;
+  delegatedApproverId: any;
+  organizationId?: any;
+  moduleScope: string[];
+  startDate: string;
+  endDate: string;
+  reason: string;
+  isActive: boolean;
+  createdAt?: string;
+}
+
+export interface AuditLogItem {
+  _id: string;
+  actorId: any;
+  actorRole: string;
+  actorNameSnapshot?: string;
+  organizationId?: any;
+  module?: string;
+  action: string;
+  targetCollection: string;
+  targetId: string;
+  entityType?: string;
+  entityId?: string;
+  requestId?: string;
+  beforeSnapshot?: any;
+  afterSnapshot?: any;
+  notes?: string;
+  ipAddress?: string;
+  userAgent?: string;
+  createdAt: string;
+}
+
+export interface AuditReportMetrics {
+  totalEvents: number;
+  byAction: Array<{ action: string; count: number }>;
+  byModule: Array<{ module: string; count: number }>;
+  byActor: Array<{ actorName: string; count: number }>;
+}
+
+
+
+

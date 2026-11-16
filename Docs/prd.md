@@ -853,3 +853,77 @@ This section incorporates the comprehensive engineering baselines established in
 - Gate 3: End-to-end workflow UAT completed.
 - Gate 4: Formal written Go/No-Go sign-off by all three Directors.
 
+---
+
+## 23. Enterprise Multi-Organization Profile & Entity Architecture (Module 01)
+### 23.1 Objectives & Tenancy Scope
+Support multiple operating entities, parent/subsidiary companies, and sister trading concerns under a unified cloud management system while strictly isolating transactional balances, document branding, legal registrations, and banking details.
+
+### 23.2 Master Entity Specification (`Organization`)
+- **Identification:** Unique `organizationCode` (e.g., `SB-CORP`, `SB-MED`), `legalName`, `displayName`, and `organizationType` (`PROPRIETORSHIP`, `PARTNERSHIP`, `PRIVATE_LIMITED`, `PUBLIC_LIMITED`).
+- **Statutory Compliance (Bangladesh):**
+  - Trade License Number with issuing authority and expiry tracking.
+  - 12-digit Tax Identification Number (TIN).
+  - 11-digit Business Identification Number (BIN / VAT Registration).
+- **Contact & Location:** Corporate email, primary and emergency telephone lines, registered address, postal code, district, and country (default: `Bangladesh`).
+- **Corporate Branding:** High-resolution company logo, official digital seal/stamp, and authorized signatory signatures with cryptographic storage URLs.
+- **Financial Defaults:** Currency code (`BDT`), time zone (`Asia/Dhaka`), and financial year start date (e.g., July 1).
+- **Default Flag:** Exactly one organization designated as `isDefault: true` within the primary operational scope.
+
+### 23.3 Implemented Submodules (12 Submodules)
+1. **Organization Dashboard:** Aggregates real-time organization metrics, active/inactive counts, sales, purchases, inventory, receivables, and payables per company entity.
+2. **Organization List:** Multi-company directory with search, type filters, and status toggles.
+3. **Add Organization:** Complete wizard for onboarding new corporate entities.
+4. **Organization Profile:** In-depth view and editing of legal and fiscal registrations.
+5. **Logo & Branding:** Dynamic upload and preview of company logos for invoice/quotation headers.
+6. **Bank Information:** Multi-currency corporate bank accounts, branch routing numbers, and SWIFT codes.
+7. **Signature Management:** Authorized digital signatures with designation and role binding.
+8. **Stamp Management:** Official company stamps with opacity and position controls.
+9. **Document Configuration:** Header/footer layout, terms and conditions, watermarks, and font settings.
+10. **Organization Settings:** Operational timeframes, fiscal year boundaries, and notification preferences.
+11. **Financial Settings:** Default receivables/payables accounts, VAT percentages, and currency conventions.
+12. **Activity Logs:** Audit trail of all configuration changes within each organization scope.
+
+---
+
+## 24. Enterprise User Identity, RBAC & Granular Permission Architecture (Module 02)
+### 24.1 User Lifecycle Management
+- **States:** `ACTIVE` (normal access), `INACTIVE` (provisioned but dormant), `SUSPENDED` (administratively disabled), `LOCKED` (brute-force security lock).
+- **Attributes:** Full name, unique username, official email, mobile phone, employee ID, department, designation, profile picture, assigned organizations (multi-select), default organization, assigned roles, password expiry, and last login.
+- **Credential Governance:** BCrypt 12-round salted hashing, mandatory password change on initial login, 5 failed attempts triggering automated 30-minute lockout.
+
+### 24.2 17 Standard Configurable Roles
+1. Super Administrator, 2. System Administrator, 3. Managing Director, 4. General Manager, 5. Finance Manager, 6. Accounts Officer, 7. Sales Manager, 8. Sales Executive, 9. Purchase Manager, 10. Store Manager, 11. Inventory Officer, 12. HR Manager, 13. HR Officer, 14. E-commerce Manager, 15. Customer Support, 16. Auditor, 17. Viewer.
+- **System Role Guards:** Core administrative roles (`SUPER_ADMIN`, `SYSTEM_ADMIN`, `MANAGING_DIRECTOR`) cannot be deleted or have their baseline administrative privileges revoked.
+
+### 24.3 Interactive Granular Permission Matrix (11 Modules × 12 Operations)
+- **Covered Modules:** Organization, Users, Inventory, Sales, Purchasing, Accounting, HR & Payroll, E-commerce, Import/LC, Customer Support, Approvals.
+- **Granular Actions:** `VIEW`, `CREATE`, `EDIT`, `DELETE`, `EXPORT`, `IMPORT`, `APPROVE`, `REJECT`, `PRINT`, `ATTACH`, `CANCEL`, `OVERRIDE`.
+- **Enforcement:** Enforced at backend middleware (`authorizePermission(module, action)`) and reflected conditionally in frontend UI controls.
+
+### 24.4 Session Security & Audit
+- **Active Sessions:** Persistent refresh token tracking (`user_sessions` collection) with IP address, user-agent, device type, and remote single/bulk session revocation.
+- **Login History:** Immutable audit log (`login_history` collection) capturing timestamp, username, IP, user-agent, and status (`SUCCESS`, `FAILED`, `BLOCKED`).
+
+---
+
+## 25. Multi-Tier Approval Workflow Engine & Tamper-Proof Audit Architecture (Module 03)
+### 25.1 Configurable Multi-Tier Workflow Engine
+- **Progression Modes:** Sequential multi-level tier progression (Level 1 → Level 2 → Level N) and parallel multi-stakeholder consensus.
+- **Threshold Routing:** Minimum and maximum amount tiers (e.g., Tier 1: ≤ BDT 50,000; Tier 2: ≤ BDT 5,00,000; Tier 3: > BDT 5,00,000 requiring Director sign-off).
+- **Supported Operational Domains:** Purchasing (PO/CS), Sales (Discounts > 20%, Credit Limit Overrides), Accounting (Manual Journal Vouchers, Payments), Inventory (Scrap Adjustments), HR (Salary Approvals, Overtime), Import/LC, and E-commerce Returns.
+
+### 25.2 Strict Maker–Checker Governance
+- **Self-Approval Ban:** The user who creates or initiates a transaction/request (`makerId`) is strictly prohibited from approving, rejecting, or reviewing their own request at any level of the approval hierarchy.
+- **Violation Response:** Service layer enforces check and returns RFC 7807 `403 Forbidden` error with explicit audit logging of unauthorized approval attempts.
+
+### 25.3 Time-Bounded Delegation with Circular Prevention
+- **Authority Delegation:** Authorized approvers can delegate approval privileges to designated peers or subordinates for scheduled leaves or temporary assignments.
+- **Circular Detection Algorithm:** Depth-first graph search traversal inspects the delegation tree to guarantee no circular delegation loops (e.g., User A → User B → User A) can be instantiated.
+
+### 25.4 Centralized Immutable Audit Trail (`audit_logs`)
+- **Tamper-Proof Immutability:** Mongoose schema pre-hooks (`updateOne`, `updateMany`, `deleteOne`, `deleteMany`, `findOneAndUpdate`) block any modification or deletion of existing audit records.
+- **Captured Data:** Timestamp, actor ID, snapshot of actor name/email, organization ID, operational module, action type, entity type, entity ID, request ID, client IP, user-agent, and exact field-level Before/After JSON diffs.
+- **Aggregate Reporting:** Compliance reports calculating approval SLA compliance, overdue turnaround rates, and anomalous administrative overrides.
+
+

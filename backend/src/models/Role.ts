@@ -1,6 +1,19 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 
-export type RoleAction = 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'APPROVE' | 'EXPORT';
+export type RoleAction =
+  | 'VIEW'
+  | 'CREATE'
+  | 'READ'
+  | 'UPDATE'
+  | 'DELETE'
+  | 'APPROVE'
+  | 'REJECT'
+  | 'EXPORT'
+  | 'PRINT'
+  | 'FINALIZE'
+  | 'CANCEL'
+  | 'MANAGE_SETTINGS'
+  | string;
 
 export interface IRolePermission {
   module: string;
@@ -14,6 +27,7 @@ export interface IRole extends Document {
   permissions: IRolePermission[];
   isSystemRole: boolean;
   isActive: boolean;
+  assignedOrganizations?: Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,7 +55,6 @@ export const RoleSchema = new Schema<IRole>(
         actions: [
           {
             type: String,
-            enum: ['CREATE', 'READ', 'UPDATE', 'DELETE', 'APPROVE', 'EXPORT'],
             required: true,
           },
         ],
@@ -55,6 +68,12 @@ export const RoleSchema = new Schema<IRole>(
       type: Boolean,
       default: true,
     },
+    assignedOrganizations: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Organization',
+      },
+    ],
   },
   {
     timestamps: true,

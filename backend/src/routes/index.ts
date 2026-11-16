@@ -25,9 +25,11 @@ import erpHrmRouter from './erp/hrmRoutes';
 import portalEmployeeRouter from './portal/employeeRoutes';
 import erpQuorumRouter from './erp/quorumRoutes';
 import erpApprovalRouter from './erp/approvalRoutes';
+import erpWorkflowRouter from './erp/workflowRoutes';
 import erpCrmRouter from './erp/crmRoutes';
 import erpAuditRouter from './erp/auditRoutes';
 import erpWarehouseRouter from './erp/warehouseRoutes';
+import erpOrganizationRouter from './erp/organizationRoutes';
 import webhookRouter from './webhooks/webhookRoutes';
 import mediaRouter from './media.routes';
 import publicReviewRouter from './public/reviewRoutes';
@@ -117,8 +119,10 @@ apiV1Router.use('/portal/employee', portalEmployeeRouter);
 // ERP Multi-Director Quorum Approvals mounted at /api/v1/erp/approvals/quorum
 apiV1Router.use('/erp/approvals/quorum', erpQuorumRouter);
 
-// ERP Workflow Maker-Checker Requests mounted at /api/v1/erp/approvals/requests
+// ERP Workflow Maker-Checker Engine & Requests (Module 03)
+apiV1Router.use('/erp/approvals', erpApprovalRouter);
 apiV1Router.use('/erp/approvals/requests', erpApprovalRouter);
+apiV1Router.use('/erp/approval-workflows', erpWorkflowRouter);
 
 // ERP CRM Activities, Doctor Visits, Leads & Follow-ups mounted at /api/v1/erp/crm
 apiV1Router.use('/erp/crm', erpCrmRouter);
@@ -128,6 +132,10 @@ apiV1Router.use('/erp/audit-logs', erpAuditRouter);
 
 // ERP Multi-Warehouse Directory & Geofencing mounted at /api/v1/erp/warehouses
 apiV1Router.use('/erp/warehouses', erpWarehouseRouter);
+
+// ERP Multi-Organization Management mounted at /api/v1/erp/organizations (Module 01)
+apiV1Router.use('/erp/organizations', erpOrganizationRouter);
+
 
 // External Payment & Courier Webhooks mounted at /api/v1/webhooks
 apiV1Router.use('/webhooks', webhookRouter);

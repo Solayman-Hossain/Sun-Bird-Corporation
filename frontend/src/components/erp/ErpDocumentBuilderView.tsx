@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ErpDocumentBuilderView.css';
 import {
   FileText,
@@ -21,7 +21,8 @@ import {
   Package,
 } from 'lucide-react';
 import { useToast } from '../../context/ToastContext';
-import { DynamicDocumentColumn, DynamicDocumentRow } from '../../types';
+import { DynamicDocumentColumn, DynamicDocumentRow, Organization } from '../../types';
+import { organizationService } from '../../services/organization.service';
 
 // Preset from Somorita Hospital Price Quotation PDF
 const SAMORITA_COLUMNS: DynamicDocumentColumn[] = [
@@ -51,6 +52,20 @@ const SAMORITA_ROWS: DynamicDocumentRow[] = [
 
 export function ErpDocumentBuilderView() {
   const { showToast } = useToast();
+
+  // Multi-Organization Branding State (Module 01)
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
+  const [companyName, setCompanyName] = useState('SUN BIRD CORPORATION');
+  const [companyTagline, setCompanyTagline] = useState('All Kinds of Medical Equipment & Hospital Supplier');
+  const [companyAddress, setCompanyAddress] = useState('House: 14, Road: 7, Block-C, Niketon, Gulshan-1, Dhaka-1212');
+  const [companyBin, setCompanyBin] = useState('BIN: 002391029-0101 | DGDA Reg: 2024-8841');
+  const [companyPhone, setCompanyPhone] = useState('+880 1751-195752');
+  const [companyEmail, setCompanyEmail] = useState('info@sunbirdbd.com');
+  const [companyWebsite, setCompanyWebsite] = useState('www.sunbirdbd.com');
+  const [companyLogo, setCompanyLogo] = useState('');
+  const [companyStampUrl, setCompanyStampUrl] = useState('');
+  const [companySignatureUrl, setCompanySignatureUrl] = useState('');
 
   // Document meta
   const [docType, setDocType] = useState<'QUOTATION' | 'INVOICE' | 'CHALLAN' | 'VOUCHER'>('QUOTATION');
@@ -89,6 +104,62 @@ export function ErpDocumentBuilderView() {
     'Payment: By Cash or A/C payee Cheque in favor of Sun Bird Corporation.',
     'Validity: Price will be valid for 30 days and is subject to DGDA tariff & statutory NBR notifications.',
   ]);
+
+  // Load organizations from backend
+  useEffect(() => {
+    organizationService
+      .getOrganizations()
+      .then((orgs) => {
+        if (orgs && orgs.length > 0) {
+          setOrganizations(orgs);
+          const def = orgs.find((o) => o.isDefault) || orgs[0];
+          applyOrganizationBranding(def);
+        }
+      })
+      .catch(() => {
+        // Fallback to initial defaults if offline
+      });
+  }, []);
+
+  const applyOrganizationBranding = (org: Organization) => {
+    setSelectedOrg(org);
+    setCompanyName(org.displayName || org.legalName);
+    setCompanyTagline(org.branding?.documentHeader || 'All Kinds of Medical Equipment & Hospital Supplier');
+    setCompanyAddress(`${org.address}, ${org.city}-${org.postalCode || ''}`);
+    setCompanyBin(`BIN: ${org.binNumber || org.vatRegistrationNumber || '002391029-0101'} | TIN: ${org.tinNumber || '592817291029'}`);
+    setCompanyPhone(org.phone);
+    setCompanyEmail(org.email);
+    setCompanyWebsite(org.website || 'www.sunbirdbd.com');
+    setCompanyLogo(org.branding?.logoUrl || org.logo || '');
+    if (org.branding?.padPrintDefault !== undefined) {
+      setIsPadPrintMode(org.branding.padPrintDefault);
+    }
+
+    if (org.signatories && org.signatories.length > 0) {
+      const activeSig = org.signatories.find((s) => s.isActive) || org.signatories[0];
+      setSignatoryName(activeSig.personName);
+      setSignatoryDesignation(activeSig.designation);
+      setSignatoryCompany(org.displayName);
+      setSignatoryPhone(org.phone);
+      setCompanySignatureUrl(activeSig.signatureImageUrl || '');
+    }
+
+    if (org.stamps && org.stamps.length > 0) {
+      const activeStamp = org.stamps.find((s) => s.isActive) || org.stamps[0];
+      setCompanyStampUrl(activeStamp.stampImageUrl || '');
+    }
+
+    // Set bank details in payment terms
+    if (org.bankAccounts && org.bankAccounts.length > 0) {
+      const defBank = org.bankAccounts.find((b) => b.isDefault) || org.bankAccounts[0];
+      setTerms((prev) => [
+        prev[0] || 'Price: Offered price is included Vat & Tax 15% for free delivery basis inside Dhaka.',
+        prev[1] || 'Delivery: Products will be delivered as per your official hospital work order within 24-48 hours.',
+        `Payment: By Cash, Cheque or BEFTN/MFS to ${defBank.bankName} (A/C: ${defBank.accountNumber}, Branch: ${defBank.branchName}, Name: ${defBank.accountName}).`,
+        prev[3] || 'Validity: Price will be valid for 30 days and is subject to DGDA tariff & statutory NBR notifications.',
+      ]);
+    }
+  };
 
   // Handle cell edit
   const handleCellChange = (rowId: string, field: string, value: string | number) => {
@@ -251,8 +322,30 @@ export function ErpDocumentBuilderView() {
             </p>
           </div>
 
-          {/* Quick Actions */}
+          {/* Quick Actions & Organization Picker */}
           <div className="flex flex-wrap items-center gap-2.5">
+            {/* Organization Selector */}
+            {organizations.length > 0 && (
+              <div className="flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs">
+                <Building className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-slate-400">কোম্পানি:</span>
+                <select
+                  value={selectedOrg?._id || ''}
+                  onChange={(e) => {
+                    const found = organizations.find((o) => o._id === e.target.value);
+                    if (found) applyOrganizationBranding(found);
+                  }}
+                  className="bg-transparent text-white font-bold border-0 focus:ring-0 cursor-pointer text-xs"
+                >
+                  {organizations.map((org) => (
+                    <option key={org._id} value={org._id} className="bg-slate-900 text-white">
+                      {org.displayName} {org.isDefault ? '(ডিফল্ট)' : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <button
               type="button"
               onClick={() => loadPreset('SAMORITA')}
@@ -365,22 +458,34 @@ export function ErpDocumentBuilderView() {
         {/* Full Company Header (Hidden when isPadPrintMode is active) */}
         {!isPadPrintMode && (
           <header className="border-b-2 border-[#1e3932] pb-4 mb-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-black text-[#1e3932] tracking-wide font-serif">
-                  SUN BIRD CORPORATION
-                </h1>
-                <p className="text-xs font-semibold text-[#c89348] tracking-widest uppercase mt-0.5">
-                  All Kinds of Medical Equipment & Hospital Supplier
-                </p>
-                <p className="text-[11px] text-slate-600 mt-1">
-                  House: 42, Road: 11, Block-E, Banani, Dhaka-1213 | DGDA Reg: 2024-8841 | BIN: 002491823-0101
-                </p>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                {companyLogo && (
+                  <div className="w-16 h-16 shrink-0 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center p-1.5 overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={companyLogo}
+                      alt={companyName}
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                )}
+                <div>
+                  <h1 className="text-2xl font-black text-[#1e3932] tracking-wide font-serif">
+                    {companyName}
+                  </h1>
+                  <p className="text-xs font-semibold text-[#c89348] tracking-widest uppercase mt-0.5">
+                    {companyTagline}
+                  </p>
+                  <p className="text-[11px] text-slate-600 mt-1">
+                    {companyAddress} | {companyBin}
+                  </p>
+                </div>
               </div>
-              <div className="text-right text-xs text-slate-600 space-y-0.5">
-                <p className="font-semibold text-slate-900">হটলাইন: +880 1711-000000</p>
-                <p>ইমেইল: info@sunbirdcorp.com</p>
-                <p>ওয়েব: www.sunbirdcorp.com</p>
+              <div className="text-right text-xs text-slate-600 space-y-0.5 shrink-0">
+                <p className="font-semibold text-slate-900">হটলাইন: {companyPhone}</p>
+                <p>ইমেইল: {companyEmail}</p>
+                <p>ওয়েব: {companyWebsite}</p>
               </div>
             </div>
           </header>
@@ -567,7 +672,17 @@ export function ErpDocumentBuilderView() {
         {/* Signatory Area */}
         <div className="pt-6 flex justify-between items-end text-xs">
           <div>
-            <p className="text-slate-600 mb-6">Kind regards,</p>
+            <p className="text-slate-600 mb-2">Kind regards,</p>
+            {companySignatureUrl && (
+              <div className="h-12 w-32 mb-1">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={companySignatureUrl}
+                  alt="Signature"
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+            )}
             <div className="space-y-0.5">
               <input
                 type="text"
@@ -597,16 +712,27 @@ export function ErpDocumentBuilderView() {
           </div>
 
           <div className="text-center space-y-1">
-            <div className="w-36 border-b border-slate-400 mb-1" />
-            <p className="text-[11px] text-slate-500 font-medium">কর্তৃপক্ষের স্বাক্ষর ও সিল</p>
+            {companyStampUrl ? (
+              <div className="w-20 h-20 mx-auto mb-1">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={companyStampUrl}
+                  alt="Official Seal"
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+            ) : (
+              <div className="w-36 border-b border-slate-400 mb-1" />
+            )}
+            <p className="text-[11px] text-slate-500 font-medium">কর্তৃপক্ষের স্বাক্ষর ও অফিসিয়াল সিল</p>
           </div>
         </div>
 
         {/* Full Footer (Hidden when isPadPrintMode is active) */}
         {!isPadPrintMode && (
           <footer className="mt-12 pt-3 border-t border-slate-300 text-[10px] text-slate-500 text-center space-y-0.5">
-            <p>House: 42, Road: 11, Block-E, Banani, Dhaka-1213 | Phone: +880 1711-000000 | Email: sales@sunbirdcorp.com</p>
-            <p className="font-mono text-slate-400">Sun Bird Corporation — DGDA Authorized Medical Devices & Healthcare Equipment</p>
+            <p>{companyAddress} | Phone: {companyPhone} | Email: {companyEmail}</p>
+            <p className="font-mono text-slate-400">{companyName} — Authorized Medical Devices & Healthcare Equipment</p>
           </footer>
         )}
       </div>
