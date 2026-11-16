@@ -798,3 +798,185 @@ export interface AuditReportMetrics {
 
 
 
+
+
+// =========================================================
+// MODULE 04: PRODUCT ENTRY & E-COMMERCE CATALOG TYPES
+// =========================================================
+
+export type ProductCatalogSubmodule =
+  | 'product-dashboard'
+  | 'erp-product-master'
+  | 'ecommerce-entry'
+  | 'product-list'
+  | 'categories'
+  | 'brands'
+  | 'variants'
+  | 'attributes'
+  | 'image-gallery'
+  | 'pricing'
+  | 'bulk-import'
+  | 'product-export'
+  | 'seo-management'
+  | 'website-publishing'
+  | 'product-approval'
+  | 'activity-logs'
+  | 'product-settings';
+
+export interface ErpProductMasterItem {
+  _id: string;
+  sku: string;
+  productCode?: string;
+  barcode?: string;
+  internalReference?: string;
+  nameEn: string;
+  nameBn?: string;
+  category: string;
+  categoryId?: string;
+  brand?: string;
+  brandId?: string;
+  hsCode: string;
+  baseUom: string;
+  purchaseUnit?: string;
+  salesUnit?: string;
+  productType: string;
+  description?: string;
+  shortDescription?: string;
+  isMedical: boolean;
+  isExpirable: boolean;
+  minStockQty: number;
+  availableStock?: number;
+  inStock?: boolean;
+  weight?: number;
+  length?: number;
+  width?: number;
+  height?: number;
+  volume?: number;
+  purchasePrice?: number;
+  costPrice?: number;
+  defaultSalesPrice?: number;
+  minSalesPrice?: number;
+  wholesalePrice?: number;
+  retailPrice: number;
+  showroomPrice: number;
+  taxRate?: number;
+  warrantyPeriod?: string;
+  reorderLevel?: number;
+  status: 'ACTIVE' | 'INACTIVE' | 'ARCHIVED';
+  publicationStatus: 'DRAFT' | 'PENDING_APPROVAL' | 'APPROVED' | 'PUBLISHED' | 'UNPUBLISHED' | 'REJECTED' | 'SCHEDULED';
+  publishedAt?: string;
+  approvalRequestId?: string;
+  ecommerceCatalog?: {
+    websiteName?: string;
+    websiteShortDesc?: string;
+    websiteFullDesc?: string;
+    highlights?: string[];
+    specifications?: Record<string, string>;
+    features?: string[];
+    tags?: string[];
+    searchKeywords?: string[];
+    isFeatured?: boolean;
+    isNewArrival?: boolean;
+    isBestSeller?: boolean;
+    isPromotional?: boolean;
+    promotionalPrice?: number;
+  };
+  gallery?: Array<{
+    url: string;
+    altText?: string;
+    caption?: string;
+    isMain?: boolean;
+    sortOrder: number;
+  }>;
+  variants?: Array<{
+    sku: string;
+    barcode?: string;
+    attributes: Record<string, string>;
+    additionalPrice: number;
+    image?: string;
+    weight?: number;
+    status: 'ACTIVE' | 'INACTIVE';
+  }>;
+  seo?: {
+    seoTitle?: string;
+    metaDescription?: string;
+    metaKeywords?: string[];
+    slug: string;
+    canonicalUrl?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    ogImage?: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ProductCategoryItem {
+  _id: string;
+  nameEn: string;
+  nameBn?: string;
+  slug: string;
+  parentId?: string | null;
+  ancestors?: string[];
+  iconUrl?: string;
+  imageUrl?: string;
+  descriptionEn?: string;
+  descriptionBn?: string;
+  displayOrder: number;
+  isHomepageVisible: boolean;
+  isActive: boolean;
+  productCount?: number;
+  children?: ProductCategoryItem[];
+}
+
+export interface ProductBrandItem {
+  _id: string;
+  name: string;
+  slug: string;
+  logoUrl?: string;
+  description?: string;
+  website?: string;
+  countryOfOrigin?: string;
+  displayOrder: number;
+  isActive: boolean;
+  productCount?: number;
+}
+
+export interface ProductAttributeItem {
+  _id: string;
+  name: string;
+  code: string;
+  values: string[];
+  displayOrder: number;
+  isActive: boolean;
+}
+
+export interface ProductCatalogDashboardMetrics {
+  totalProducts: number;
+  activeProducts: number;
+  inactiveProducts: number;
+  draftProducts: number;
+  publishedProducts: number;
+  unpublishedProducts: number;
+  pendingApprovalProducts: number;
+  outOfStockCount: number;
+  lowStockCount: number;
+  inStockCount: number;
+  noImagesProducts: number;
+  noSeoProducts: number;
+  categoriesDistribution: Array<{ category: string; count: number }>;
+  brandsDistribution: Array<{ brand: string; count: number }>;
+  publicationRatio: {
+    published: number;
+    unpublished: number;
+    pending: number;
+  };
+}
+
+export interface BulkImportResult {
+  totalRows: number;
+  createdCount: number;
+  updatedCount: number;
+  failedCount: number;
+  errors: Array<{ row: number; sku: string; error: string }>;
+}

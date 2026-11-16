@@ -90,5 +90,10 @@ export * from './ApprovalDelegationService';
 export { default as ApprovalDelegationService } from './ApprovalDelegationService';
 export * from './AuditService';
 export { default as AuditService } from './AuditService';
+export * from './CategoryService';
+export * from './BrandService';
+export * from './ProductAttributeService';
+export * from './ProductCatalogService';
+
 
 

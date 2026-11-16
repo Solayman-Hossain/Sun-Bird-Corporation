@@ -1696,3 +1696,69 @@ Verification & Testing:
   - Frontend ERP Route: `http://localhost:3000/erp/approvals` (HTTP 200).
   - Frontend Admin Route: `http://localhost:3000/admin/approvals` (HTTP 200).
 ```
+
+```markdown
+### Prompt 53: SUN BIRD ERP – MODULE 04: PRODUCT ENTRY & E-COMMERCE CATALOG MANAGEMENT
+
+Objective:
+Implement a unified enterprise-grade Product Entry and E-Commerce Catalog Management system inside Sun Bird Corporation ERP without rebuilding the application, redesigning existing layouts, or duplicating database master collections.
+
+Architecture & Scope:
+- Single Authoritative Product Master: Upgraded existing `products` collection with ERP master attributes (productCode, internalReference, HS code, manufacturer, internal purchase costs, costPrice, wholesale price, reorderLevel, warrantyPeriod) while protecting internal cost prices (`-purchasePrice -costPrice`) from public storefront access.
+- Dynamic Stock Aggregation: Real-time inventory availability derived on the fly from `ProductBatchModel` batches with zero secondary stock field desynchronization.
+- Hierarchical Taxonomies & Variants: Self-referencing category tree with circular loop prevention (`detectCircularCategory`), brand directory with reference integrity checks, and variant attribute definitions.
+- Publication Governance: Integration with Module 03 Approval Workflow Engine (`PRODUCT_PUBLICATION`) enforcing strict Maker–Checker separation of duties before storefront visibility.
+- 17-Submodule Expandable Accordion: Integrated seamlessly under the Products navigation section.
+
+Files Created & Updated:
+- `backend/src/models/Product.ts`: Enhanced existing Mongoose model with ERP master fields, e-commerce catalog, gallery, and SEO.
+- `backend/src/models/Category.ts`: Hierarchical categories model with ancestors and display ordering.
+- `backend/src/models/Brand.ts`: Brand directory model with logo and country of origin.
+- `backend/src/models/ProductAttribute.ts`: Variant attributes model.
+- `backend/src/models/index.ts`: Exported new models.
+- `backend/src/services/CategoryService.ts`: Category CRUD with circular loop detection and default seed data.
+- `backend/src/services/BrandService.ts`: Brand CRUD with safe deletion guards and default seed data.
+- `backend/src/services/ProductAttributeService.ts`: Attribute CRUD and seed data.
+- `backend/src/services/ProductCatalogService.ts`: Catalog dashboard metrics, secure retrieval, master CRUD, gallery reordering, pricing tiers, SEO slug generation, Module 03 publication approval submission, bulk import validation, and export.
+- `backend/src/services/verify-product-catalog-service.ts`: Comprehensive 35-assertion automated test suite.
+- `backend/src/controllers/ProductController.ts`: Projected `-purchasePrice -costPrice` on public endpoints.
+- `backend/src/controllers/ProductCatalogController.ts`: REST controller for ERP product catalog operations.
+- `backend/src/routes/erp/productCatalogRoutes.ts`: Mounted at `/api/v1/erp/product-catalog`.
+- `backend/src/routes/index.ts`: Registered product catalog router.
+- `frontend/src/types/index.ts`: Added `ProductCatalogSubmodule`, `ErpProductMasterItem`, `ProductCategoryItem`, `ProductBrandItem`, `ProductAttributeItem`, `ProductCatalogDashboardMetrics`.
+- `frontend/src/services/productCatalog.service.ts`: Frontend client service for catalog operations.
+- `frontend/src/services/index.ts`: Exported `productCatalogService`.
+- `frontend/src/components/erp/ErpProductCatalogView.tsx`: Full interactive React component supporting all 17 submodules.
+- `frontend/src/components/erp/ErpProductCatalogView.css`: Sun Bird theme (#1e3932 Forest Green, #c89348 Warm Gold).
+- `frontend/src/app/erp/page.tsx`: Sidebar accordion integration with 17 submodules and main view rendering.
+- `frontend/src/app/erp/products/page.tsx`: Direct route wrapper.
+- `frontend/src/app/admin/products/page.tsx`: Admin route wrapper.
+
+Submodules Implemented (17 Submodules):
+1. Product Dashboard: Live metric cards (Total, Active, Draft, Published, Unpublished, Low Stock, Pending Approval, Without Images, Without SEO) with category and brand charts.
+2. ERP Product Master: Internal operational product profile with classification, HS codes, base UOM, reorder thresholds, and internal costs (protected).
+3. E-commerce Product Entry: Public storefront product editing with key highlights, specifications, and warranty information.
+4. Product List: Master table with live aggregated batch inventory, pricing tiers, and quick actions.
+5. Product Categories: Hierarchical category tree management with circular loop protection.
+6. Brand Management: Manufacturer brand catalog with country of origin and logo assets.
+7. Product Variants: Multi-SKU variation matrix mapped by technical attributes.
+8. Product Attributes: Global attribute definitions with selectable values.
+9. Product Image Gallery: Drag-and-drop image management with primary image designation and display ordering.
+10. Product Pricing: Multi-tier pricing editor (Retail MRP, Showroom, Reseller Tiers 1-3, Wholesale) with margin display.
+11. Bulk Product Import: CSV/JSON batch data ingestion with automated row-by-row SKU uniqueness and required field validation.
+12. Product Export: Secure JSON/CSV data export for inventory auditing and accounting reconciliation.
+13. SEO Management: Meta title, meta description, canonical URL, and URL slug optimization with preview cards.
+14. Website Publishing: Controlled publishing workflows with publication history and instant unpublish controls.
+15. Product Approval: Maker–Checker workflow integration tracking pending publication requests.
+16. Product Activity Logs: Comprehensive audit trail capturing all price edits, descriptions, and catalog modifications.
+17. Product Settings: Global catalog configurations, default tax/VAT rates, and low-stock threshold triggers.
+
+Verification & Testing:
+- Backend Test Suite: `verify-product-catalog-service.ts` (35 Passed / 0 Failed).
+- Backend TypeScript Check: `npx tsc --noEmit` (Exit code 0, zero errors).
+- Frontend TypeScript Check: `npx tsc --noEmit` (Exit code 0, zero errors).
+- Production Build: Next.js build (`npm run build`) succeeded with 56/56 static pages generated cleanly.
+- Live Endpoints Verified:
+  - Backend API: `http://localhost:5000/api/v1/health` (Status UP, HTTP 200).
+  - Frontend ERP Route: `http://localhost:3000/erp/products` (HTTP 200).
+```

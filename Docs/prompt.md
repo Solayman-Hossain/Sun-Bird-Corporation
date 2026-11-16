@@ -1578,5 +1578,42 @@ Verification: Execute `src/services/verify-approval-service.ts` (31 assertions p
 
 ---
 
-*Document v1.2 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
+### Prompt 66: SUN BIRD ERP – MODULE 04: PRODUCT ENTRY & E-COMMERCE CATALOG MANAGEMENT
+```text
+Task: Develop an enterprise-grade Product Entry and E-Commerce Catalog Management module inside the existing Sun Bird Corporation ERP without rebuilding or redesigning existing modules.
+
+Technical Requirements:
+1. Unified Product Master with Single Source of Truth:
+   - Reuse existing `products` collection and Mongoose `ProductModel`. Never create duplicate collections.
+   - Retain 100% of existing medical/storefront fields (`sku`, `nameEn`, `nameBn`, `hsCode`, `baseUom`, `isMedical`, `retailPrice`, `showroomPrice`, `resellerTierPrices`, `barcodes`, `seoContent`).
+   - Add ERP Master extensions: `organizationId`, `productCode`, `internalReference`, `productType`, `manufacturer`, `modelNumber`, `purchasePrice`, `costPrice`, `defaultSalesPrice`, `wholesalePrice`, `warrantyPeriod`, `reorderLevel`, `status`, `publicationStatus`, `publishedAt`, `approvalRequestId`, `ecommerceCatalog`, `gallery`, `variants`, `seo`.
+2. Hierarchical Categories, Brands & Variant Attributes:
+   - `CategoryModel` (`categories` collection): `parentId`, `ancestors`, `iconUrl`, `displayOrder`, `isHomepageVisible`. Enforce circular dependency prevention (`detectCircularCategory`) using depth-first graph traversal.
+   - `BrandModel` (`brands` collection): `logoUrl`, `countryOfOrigin`, `displayOrder`, safe deletion checks against product references.
+   - `ProductAttributeModel` (`product_attributes` collection): Variant attributes (e.g. Needle Gauge, Capacity, Size) with configurable values.
+3. Central Stock Ledger Authority:
+   - Never create an independent or parallel e-commerce inventory stock field.
+   - Aggregate stock dynamically in real-time from `ProductBatchModel` (`$group: { _id: '$sku', availableStock: { $sum: '$currentQty' } }`).
+4. Strict Internal Cost Protection:
+   - Public storefront APIs (`/api/v1/products`) strictly project `-purchasePrice -costPrice -createdBy -__v`.
+   - Internal cost prices are strictly gated by RBAC to authorized managerial roles (`super_admin`, `managing_director`, `finance_manager`).
+5. Module 03 Approval Integration:
+   - Publishing products to the public storefront triggers Module 03 Approval Workflow Engine (`PRODUCT_PUBLICATION`) adhering strictly to Maker–Checker governance.
+6. 17 Submodules Accordion & Full ERP Integration:
+   - Under Products, introduce an expandable accordion with 17 submodules:
+     1. Product Dashboard, 2. ERP Product Master, 3. E-commerce Product Entry, 4. Product List, 5. Product Categories, 6. Brand Management, 7. Product Variants, 8. Product Attributes, 9. Product Image Gallery, 10. Product Pricing, 11. Bulk Product Import, 12. Product Export, 13. SEO Management, 14. Website Publishing, 15. Product Approval, 16. Product Activity Logs, 17. Product Settings.
+7. Backend & Frontend Implementation:
+   - Models: `backend/src/models/Product.ts`, `Category.ts`, `Brand.ts`, `ProductAttribute.ts`.
+   - Services: `backend/src/services/ProductCatalogService.ts`, `CategoryService.ts`, `BrandService.ts`, `ProductAttributeService.ts`.
+   - Controller & Routes: `backend/src/controllers/ProductCatalogController.ts`, `backend/src/routes/erp/productCatalogRoutes.ts`.
+   - Automated Verification: `backend/src/services/verify-product-catalog-service.ts` (35 assertions passed, 0 failed).
+   - Frontend: `frontend/src/types/index.ts`, `frontend/src/services/productCatalog.service.ts`, `frontend/src/components/erp/ErpProductCatalogView.tsx`, `frontend/src/components/erp/ErpProductCatalogView.css`.
+   - Routing: Integrated into `frontend/src/app/erp/page.tsx`, `frontend/src/app/erp/products/page.tsx`, and `frontend/src/app/admin/products/page.tsx`.
+
+Verification: Execute `src/services/verify-product-catalog-service.ts` (35 assertions passed), run `npm run build` (56/56 pages cleanly generated), and verify HTTP 200 on `/erp/products`.
+```
+
+---
+
+*Document v1.3 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
 *Node.js · Express.js · TypeScript · MongoDB Atlas · Redis BullMQ · Next.js 16+*

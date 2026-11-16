@@ -43,6 +43,7 @@ import { ErpAccountingView } from './erp/ErpAccountingView';
 import { ErpSupportView } from './erp/ErpSupportView';
 import { ErpDocumentBuilderView } from './erp/ErpDocumentBuilderView';
 import { ErpProductEntryView } from './erp/ErpProductEntryView';
+import { ErpProductCatalogView } from './erp/ErpProductCatalogView';
 import { ErpHrmView } from './erp/ErpHrmView';
 import { ErpBannerManagerView } from './erp/ErpBannerManagerView';
 import { useToast } from '../context/ToastContext';
@@ -545,7 +546,7 @@ export function AdminPage({ initialTab = 'overview' }: AdminPageProps) {
           )}
 
           {activeTab === 'documents' && <ErpDocumentBuilderView />}
-          {activeTab === 'products' && <ErpProductEntryView />}
+          {activeTab === 'products' && <ErpProductCatalogView />}
           {activeTab === 'orders' && <ErpOrdersView />}
           {activeTab === 'inventory' && <ErpInventoryView />}
           {activeTab === 'accounting' && <ErpAccountingView />}

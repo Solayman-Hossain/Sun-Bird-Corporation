@@ -926,4 +926,47 @@ Support multiple operating entities, parent/subsidiary companies, and sister tra
 - **Captured Data:** Timestamp, actor ID, snapshot of actor name/email, organization ID, operational module, action type, entity type, entity ID, request ID, client IP, user-agent, and exact field-level Before/After JSON diffs.
 - **Aggregate Reporting:** Compliance reports calculating approval SLA compliance, overdue turnaround rates, and anomalous administrative overrides.
 
+---
+
+## 26. Enterprise Product Entry & E-Commerce Catalog Architecture (Module 04)
+### 26.1 Unified Product Master Architecture
+- **Single Source of Truth:** Reuses the existing `products` collection without creating secondary or disconnected catalog tables.
+- **Dual-Pane Separation of Concerns:**
+  - **ERP Product Master:** Main internal ledger recording SKU, productCode, HS Code, UOM, dimensions, weight, manufacturer, internal purchase costs, landed costs, multi-tier pricing (retail, showroom, wholesale, reseller tiers), reorder limits, and tax rates.
+  - **E-Commerce Catalog:** Presentation metadata including website product titles, rich HTML descriptions, primary display images, multi-angle gallery, badges (Featured, New Arrival, Best Seller), technical specifications, and search tags.
+- **Confidentiality & Internal Cost Protection:** `purchasePrice` and `costPrice` are strictly excluded from all public API projections (`-purchasePrice -costPrice`) and accessible only to authorized managerial roles.
+
+### 26.2 Dynamic Inventory Aggregation (Zero Duplicate Stock)
+- **Stock Authority:** Stock availability is calculated dynamically on the fly by querying `ProductBatchModel` (`$group: { _id: '$sku', availableStock: { $sum: '$currentQty' } }`).
+- **Warehouse/Depot Transparency:** Stock figures automatically reflect warehouse receipts, quality quarantine, and customer shipments without manual sync or sync lag.
+
+### 26.3 Hierarchical Categories, Brands & Variant Attributes
+- **Categories:** Self-referencing hierarchical tree (`parentId`, `ancestors`) with automated circular loop detection (`detectCircularCategory`) preventing invalid cyclical references.
+- **Brands:** Managed brand directory with logos, manufacturer countries, and safe deletion checks ensuring brands with active products cannot be removed.
+- **Variant Attributes:** Configurable technical attributes (Needle Gauge, Capacity, Volume, Color) for SKU variant grouping.
+
+### 26.4 Website Publishing Governance via Module 03 Approvals
+- **Publishing Governance:** Moving a product from `DRAFT` or `UNPUBLISHED` to `PUBLISHED` creates an approval request under Module 03 (`PRODUCT_PUBLICATION`).
+- **Maker–Checker Enforcement:** Product creators cannot approve their own publication requests, ensuring strict catalog quality control.
+
+### 26.5 Implemented Submodules (17 Submodules)
+1. **Product Dashboard:** Live database metrics (Total Products, Active, Inactive, Draft, Published, Unpublished, Pending Approval, Low Stock, Products without SEO, etc.) and category/brand distribution charts.
+2. **ERP Product Master:** Comprehensive internal product profile including accounting classifications, HS codes, base UOMs, and reorder levels.
+3. **E-commerce Product Entry:** Public storefront content authoring tool with rich descriptions, key features, and warranty badges.
+4. **Product List:** High-density inventory catalog table with real-time stock aggregation, multi-tier pricing, and status toggles.
+5. **Product Categories:** Hierarchical category management with parent-child nesting and circular loop prevention.
+6. **Brand Management:** Manufacturer and vendor brand directory with country of origin and logo assets.
+7. **Product Variants:** Multi-SKU variation matrix mapped by technical attributes.
+8. **Product Attributes:** Global attribute definitions and selectable values.
+9. **Product Image Gallery:** Drag-and-drop image management with primary image designation and display ordering.
+10. **Product Pricing:** Multi-channel pricing engine (MRP, Showroom, Reseller Tier 1/2/3, Wholesale) with margin calculators.
+11. **Bulk Product Import:** CSV/JSON batch data ingestion with automated row-by-row SKU uniqueness and required field validation.
+12. **Product Export:** Secure JSON/CSV data export for inventory auditing and accounting reconciliation.
+13. **SEO Management:** Meta title, meta description, canonical URL, and URL slug optimization with preview cards.
+14. **Website Publishing:** Controlled publishing workflows with publication history and instant unpublish controls.
+15. **Product Approval:** Maker–Checker workflow integration tracking pending publication requests.
+16. **Product Activity Logs:** Comprehensive audit trail capturing all price edits, descriptions, and catalog modifications.
+17. **Product Settings:** Global catalog configurations, default tax/VAT rates, and low-stock threshold triggers.
+
+
 

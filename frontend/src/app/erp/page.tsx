@@ -47,6 +47,8 @@ import { ErpBannerManagerView } from '../../components/erp/ErpBannerManagerView'
 import { ErpOrganizationView, OrgSubmodule } from '../../components/erp/ErpOrganizationView';
 import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUserManagementView';
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
+import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
+import { ProductCatalogSubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -112,6 +114,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isUserMenuExpanded, setIsUserMenuExpanded] = useState<boolean>(true);
   const [approvalSubmodule, setApprovalSubmodule] = useState<ApprovalSubmodule>('approval-dashboard');
   const [isApprovalMenuExpanded, setIsApprovalMenuExpanded] = useState<boolean>(true);
+  const [productSubmodule, setProductSubmodule] = useState<ProductCatalogSubmodule>('product-dashboard');
+  const [isProductMenuExpanded, setIsProductMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -468,10 +472,89 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
               )}
             </div>
 
+            {/* 5. Expandable Product Entry & E-commerce Catalog Section (Module 04) */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeTab !== 'products') setActiveTab('products');
+                  setIsProductMenuExpanded(!isProductMenuExpanded);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'products'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+                title="Product Entry & Catalog"
+              >
+                <div className="flex items-center gap-3 truncate">
+                  <Boxes
+                    className={`w-4 h-4 shrink-0 ${activeTab === 'products' ? 'text-[#e6b980]' : 'text-slate-400'}`}
+                  />
+                  {isSidebarOpen && (
+                    <div className="text-left truncate">
+                      <span className="block leading-tight">Product Entry & Catalog</span>
+                      <span className="text-[10px] opacity-75 font-normal block">প্রডাক্ট এন্ট্রি ও ক্যাটালগ</span>
+                    </div>
+                  )}
+                </div>
+                {isSidebarOpen && (
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 shrink-0 transition-transform ${
+                      isProductMenuExpanded ? 'rotate-180 text-[#e6b980]' : 'text-slate-500'
+                    }`}
+                  />
+                )}
+              </button>
+
+              {/* 17 Submodules Accordion for Products */}
+              {isSidebarOpen && isProductMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5">
+                  {[
+                    { id: 'product-dashboard' as ProductCatalogSubmodule, label: '1. Product Dashboard' },
+                    { id: 'erp-product-master' as ProductCatalogSubmodule, label: '2. ERP Product Master' },
+                    { id: 'ecommerce-entry' as ProductCatalogSubmodule, label: '3. E-commerce Entry' },
+                    { id: 'product-list' as ProductCatalogSubmodule, label: '4. Product List' },
+                    { id: 'categories' as ProductCatalogSubmodule, label: '5. Product Categories' },
+                    { id: 'brands' as ProductCatalogSubmodule, label: '6. Brand Management' },
+                    { id: 'variants' as ProductCatalogSubmodule, label: '7. Product Variants' },
+                    { id: 'attributes' as ProductCatalogSubmodule, label: '8. Product Attributes' },
+                    { id: 'image-gallery' as ProductCatalogSubmodule, label: '9. Image Gallery' },
+                    { id: 'pricing' as ProductCatalogSubmodule, label: '10. Product Pricing' },
+                    { id: 'bulk-import' as ProductCatalogSubmodule, label: '11. Bulk Import' },
+                    { id: 'product-export' as ProductCatalogSubmodule, label: '12. Product Export' },
+                    { id: 'seo-management' as ProductCatalogSubmodule, label: '13. SEO Management' },
+                    { id: 'website-publishing' as ProductCatalogSubmodule, label: '14. Website Publishing' },
+                    { id: 'product-approval' as ProductCatalogSubmodule, label: '15. Product Approval' },
+                    { id: 'activity-logs' as ProductCatalogSubmodule, label: '16. Activity Logs' },
+                    { id: 'product-settings' as ProductCatalogSubmodule, label: '17. Product Settings' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'products' && productSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('products');
+                          setProductSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {/* Standard ERP Modules */}
             {[
               { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
-              { id: 'products' as ErpTab, label: 'Product Entry & Catalog', labelBn: 'প্রডাক্ট এন্ট্রি (ইকমার্স+ইআরপি)', icon: Boxes },
               { id: 'orders' as ErpTab, label: 'Order Processing', labelBn: 'অর্ডার ও কুরিয়ার কিউ', icon: Package },
               { id: 'inventory' as ErpTab, label: 'Inventory & FEFO', labelBn: 'ইনভেন্টরি ও FEFO মেয়াদ', icon: Boxes },
               { id: 'accounting' as ErpTab, label: 'Accounts & Partnership', labelBn: 'আয়-ব্যয় ও পার্টনারশিপ', icon: DollarSign },
@@ -652,8 +735,13 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
           {/* TAB: Document & Quotation Builder */}
           {activeTab === 'documents' && <ErpDocumentBuilderView />}
 
-          {/* TAB: Product Entry */}
-          {activeTab === 'products' && <ErpProductEntryView />}
+          {/* TAB: Product Entry & E-commerce Catalog (Module 04) */}
+          {activeTab === 'products' && (
+            <ErpProductCatalogView
+              initialSubmodule={productSubmodule}
+              onNavigateToSubmodule={(sub) => setProductSubmodule(sub)}
+            />
+          )}
 
           {/* TAB 2: Order Processing (Prompt 35) */}
           {activeTab === 'orders' && <ErpOrdersView />}

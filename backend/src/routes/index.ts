@@ -30,6 +30,7 @@ import erpCrmRouter from './erp/crmRoutes';
 import erpAuditRouter from './erp/auditRoutes';
 import erpWarehouseRouter from './erp/warehouseRoutes';
 import erpOrganizationRouter from './erp/organizationRoutes';
+import erpProductCatalogRouter from './erp/productCatalogRoutes';
 import webhookRouter from './webhooks/webhookRoutes';
 import mediaRouter from './media.routes';
 import publicReviewRouter from './public/reviewRoutes';
@@ -135,6 +136,9 @@ apiV1Router.use('/erp/warehouses', erpWarehouseRouter);
 
 // ERP Multi-Organization Management mounted at /api/v1/erp/organizations (Module 01)
 apiV1Router.use('/erp/organizations', erpOrganizationRouter);
+
+// ERP Product Entry & E-commerce Catalog Management (Module 04)
+apiV1Router.use('/erp/product-catalog', erpProductCatalogRouter);
 
 
 // External Payment & Courier Webhooks mounted at /api/v1/webhooks

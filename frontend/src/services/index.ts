@@ -10,3 +10,6 @@ export * from './listing.service';
 export * from './report.service';
 export * from './organization.service';
 
+export * from './userManagement.service';
+export * from './approval.service';
+export * from './productCatalog.service';

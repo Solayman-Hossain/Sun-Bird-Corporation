@@ -44,5 +44,9 @@ export * from './Organization';
 export * from './LoginHistory';
 export * from './ApprovalWorkflow';
 export * from './ApprovalDelegation';
+export * from './Category';
+export * from './Brand';
+export * from './ProductAttribute';
+
 
 

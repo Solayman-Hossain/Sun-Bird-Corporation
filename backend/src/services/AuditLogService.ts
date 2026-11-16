@@ -76,6 +76,33 @@ export class AuditLogService {
   }
 
   /**
+   * Convenience alias for record logging with optional defaults
+   */
+  public static async record(entry: {
+    action: string;
+    targetCollection: string;
+    targetId: string | Types.ObjectId;
+    actorId?: string | Types.ObjectId;
+    actorRole?: string;
+    actorNameSnapshot?: string;
+    organizationId?: string | Types.ObjectId;
+    diff?: any;
+    module?: string;
+  }): Promise<IAuditLog> {
+    return this.logAction({
+      actorId: entry.actorId || new Types.ObjectId('000000000000000000000001'),
+      actorRole: entry.actorRole || 'SYSTEM',
+      actorNameSnapshot: entry.actorNameSnapshot,
+      organizationId: entry.organizationId,
+      module: entry.module || 'SYSTEM',
+      action: entry.action,
+      targetCollection: entry.targetCollection,
+      targetId: entry.targetId,
+      afterSnapshot: entry.diff,
+    });
+  }
+
+  /**
    * Queries chronological audit records with multi-dimensional filtering.
    */
   public static async queryAuditLogs(filter: AuditLogFilterDTO = {}) {

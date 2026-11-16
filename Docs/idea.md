@@ -56,6 +56,14 @@ Sun Bird Corporation aims to build a unified, cloud-based SaaS platform combinin
 - **Time-Bounded Delegation with Circular Prevention:** Approvers can delegate signing authority during absences, protected by automated cycle detection algorithms.
 - **Tamper-Proof Immutable Audit Trail:** Append-only audit logging (`audit_logs`) with Mongoose pre-hook mutation locks, capturing IP, actor snapshot, and field-level Before/After JSON diffs.
 
+### J. Product Entry & E-Commerce Catalog Management (Module 04)
+- **Unified Product Master & Dual Facets:** Reuses central `products` collection without duplicate catalog tables, maintaining separate ERP operational identity and E-commerce presentation data.
+- **Strict Cost Confidentiality:** Internal purchase and cost prices (`purchasePrice`, `costPrice`) are strictly hidden from public APIs and restricted to privileged management.
+- **Dynamic Stock Ledger Authority:** Real-time stock counts are dynamically aggregated from `ProductBatch` without redundant or out-of-sync inventory fields.
+- **Hierarchical Taxonomies & Variants:** Multi-level categories with circular loop prevention, brand management, and multi-SKU variant attributes.
+- **Publication Governance:** Storefront publishing integrated with Module 03 Maker–Checker approval workflows.
+- **17 Submodules Accordion:** Full enterprise suite covering Dashboard, ERP Master, E-commerce Entry, Categories, Brands, Variants, Pricing, Bulk Import/Export, SEO, Approvals, and Settings.
+
 ---
 
 ## 3. Simplified Tech Architecture
@@ -86,3 +94,4 @@ Integrate double-entry accounting, attendance/salary system, and AI smart featur
 - **Module 01:** Multi-Organization Profile, Legal Registrations, Branding & Bank Profile Management.
 - **Module 02:** User Lifecycle, 17 Standard Configurable Roles & 11×12 Granular Permission Matrix.
 - **Module 03:** Multi-Tier Approval Workflow Engine, Maker–Checker Governance, Delegation & Immutable Audit Trail.
+- **Module 04:** Product Entry & E-Commerce Catalog Management, Dynamic Stock Aggregation, Category Tree & Publication Governance.

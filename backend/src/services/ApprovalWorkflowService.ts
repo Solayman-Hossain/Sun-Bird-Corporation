@@ -523,6 +523,36 @@ export class ApprovalWorkflowService {
           },
         ],
       },
+
+      // H. PRODUCT & CATALOG MANAGEMENT
+      {
+        workflowName: 'Product E-Commerce Publication & Price Authorization',
+        workflowCode: 'WF_PRODUCT_PUBLISH',
+        module: 'PRODUCT',
+        transactionType: 'PRODUCT_PUBLICATION',
+        minAmount: 0,
+        maxAmount: 1000000000,
+        approvalLevels: [
+          {
+            levelNumber: 1,
+            levelName: 'E-commerce Manager Content & Pricing Audit',
+            approverType: 'ROLE',
+            roleSlug: 'ecommerce_manager',
+            requiredCount: 1,
+            isParallel: false,
+            slaHours: 24,
+          },
+          {
+            levelNumber: 2,
+            levelName: 'General Manager Commercial Sanction',
+            approverType: 'ROLE',
+            roleSlug: 'general_manager',
+            requiredCount: 1,
+            isParallel: false,
+            slaHours: 48,
+          },
+        ],
+      },
     ];
 
     const created: string[] = [];
