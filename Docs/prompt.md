@@ -1646,5 +1646,38 @@ Verification: Execute `src/services/verify-purchase-service.ts` (38 assertions p
 
 ---
 
-*Document v1.4 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
+### Prompt 68: SUN BIRD ERP – MODULE 06: INVENTORY & FEFO MANAGEMENT
+```text
+Task: Implement an enterprise-grade Inventory & FEFO Management system within Sun Bird Corporation ERP without rebuilding or redesigning existing modules.
+
+Technical Requirements:
+1. End-to-End Inventory & Stock Movement Architecture:
+   - Multi-Warehouse Management: Central hubs, branch warehouses, and retail showrooms with geofenced coordinates and district tagging.
+   - Warehouse Locations / Bins: Zone, aisle, rack, shelf location management with capacity and volumetric utilization tracking.
+   - Real-data Stock Overview: Physical, Reserved, Available (Physical - Reserved), In-Transit, Damaged, and Expired stock buckets calculated in real time without double-counting.
+   - First-Expiry-First-Out (FEFO) Allocation: Strict sorting by expiryDate ascending across sellable non-expired batches with FIFO fallback.
+   - Stock Reservation: Order and quote locks decrementing sellable stock and incrementing reservedQty with full release recovery.
+   - Inter-Warehouse Stock Transfer: Source stock deduction, immutable TRANSFER_OUT ledger logging, IN_TRANSIT status, and destination batch receipt with TRANSFER_IN ledger logging.
+   - Stock Adjustment: DAMAGED, EXPIRED, THEFT, COUNT_VARIANCE, REVALUATION, SCRAP, and INITIAL_STOCK adjustments with double-entry GL Journal Voucher integration (DR/CR 1300 Inventory Asset vs 5300/5400 Shrinkage/Damage Expenses).
+   - Physical Stock Count & Reconciliation: Full, cycle, category, and zone counts with automated count variance calculation and auto-posted reconciliation adjustments.
+   - Damaged & Expired Stock Management: Write-down tracking, quarantine bins, and near-expiry risk categorization (Expired, Critical ≤30d, Warning ≤60d, Attention ≤90d).
+   - Immutable Stock Movement History: Audit ledger tracking with reference documents (TRANSFER, ADJUSTMENT, PHYSICAL_COUNT, ORDER, GRN).
+   - Reorder & Low Stock Alerts: Deficit calculation against minStockQty threshold with PO reorder triggers.
+2. 18 Submodules Accordion & Full ERP Integration:
+   - Under Inventory & FEFO, introduce an expandable accordion with 18 submodules:
+     01. Inventory Dashboard, 02. Stock Overview, 03. Warehouse Management, 04. Warehouse Locations / Bins, 05. Batch / Lot Management, 06. Expiry Management, 07. FEFO Allocation, 08. Stock Reservation, 09. Stock Transfer, 10. Stock Adjustment, 11. Physical Stock Count, 12. Stock Reconciliation, 13. Damaged / Expired Stock, 14. Stock Movement History, 15. Reorder & Low Stock Alerts, 16. Inventory Reports, 17. Inventory Settings, 18. Inventory Activity Logs.
+3. Backend & Frontend Implementation:
+   - Models: `backend/src/models/WarehouseBin.ts`, `StockTransfer.ts`, `StockAdjustment.ts`, `PhysicalCount.ts`, enhanced `ProductBatch.ts`, `Warehouse.ts`, and `StockLedger.ts`.
+   - Services: `backend/src/services/WarehouseBinService.ts`, `StockTransferService.ts`, `StockAdjustmentService.ts`, `PhysicalCountService.ts`, `InventoryEngineService.ts`.
+   - Controller & Routes: `backend/src/controllers/InventoryManagementController.ts`, `backend/src/routes/erp/inventoryManagementRoutes.ts` mounted at `/api/v1/erp/inventory-management` and `/api/v1/erp/inventory`.
+   - Automated Verification: `backend/src/services/verify-inventory-module.ts` (56 assertions passed, 0 failed).
+   - Frontend: `frontend/src/types/index.ts`, `frontend/src/services/inventoryManagement.service.ts`, `frontend/src/components/erp/ErpInventoryManagementView.tsx`, `frontend/src/components/erp/ErpInventoryManagementView.css`.
+   - Routing: Integrated into `frontend/src/app/erp/page.tsx` under the 'inventory' tab.
+
+Verification: Execute `src/services/verify-inventory-module.ts` (56 assertions passed, 0 failed), run `npm run build` on both frontend (58/58 static pages generated) and backend, and verify zero TypeScript errors.
+```
+
+---
+
+*Document v1.5 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
 *Node.js · Express.js · TypeScript · MongoDB Atlas · Redis BullMQ · Next.js 16+*

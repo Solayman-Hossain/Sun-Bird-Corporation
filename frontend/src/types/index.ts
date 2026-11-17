@@ -1191,3 +1191,293 @@ export interface PayablesSummaryResponse {
     bucket_90_plus: number;
   };
 }
+
+
+// ─── MODULE 06: INVENTORY & FEFO MANAGEMENT TYPES ───────────────────────────
+
+export type InventorySubmodule =
+  | 'inv-dashboard'
+  | 'inv-stock-overview'
+  | 'inv-warehouses'
+  | 'inv-bins'
+  | 'inv-batches'
+  | 'inv-expiry'
+  | 'inv-fefo'
+  | 'inv-reservation'
+  | 'inv-transfers'
+  | 'inv-adjustments'
+  | 'inv-physical-count'
+  | 'inv-reconciliation'
+  | 'inv-damaged-expired'
+  | 'inv-movement-history'
+  | 'inv-alerts'
+  | 'inv-reports'
+  | 'inv-settings'
+  | 'inv-activity-logs';
+
+export interface InventoryDashboardData {
+  totalProducts: number;
+  totalActiveSKUs: number;
+  totalWarehouses: number;
+  totalStockQuantity: number;
+  totalAvailableStock: number;
+  totalReservedStock: number;
+  totalInTransitStock: number;
+  totalDamagedStock: number;
+  totalExpiredStock: number;
+  lowStockProducts: number;
+  outOfStockProducts: number;
+  expiringProducts: number;
+  expiredBatches: number;
+  stockTransfersPending: number;
+  stockAdjustmentsPending: number;
+  pendingStockCounts: number;
+  inventoryValuation: number;
+  warehouseStockSummary: Array<{
+    warehouseId: string;
+    warehouseName: string;
+    warehouseCode: string;
+    stockQty: number;
+    reservedQty: number;
+    valuation: number;
+    batchCount: number;
+  }>;
+  categoryStockSummary: Array<{
+    category: string;
+    stockQty: number;
+    valuation: number;
+    skuCount: number;
+  }>;
+  monthlyStockMovement: Array<{
+    _id: { year: number; month: number; type: string };
+    totalQty: number;
+    count: number;
+  }>;
+  topMovingProducts: Array<{ _id: string; dispatchedQty: number }>;
+  slowMovingProducts: Array<{ _id: string; dispatchedQty: number }>;
+}
+
+export interface StockOverviewItem {
+  _id: string;
+  productId: string;
+  productName: string;
+  productImage?: string;
+  sku: string;
+  barcode?: string;
+  category: string;
+  brand?: string;
+  warehouseId: string;
+  warehouseName: string;
+  warehouseCode: string;
+  binCode?: string;
+  batchNumber: string;
+  expiryDate?: string;
+  manufacturingDate?: string;
+  categoryType: 'EXPIRY_CONTROLLED' | 'NON_EXPIRING';
+  physicalQuantity: number;
+  reservedQuantity: number;
+  availableQuantity: number;
+  inTransitQuantity: number;
+  damagedQuantity: number;
+  expiredQuantity: number;
+  uom: string;
+  unitCost: number;
+  stockValue: number;
+  reorderLevel: number;
+  stockStatus: 'IN_STOCK' | 'LOW_STOCK' | 'OUT_OF_STOCK' | 'EXPIRED';
+}
+
+export interface WarehouseBin {
+  _id: string;
+  organizationId?: string;
+  warehouseId: string | { _id: string; name: string; warehouseCode: string };
+  binCode: string;
+  zone: string;
+  aisle: string;
+  rack: string;
+  shelf: string;
+  binType: 'STANDARD' | 'COLD_STORAGE' | 'HAZARDOUS' | 'QUARANTINE' | 'STAGING';
+  capacityCbf?: number;
+  currentUtilizedCbf?: number;
+  maxWeightKg?: number;
+  isActive: boolean;
+  notes?: string;
+  totalBatches?: number;
+  totalStockQty?: number;
+  isOccupied?: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProductBatch {
+  _id: string;
+  organizationId?: string;
+  productId: string | { _id: string; nameEn: string; sku: string; category: string };
+  sku: string;
+  batchNumber: string;
+  category: 'EXPIRY_CONTROLLED' | 'NON_EXPIRING';
+  manufacturingDate?: string;
+  expiryDate?: string;
+  baseUom: string;
+  currentQty: number;
+  reservedQty: number;
+  damagedQty?: number;
+  expiredQty?: number;
+  unitCost: number;
+  hasIndividualSerials: boolean;
+  warrantyMonths: number;
+  warehouseId: string | { _id: string; name: string; warehouseCode: string };
+  binId?: string | { _id: string; binCode: string; zone: string; aisle: string };
+  locationStatus: 'ON_HAND' | 'IN_TRANSIT';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface StockTransferItem {
+  productId: string;
+  batchId: string;
+  sourceBinId?: string;
+  destBinId?: string;
+  sku: string;
+  batchNumber: string;
+  requestedQty: number;
+  dispatchedQty: number;
+  receivedQty: number;
+  damagedQty: number;
+  uom: string;
+  unitCost: number;
+  notes?: string;
+}
+
+export interface StockTransfer {
+  _id: string;
+  transferNumber: string;
+  organizationId?: string;
+  sourceWarehouseId: string | { _id: string; name: string; warehouseCode: string };
+  destinationWarehouseId: string | { _id: string; name: string; warehouseCode: string };
+  status: 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'IN_TRANSIT' | 'RECEIVED' | 'CANCELLED';
+  items: StockTransferItem[];
+  totalQuantity: number;
+  totalValue: number;
+  requestedBy: string | { _id: string; name: string; email: string };
+  approvedBy?: string | { _id: string; name: string };
+  approvedAt?: string;
+  dispatchedBy?: string;
+  dispatchedAt?: string;
+  receivedBy?: string;
+  receivedAt?: string;
+  vehicleNumber?: string;
+  driverName?: string;
+  driverPhone?: string;
+  challanNumber?: string;
+  remarks?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface StockAdjustmentItem {
+  productId: string;
+  batchId: string;
+  binId?: string;
+  sku: string;
+  batchNumber: string;
+  currentQty: number;
+  adjustedQty: number;
+  differenceQty: number;
+  unitCost: number;
+  totalValueChange: number;
+  reason?: string;
+}
+
+export interface StockAdjustment {
+  _id: string;
+  adjustmentNumber: string;
+  organizationId?: string;
+  warehouseId: string | { _id: string; name: string; warehouseCode: string };
+  adjustmentType: 'DAMAGED' | 'EXPIRED' | 'THEFT' | 'COUNT_VARIANCE' | 'REVALUATION' | 'SCRAP' | 'INITIAL_STOCK' | 'OTHER';
+  status: 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'POSTED' | 'REJECTED';
+  items: StockAdjustmentItem[];
+  totalValuationChange: number;
+  journalEntryId?: string;
+  requestedBy: string | { _id: string; name: string; email: string };
+  approvedBy?: string | { _id: string; name: string };
+  approvedAt?: string;
+  postedBy?: string;
+  postedAt?: string;
+  remarks?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PhysicalCountItem {
+  productId: string;
+  batchId: string;
+  binId?: string;
+  sku: string;
+  batchNumber: string;
+  systemQty: number;
+  countedQty: number;
+  varianceQty: number;
+  unitCost: number;
+  varianceValue: number;
+  countedBy?: string;
+  countedAt?: string;
+  notes?: string;
+}
+
+export interface PhysicalCount {
+  _id: string;
+  countNumber: string;
+  organizationId?: string;
+  warehouseId: string | { _id: string; name: string; warehouseCode: string };
+  countDate: string;
+  countType: 'FULL' | 'CYCLE' | 'CATEGORY' | 'ZONE';
+  status: 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED' | 'RECONCILED' | 'CANCELLED';
+  items: PhysicalCountItem[];
+  totalVarianceValue: number;
+  reconciliationAdjustmentId?: string;
+  conductedBy: string | { _id: string; name: string; email: string };
+  reconciledBy?: string;
+  reconciledAt?: string;
+  remarks?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ExpiryManagementData {
+  summary: {
+    expiredCount: number;
+    criticalCount: number;
+    warningCount: number;
+    attentionCount: number;
+    totalAtRisk: number;
+  };
+  expired: ProductBatch[];
+  critical: ProductBatch[];
+  warning: ProductBatch[];
+  attention: ProductBatch[];
+}
+
+export interface ReorderAlert {
+  productId: string;
+  sku: string;
+  productName: string;
+  category: string;
+  uom: string;
+  image?: string;
+  minReorderLevel: number;
+  availableStock: number;
+  reservedStock: number;
+  deficit: number;
+  status: 'OUT_OF_STOCK' | 'LOW_STOCK';
+}
+
+export interface InventorySettings {
+  defaultAllocationMethod: 'FEFO' | 'FIFO';
+  expiryWarningDays: number;
+  expiryCriticalDays: number;
+  defaultUom: string;
+  negativeStockAllowed: boolean;
+  autoReorderTrigger: boolean;
+  costingMethod: 'MOVING_AVERAGE' | 'FIFO_COST' | 'STANDARD_COST';
+}

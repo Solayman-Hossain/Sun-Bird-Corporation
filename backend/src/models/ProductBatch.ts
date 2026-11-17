@@ -5,6 +5,7 @@ export type LocationStatus = 'ON_HAND' | 'IN_TRANSIT';
 
 export interface IProductBatch extends Document {
   _id: Types.ObjectId;
+  organizationId?: Types.ObjectId;
   productId: Types.ObjectId;
   sku: string;
   batchNumber: string;
@@ -14,10 +15,13 @@ export interface IProductBatch extends Document {
   baseUom: string;
   currentQty: number; // Available sellable stock
   reservedQty: number; // TTL-locked by cart/orders
+  damagedQty?: number;
+  expiredQty?: number;
   unitCost: number; // Moving WAC unit cost in BDT
   hasIndividualSerials: boolean;
   warrantyMonths: number;
   warehouseId: Types.ObjectId;
+  binId?: Types.ObjectId;
   locationStatus: LocationStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -25,6 +29,10 @@ export interface IProductBatch extends Document {
 
 export const ProductBatchSchema = new Schema<IProductBatch>(
   {
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+    },
     productId: {
       type: Schema.Types.ObjectId,
       ref: 'Product',
@@ -69,6 +77,16 @@ export const ProductBatchSchema = new Schema<IProductBatch>(
       default: 0,
       min: 0,
     },
+    damagedQty: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    expiredQty: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     unitCost: {
       type: Number,
       required: true,
@@ -88,6 +106,10 @@ export const ProductBatchSchema = new Schema<IProductBatch>(
       ref: 'Warehouse',
       required: true,
     },
+    binId: {
+      type: Schema.Types.ObjectId,
+      ref: 'WarehouseBin',
+    },
     locationStatus: {
       type: String,
       enum: ['ON_HAND', 'IN_TRANSIT'],
@@ -103,6 +125,7 @@ export const ProductBatchSchema = new Schema<IProductBatch>(
 ProductBatchSchema.index({ sku: 1, batchNumber: 1, warehouseId: 1 }, { unique: true });
 ProductBatchSchema.index({ expiryDate: 1 });
 ProductBatchSchema.index({ warehouseId: 1, currentQty: 1 });
+ProductBatchSchema.index({ organizationId: 1, currentQty: 1 });
 ProductBatchSchema.index({ productId: 1 });
 
 export const ProductBatchModel = model<IProductBatch>(

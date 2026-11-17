@@ -4,6 +4,7 @@ export type WarehouseType = 'CENTRAL' | 'BRANCH' | 'OUTLET';
 
 export interface IWarehouse extends Document {
   _id: Types.ObjectId;
+  organizationId?: Types.ObjectId;
   warehouseCode: string;
   name: string;
   type: WarehouseType;
@@ -28,6 +29,10 @@ export interface IWarehouse extends Document {
 
 export const WarehouseSchema = new Schema<IWarehouse>(
   {
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+    },
     warehouseCode: {
       type: String,
       required: true,

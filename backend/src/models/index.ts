@@ -52,6 +52,10 @@ export * from './GoodsReceiveNote';
 export * from './PurchaseInvoice';
 export * from './SupplierPayment';
 export * from './PurchaseReturn';
+export * from './WarehouseBin';
+export * from './StockTransfer';
+export * from './StockAdjustment';
+export * from './PhysicalCount';
 
 
 

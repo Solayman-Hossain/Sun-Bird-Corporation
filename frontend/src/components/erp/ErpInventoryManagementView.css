@@ -1,0 +1,435 @@
+/* ==========================================================================
+   SUN BIRD ERP — MODULE 06: INVENTORY & FEFO MANAGEMENT STYLES
+   Forest Green (#1e3932) & Warm Gold (#c89348)
+   ========================================================================== */
+
+.erp-inv-container {
+  padding: 1.5rem;
+  min-height: calc(100vh - 4rem);
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.erp-inv-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .erp-inv-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.erp-inv-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1e3932;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.erp-inv-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  background: #c89348;
+  color: #fff;
+}
+
+/* ── KPI Cards ── */
+.erp-inv-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.erp-inv-kpi-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.erp-inv-kpi-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.erp-inv-kpi-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e3932;
+}
+
+.erp-inv-kpi-sub {
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.erp-inv-kpi-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  margin-bottom: 0.4rem;
+}
+
+.erp-inv-kpi-green  { background: rgba(30,57,50,0.08);  color: #1e3932; }
+.erp-inv-kpi-gold   { background: rgba(200,147,72,0.12); color: #c89348; }
+.erp-inv-kpi-blue   { background: rgba(37,99,235,0.08);  color: #2563eb; }
+.erp-inv-kpi-orange { background: rgba(234,88,12,0.08);  color: #ea580c; }
+.erp-inv-kpi-red    { background: rgba(220,38,38,0.08);  color: #dc2626; }
+.erp-inv-kpi-purple { background: rgba(124,58,237,0.08); color: #7c3aed; }
+
+/* ── Toolbar ── */
+.erp-inv-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.erp-inv-search {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.erp-inv-search input {
+  width: 100%;
+  padding: 0.52rem 0.75rem 0.52rem 2.4rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #fff;
+  color: #0f172a;
+  outline: none;
+}
+
+.erp-inv-search input:focus {
+  border-color: #1e3932;
+  box-shadow: 0 0 0 2px rgba(30,57,50,0.12);
+}
+
+.erp-inv-search-icon {
+  position: absolute;
+  left: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  width: 1rem;
+  height: 1rem;
+}
+
+.erp-inv-select {
+  padding: 0.52rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #fff;
+  color: #0f172a;
+  outline: none;
+  cursor: pointer;
+}
+
+.erp-inv-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.52rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+
+.erp-inv-btn-primary {
+  background: #1e3932;
+  color: #fff;
+}
+
+.erp-inv-btn-primary:hover {
+  background: #2d5245;
+}
+
+.erp-inv-btn-gold {
+  background: #c89348;
+  color: #fff;
+}
+
+.erp-inv-btn-gold:hover {
+  background: #b07e3a;
+}
+
+.erp-inv-btn-secondary {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+.erp-inv-btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+/* ── Table ── */
+.erp-inv-table-wrap {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  overflow: auto;
+}
+
+.erp-inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.erp-inv-table thead th {
+  background: #f8fafc;
+  color: #64748b;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.erp-inv-table tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.1s;
+}
+
+.erp-inv-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.erp-inv-table tbody td {
+  padding: 0.65rem 1rem;
+  color: #0f172a;
+}
+
+/* ── Status Badges ── */
+.erp-inv-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+}
+
+.erp-inv-status-draft     { background: #f1f5f9; color: #64748b; }
+.erp-inv-status-submitted { background: #eff6ff; color: #2563eb; }
+.erp-inv-status-approved  { background: #ecfdf5; color: #059669; }
+.erp-inv-status-in_transit{ background: #fff7ed; color: #ea580c; }
+.erp-inv-status-received  { background: #ecfdf5; color: #059669; }
+.erp-inv-status-posted    { background: #ecfdf5; color: #059669; }
+.erp-inv-status-reconciled{ background: #ecfdf5; color: #059669; }
+.erp-inv-status-rejected  { background: #fef2f2; color: #dc2626; }
+.erp-inv-status-cancelled { background: #fef2f2; color: #dc2626; }
+.erp-inv-status-in_stock  { background: #ecfdf5; color: #059669; }
+.erp-inv-status-low_stock { background: #fff7ed; color: #ea580c; }
+.erp-inv-status-out_of_stock { background: #fef2f2; color: #dc2626; }
+.erp-inv-status-expired   { background: #fef2f2; color: #dc2626; }
+.erp-inv-status-planned   { background: #f0fdf4; color: #16a34a; }
+.erp-inv-status-completed { background: #eff6ff; color: #2563eb; }
+
+/* ── Summary Panels ── */
+.erp-inv-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 700px) {
+  .erp-inv-two-col { grid-template-columns: 1fr; }
+}
+
+.erp-inv-panel {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 1rem 1.2rem;
+}
+
+.erp-inv-panel-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1e3932;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ── Expiry color coding ── */
+.erp-inv-expiry-critical { color: #dc2626; font-weight: 700; }
+.erp-inv-expiry-warning  { color: #ea580c; font-weight: 600; }
+.erp-inv-expiry-attention { color: #d97706; font-weight: 600; }
+.erp-inv-expiry-ok       { color: #059669; }
+
+/* ── Empty state ── */
+.erp-inv-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #94a3b8;
+}
+
+.erp-inv-empty-icon {
+  margin: 0 auto 0.75rem;
+  opacity: 0.4;
+}
+
+/* ── Loading ── */
+.erp-inv-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: #64748b;
+  gap: 0.5rem;
+}
+
+/* ── Alert bar ── */
+.erp-inv-alert {
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.erp-inv-alert-success { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+.erp-inv-alert-error   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+/* ── Progress bar ── */
+.erp-inv-progress {
+  height: 6px;
+  border-radius: 3px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.erp-inv-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: #1e3932;
+  transition: width 0.4s;
+}
+
+/* ── Action buttons in table ── */
+.erp-inv-action-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.erp-inv-action-btn {
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.erp-inv-action-btn-green  { background: #ecfdf5; color: #059669; }
+.erp-inv-action-btn-green:hover  { background: #d1fae5; }
+.erp-inv-action-btn-gold   { background: #fff7ed; color: #c89348; }
+.erp-inv-action-btn-gold:hover   { background: #fed7aa; }
+.erp-inv-action-btn-red    { background: #fef2f2; color: #dc2626; }
+.erp-inv-action-btn-red:hover    { background: #fee2e2; }
+.erp-inv-action-btn-blue   { background: #eff6ff; color: #2563eb; }
+.erp-inv-action-btn-blue:hover   { background: #dbeafe; }
+
+/* ── Pagination ── */
+.erp-inv-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.erp-inv-page-btns {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.erp-inv-page-btn {
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+.erp-inv-page-btn:hover      { background: #f1f5f9; }
+.erp-inv-page-btn.active     { background: #1e3932; color: #fff; border-color: #1e3932; }
+.erp-inv-page-btn:disabled   { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Warehouse summary table ── */
+.erp-inv-wh-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.82rem;
+}
+
+.erp-inv-wh-row:last-child { border-bottom: none; }
+
+/* ── Bin occupancy ── */
+.erp-inv-occ-bar {
+  width: 80px;
+  height: 6px;
+  border-radius: 3px;
+  background: #e2e8f0;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+  overflow: hidden;
+}
+
+.erp-inv-occ-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: #1e3932;
+}

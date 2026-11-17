@@ -8,17 +8,25 @@ export type StockMovementType =
   | 'ADJUST'
   | 'TRANSFER_OUT'
   | 'TRANSFER_IN'
-  | 'POS_BATCH';
+  | 'POS_BATCH'
+  | 'ADJUST_UP'
+  | 'ADJUST_DOWN'
+  | 'COUNT_RECONCILE'
+  | 'SCRAP_WRITE_OFF'
+  | 'EXPIRED_WRITE_OFF';
 
 export type StockReferenceType =
   | 'ORDER'
   | 'CHALLAN'
   | 'GRN'
   | 'ADJUSTMENT'
-  | 'POS_BATCH';
+  | 'POS_BATCH'
+  | 'TRANSFER'
+  | 'PHYSICAL_COUNT';
 
 export interface IStockLedger extends Document {
   _id: Types.ObjectId;
+  organizationId?: Types.ObjectId;
   sku: string;
   batchId: Types.ObjectId;
   warehouseId: Types.ObjectId;
@@ -34,6 +42,10 @@ export interface IStockLedger extends Document {
 
 export const StockLedgerSchema = new Schema<IStockLedger>(
   {
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+    },
     sku: {
       type: String,
       required: true,
@@ -61,6 +73,11 @@ export const StockLedgerSchema = new Schema<IStockLedger>(
         'TRANSFER_OUT',
         'TRANSFER_IN',
         'POS_BATCH',
+        'ADJUST_UP',
+        'ADJUST_DOWN',
+        'COUNT_RECONCILE',
+        'SCRAP_WRITE_OFF',
+        'EXPIRED_WRITE_OFF',
       ],
       required: true,
     },
@@ -78,7 +95,7 @@ export const StockLedgerSchema = new Schema<IStockLedger>(
     },
     referenceType: {
       type: String,
-      enum: ['ORDER', 'CHALLAN', 'GRN', 'ADJUSTMENT', 'POS_BATCH'],
+      enum: ['ORDER', 'CHALLAN', 'GRN', 'ADJUSTMENT', 'POS_BATCH', 'TRANSFER', 'PHYSICAL_COUNT'],
     },
     createdBy: {
       type: Schema.Types.ObjectId,

@@ -118,3 +118,19 @@ export { PurchaseDashboardService } from './PurchaseDashboardService';
 export * from './SupplierService';
 export { default as SupplierService } from './SupplierService';
 
+// ─── Module 06: Inventory & FEFO Management ──────────────────────────────────
+export * from './WarehouseBinService';
+export { WarehouseBinService } from './WarehouseBinService';
+
+export * from './StockTransferService';
+export { StockTransferService } from './StockTransferService';
+
+export * from './StockAdjustmentService';
+export { StockAdjustmentService } from './StockAdjustmentService';
+
+export * from './PhysicalCountService';
+export { PhysicalCountService } from './PhysicalCountService';
+
+export * from './InventoryEngineService';
+export { InventoryEngineService } from './InventoryEngineService';
+

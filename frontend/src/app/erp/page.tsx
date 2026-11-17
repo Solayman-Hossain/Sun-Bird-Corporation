@@ -39,6 +39,7 @@ import {
 } from 'lucide-react';
 import { ErpOrdersView } from '../../components/erp/ErpOrdersView';
 import { ErpInventoryView } from '../../components/erp/ErpInventoryView';
+import { ErpInventoryManagementView } from '../../components/erp/ErpInventoryManagementView';
 import { ErpAccountingView } from '../../components/erp/ErpAccountingView';
 import { ErpSupportView } from '../../components/erp/ErpSupportView';
 import { ErpDocumentBuilderView } from '../../components/erp/ErpDocumentBuilderView';
@@ -50,7 +51,7 @@ import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUs
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
 import { ErpPurchaseView } from '../../components/erp/ErpPurchaseView';
-import { ProductCatalogSubmodule, PurchaseSubmodule } from '../../types';
+import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -840,8 +841,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
           {/* TAB 2: Order Processing (Prompt 35) */}
           {activeTab === 'orders' && <ErpOrdersView />}
 
-          {/* TAB 3: Inventory & FEFO (Prompt 36) */}
-          {activeTab === 'inventory' && <ErpInventoryView />}
+          {/* TAB 3: Inventory & FEFO Management (Module 06) */}
+          {activeTab === 'inventory' && <ErpInventoryManagementView currentSubmodule="inv-dashboard" />}
 
           {/* TAB 4: Double-Entry Accounting & Partnership */}
           {activeTab === 'accounting' && <ErpAccountingView />}
