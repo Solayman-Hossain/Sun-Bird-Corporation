@@ -1481,3 +1481,226 @@ export interface InventorySettings {
   autoReorderTrigger: boolean;
   costingMethod: 'MOVING_AVERAGE' | 'FIFO_COST' | 'STANDARD_COST';
 }
+
+
+// ─── MODULE 07: DOCUMENT MANAGEMENT & DYNAMIC TEMPLATE ENGINE TYPES ─────────
+
+export type DocumentSubmodule =
+  | 'doc-dashboard'
+  | 'doc-quotations'
+  | 'doc-proformas'
+  | 'doc-sales-invoices'
+  | 'doc-challans'
+  | 'doc-receipts'
+  | 'doc-credit-notes'
+  | 'doc-purchase-orders'
+  | 'doc-purchase-invoices'
+  | 'doc-template-builder'
+  | 'doc-branding'
+  | 'doc-letterheads'
+  | 'doc-signatures'
+  | 'doc-seals'
+  | 'doc-terms'
+  | 'doc-print-settings'
+  | 'doc-numbering'
+  | 'doc-activity-logs';
+
+export type DocumentTypeEnum =
+  | 'SALES_QUOTATION'
+  | 'PROFORMA_INVOICE'
+  | 'SALES_INVOICE'
+  | 'DELIVERY_CHALLAN'
+  | 'MONEY_RECEIPT'
+  | 'CREDIT_NOTE'
+  | 'PURCHASE_ORDER'
+  | 'PURCHASE_INVOICE';
+
+export interface TemplateColumn {
+  id: string;
+  label: string;
+  field: string;
+  width?: string;
+  align?: 'left' | 'center' | 'right';
+  format?: 'text' | 'number' | 'currency' | 'date' | 'auto_sl' | 'formula';
+  visible: boolean;
+  headerBackground?: string;
+  fontWeight?: string;
+  isDeletable?: boolean;
+}
+
+export interface DocumentTemplateItem {
+  _id: string;
+  organizationId: string | { _id: string; displayName: string; legalName: string; organizationCode: string };
+  name: string;
+  documentType: DocumentTypeEnum;
+  language: 'EN' | 'BN' | 'BILINGUAL';
+  version: number;
+  paperSize: 'A4' | 'A5' | 'LETTER';
+  orientation: 'PORTRAIT' | 'LANDSCAPE';
+  headerSettings: {
+    showLogo: boolean;
+    logoPosition: 'left' | 'center' | 'right';
+    showOrgDetails: boolean;
+    showDocNumber: boolean;
+    showStatus: boolean;
+    docTitle: string;
+    docSubtitle?: string;
+    customHeaderText?: string;
+    showBinVat?: boolean;
+  };
+  recipientSettings: {
+    showRecipient: boolean;
+    recipientLabel: string;
+    showAddress: boolean;
+    showContact: boolean;
+    showBinVat: boolean;
+  };
+  introductionText?: string;
+  closingText?: string;
+  tableDefinition: {
+    columns: TemplateColumn[];
+    defaultRows?: any[];
+    showSubtotal: boolean;
+    showDiscount: boolean;
+    showTax: boolean;
+    showShipping: boolean;
+    showGrandTotal: boolean;
+    showAmountInWords: boolean;
+    amountInWordsLanguage: 'EN' | 'BN' | 'BILINGUAL';
+  };
+  termsAndConditions: Array<{
+    id: string;
+    textBn?: string;
+    textEn?: string;
+    order: number;
+    isActive: boolean;
+  }>;
+  signatureSettings: Array<{
+    id: string;
+    title: string;
+    personName?: string;
+    designation?: string;
+    signatureImageUrl?: string;
+    alignment: 'left' | 'center' | 'right';
+    required: boolean;
+  }>;
+  sealSettings: {
+    showSeal: boolean;
+    stampType?: 'OFFICIAL' | 'APPROVAL' | 'PAID' | 'RECEIVED';
+    stampImageUrl?: string;
+    position: 'left' | 'center' | 'right';
+  };
+  footerSettings: {
+    footerText?: string;
+    showPageNumber: boolean;
+    pageNumberFormat?: string;
+  };
+  isDefault: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SalesQuotationItem {
+  _id: string;
+  quotationNumber: string;
+  organizationId: string | { _id: string; displayName: string };
+  customerId: string | { _id: string; fullName: string; companyName?: string; mobile: string; email?: string; billingAddress?: string };
+  customerName?: string;
+  customerAddress?: string;
+  title?: string;
+  quotationDate: string;
+  validityDays: number;
+  expiryDate: string;
+  subject: string;
+  currency: string;
+  items: Array<{
+    sku?: string;
+    productName?: string;
+    description?: string;
+    name?: string;
+    brand?: string;
+    origin?: string;
+    uom?: string;
+    quantity: number;
+    unitPrice: number;
+    discount?: number;
+    taxAmount?: number;
+    lineTotal?: number;
+  }>;
+  subtotal: number;
+  discountTotal?: number;
+  taxTotal?: number;
+  taxAmount?: number;
+  shippingCharge?: number;
+  grandTotal: number;
+  amountInWordsEn: string;
+  amountInWordsBn: string;
+  status: 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'SENT' | 'ACCEPTED' | 'REJECTED' | 'EXPIRED' | 'CONVERTED';
+  termsAndConditions?: string[];
+  notes?: string;
+  createdAt: string;
+}
+
+export interface ProformaInvoiceItem {
+  _id: string;
+  proformaNumber: string;
+  organizationId: string | { _id: string; displayName: string };
+  customerId: string | { _id: string; fullName: string; mobile: string; billingAddress?: string };
+  customerName?: string;
+  proformaDate: string;
+  paymentTerms: string;
+  deliveryTerms?: string;
+  currency: string;
+  items: Array<{
+    sku?: string;
+    productName?: string;
+    uom?: string;
+    quantity: number;
+    unitPrice: number;
+    discount?: number;
+    taxAmount?: number;
+    lineTotal?: number;
+  }>;
+  subtotal: number;
+  grandTotal: number;
+  amountInWordsEn: string;
+  status: 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'SENT' | 'CONVERTED' | 'CANCELLED';
+  createdAt: string;
+}
+
+export interface MoneyReceiptDocItem {
+  _id: string;
+  receiptNumber: string;
+  customerId: string | { _id: string; fullName: string; mobile: string };
+  customerName?: string;
+  receiptDate: string;
+  paymentMethod: string;
+  bankName?: string;
+  chequeNumber?: string;
+  transactionRef?: string;
+  amount: number;
+  amountInWordsEn: string;
+  forParticulars: string;
+  status: 'DRAFT' | 'APPROVED' | 'POSTED' | 'CANCELLED';
+  journalEntryId?: string;
+  isPosted?: boolean;
+  createdAt: string;
+}
+
+export interface CreditNoteDocItem {
+  _id: string;
+  creditNoteNumber: string;
+  customerId: string | { _id: string; fullName: string; mobile: string };
+  customerName?: string;
+  creditDate: string;
+  reason: string;
+  subtotal: number;
+  totalAmount?: number;
+  grandTotal?: number;
+  amountInWordsEn: string;
+  status: 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'POSTED' | 'CANCELLED';
+  journalEntryId?: string;
+  isPosted?: boolean;
+  createdAt: string;
+}

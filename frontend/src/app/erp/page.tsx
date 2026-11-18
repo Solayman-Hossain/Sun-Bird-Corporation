@@ -42,7 +42,7 @@ import { ErpInventoryView } from '../../components/erp/ErpInventoryView';
 import { ErpInventoryManagementView } from '../../components/erp/ErpInventoryManagementView';
 import { ErpAccountingView } from '../../components/erp/ErpAccountingView';
 import { ErpSupportView } from '../../components/erp/ErpSupportView';
-import { ErpDocumentBuilderView } from '../../components/erp/ErpDocumentBuilderView';
+import { ErpDocumentManagementView } from '../../components/erp/ErpDocumentManagementView';
 import { ErpProductEntryView } from '../../components/erp/ErpProductEntryView';
 import { ErpHrmView } from '../../components/erp/ErpHrmView';
 import { ErpBannerManagerView } from '../../components/erp/ErpBannerManagerView';
@@ -819,8 +819,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
             />
           )}
 
-          {/* TAB: Document & Quotation Builder */}
-          {activeTab === 'documents' && <ErpDocumentBuilderView />}
+          {/* TAB: Document & Quotation Builder (Module 07) */}
+          {activeTab === 'documents' && <ErpDocumentManagementView />}
 
           {/* TAB: Product Entry & E-commerce Catalog (Module 04) */}
           {activeTab === 'products' && (

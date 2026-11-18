@@ -56,6 +56,11 @@ export * from './WarehouseBin';
 export * from './StockTransfer';
 export * from './StockAdjustment';
 export * from './PhysicalCount';
+export * from './DocumentTemplate';
+export * from './SalesQuotation';
+export * from './ProformaInvoice';
+export * from './MoneyReceipt';
+export * from './CreditNote';
 
 
 

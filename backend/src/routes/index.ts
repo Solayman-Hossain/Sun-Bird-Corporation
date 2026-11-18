@@ -33,6 +33,7 @@ import erpOrganizationRouter from './erp/organizationRoutes';
 import erpProductCatalogRouter from './erp/productCatalogRoutes';
 import erpPurchaseRouter from './erp/purchaseRoutes';
 import erpInventoryManagementRouter from './erp/inventoryManagementRoutes';
+import erpDocumentManagementRouter from './erp/documentManagementRoutes';
 import webhookRouter from './webhooks/webhookRoutes';
 import mediaRouter from './media.routes';
 import publicReviewRouter from './public/reviewRoutes';
@@ -148,6 +149,10 @@ apiV1Router.use('/erp/purchase', erpPurchaseRouter);
 // ERP Inventory & FEFO Management (Module 06)
 apiV1Router.use('/erp/inventory-management', erpInventoryManagementRouter);
 apiV1Router.use('/erp/inventory', erpInventoryManagementRouter);
+
+// ERP Document Management & Dynamic Template Engine (Module 07)
+apiV1Router.use('/erp/documents', erpDocumentManagementRouter);
+apiV1Router.use('/erp/document-templates', erpDocumentManagementRouter);
 
 
 // External Payment & Courier Webhooks mounted at /api/v1/webhooks

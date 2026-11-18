@@ -1679,5 +1679,38 @@ Verification: Execute `src/services/verify-inventory-module.ts` (56 assertions p
 
 ---
 
+### Prompt 69: SUN BIRD ERP – MODULE 07: COMPLETE DOCUMENT MANAGEMENT, DYNAMIC TEMPLATE BUILDER & AUTOMATED DOCUMENT ENGINE
+```text
+Task: Implement an enterprise-grade Document Management System, Central Dynamic Document Engine, and Visual Template Builder within Sun Bird Corporation ERP without rebuilding or redesigning existing modules.
+
+Technical Requirements:
+1. Universal Central Document Engine:
+   - Data Resolvers: Automatic cross-entity resolution for Organization Branding (logos, letterheads, signatories, stamps, BIN/VAT), Customer Profiles, Supplier Profiles, and Product Specifications.
+   - Dynamic Layout & Multi-Template Architecture: Multiple templates per business document (e.g. Standard PO, Detailed PO, Bangla PO, Somorita Hospital Quotation) without duplicating underlying transactional records.
+   - Calculation & Math Engine: Subtotal, item discount, document-level discount, VAT/tax, shipping, and grand total with floating-point rounding precision.
+   - Dual-Language Currency Words Engine: English and authentic Unicode Bangla currency conversion (Taka and Paisa across Crore, Lakh, Thousand tiers).
+   - High-Fidelity PDF Generation: PDFKit pipeline with configurable margins, brand headers, dynamic tabular columns, totals, terms, and dual signatories with stamps.
+   - Immutable Historical Snapshots: Snapshotting issued and approved documents preserving exact visual and numerical state irrespective of future template or organization edits.
+   - Accounting & GL Integration: Double-entry Journal Voucher creation for Money Receipts (Receipt vouchers) and Credit Notes (Journal vouchers).
+2. 18 Submodules Navigation:
+   - Under Invoice & Quotation navigation:
+     01. Document Dashboard, 02. Sales Quotation, 03. Proforma Invoice, 04. Sales Invoice, 05. Delivery Challan, 06. Money Receipt, 07. Credit Note, 08. Purchase Order, 09. Purchase Invoice, 10. Document Template Builder, 11. Organization Document Branding, 12. Logo & Letterhead Management, 13. Signature Management, 14. Seal / Stamp Management, 15. Terms & Conditions Library, 16. Print Settings, 17. Document Numbering, 18. Document Activity Logs.
+3. 3-Panel Visual Template Builder:
+   - Left Palette: Tool controls (paper size A4/Letter/Legal, orientation, language EN/BN/Bilingual, toggle subtotals, VAT, and Amount in Words).
+   - Center Canvas: Real-time rendered A4 document canvas with interactive column headers, dynamic item rows, totals calculation, terms block, and signatures.
+   - Right Inspector: Column property editor (label, field, width, alignment, format, delete) and intro/closing text notes.
+4. Backend & Frontend Implementation:
+   - Models: `backend/src/models/DocumentTemplate.ts`, `SalesQuotation.ts`, `ProformaInvoice.ts`, `MoneyReceipt.ts`, `CreditNote.ts`.
+   - Services: `backend/src/services/AmountInWordsService.ts`, `DocumentCalculationService.ts`, `DocumentDataResolver.ts`, `DocumentTemplateService.ts`, `SalesDocumentService.ts`, `DocumentPdfService.ts`.
+   - Controller & Routes: `backend/src/controllers/DocumentManagementController.ts`, `backend/src/routes/erp/documentManagementRoutes.ts` mounted at `/api/v1/erp/documents` and `/api/v1/erp/document-templates`.
+   - Automated Verification: `backend/src/services/verify-document-module.ts` (51 assertions passed, 0 failed).
+   - Frontend: `frontend/src/types/index.ts`, `frontend/src/services/documentManagement.service.ts`, `frontend/src/components/erp/ErpDocumentManagementView.tsx`, `frontend/src/components/erp/ErpDocumentManagementView.css`.
+   - Routing: Integrated into `frontend/src/app/erp/page.tsx` under the 'documents' tab.
+
+Verification: Execute `npm run test:document-module` (51 assertions passed, 0 failed), run `npm run build` on both frontend (58/58 static pages generated) and backend, and verify zero TypeScript errors.
+```
+
+---
+
 *Document v1.5 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
 *Node.js · Express.js · TypeScript · MongoDB Atlas · Redis BullMQ · Next.js 16+*

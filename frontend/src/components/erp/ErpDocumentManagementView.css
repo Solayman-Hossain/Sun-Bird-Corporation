@@ -1,0 +1,459 @@
+/* ==========================================================================
+   SUN BIRD ERP — MODULE 07: DOCUMENT MANAGEMENT & ENGINE STYLES
+   Forest Green (#1e3932) & Warm Gold (#c89348)
+   ========================================================================== */
+
+.erp-doc-container {
+  padding: 1.5rem;
+  min-height: calc(100vh - 4rem);
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.erp-doc-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .erp-doc-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.erp-doc-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1e3932;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.erp-doc-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  background: #c89348;
+  color: #fff;
+}
+
+/* ── KPI Grid ── */
+.erp-doc-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.erp-doc-kpi-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.erp-doc-kpi-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.erp-doc-kpi-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e3932;
+}
+
+.erp-doc-kpi-sub {
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.erp-doc-kpi-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  margin-bottom: 0.4rem;
+}
+
+.erp-doc-kpi-green  { background: rgba(30,57,50,0.08);  color: #1e3932; }
+.erp-doc-kpi-gold   { background: rgba(200,147,72,0.12); color: #c89348; }
+.erp-doc-kpi-blue   { background: rgba(37,99,235,0.08);  color: #2563eb; }
+.erp-doc-kpi-orange { background: rgba(234,88,12,0.08);  color: #ea580c; }
+.erp-doc-kpi-purple { background: rgba(124,58,237,0.08); color: #7c3aed; }
+
+/* ── Toolbar ── */
+.erp-doc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.erp-doc-search {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.erp-doc-search input {
+  width: 100%;
+  padding: 0.52rem 0.75rem 0.52rem 2.4rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #fff;
+  color: #0f172a;
+  outline: none;
+}
+
+.erp-doc-search input:focus {
+  border-color: #1e3932;
+  box-shadow: 0 0 0 2px rgba(30,57,50,0.12);
+}
+
+.erp-doc-search-icon {
+  position: absolute;
+  left: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  width: 1rem;
+  height: 1rem;
+}
+
+.erp-doc-select {
+  padding: 0.52rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #fff;
+  color: #0f172a;
+  outline: none;
+  cursor: pointer;
+}
+
+.erp-doc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.52rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+
+.erp-doc-btn-primary { background: #1e3932; color: #fff; }
+.erp-doc-btn-primary:hover { background: #2d5245; }
+.erp-doc-btn-gold { background: #c89348; color: #fff; }
+.erp-doc-btn-gold:hover { background: #b07e3a; }
+.erp-doc-btn-secondary { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
+.erp-doc-btn-secondary:hover { background: #e2e8f0; }
+
+/* ── Table ── */
+.erp-doc-table-wrap {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  overflow: auto;
+}
+
+.erp-doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.erp-doc-table thead th {
+  background: #f8fafc;
+  color: #64748b;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.erp-doc-table tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.1s;
+}
+
+.erp-doc-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.erp-doc-table tbody td {
+  padding: 0.65rem 1rem;
+  color: #0f172a;
+}
+
+/* ── Status Badges ── */
+.erp-doc-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+}
+
+.erp-doc-status-draft     { background: #f1f5f9; color: #64748b; }
+.erp-doc-status-submitted { background: #eff6ff; color: #2563eb; }
+.erp-doc-status-approved  { background: #ecfdf5; color: #059669; }
+.erp-doc-status-posted    { background: #ecfdf5; color: #059669; }
+.erp-doc-status-sent      { background: #eff6ff; color: #2563eb; }
+.erp-doc-status-converted { background: #f0fdf4; color: #16a34a; }
+.erp-doc-status-rejected  { background: #fef2f2; color: #dc2626; }
+.erp-doc-status-cancelled { background: #fef2f2; color: #dc2626; }
+
+/* ── Template Builder 3-Panel Layout ── */
+.erp-builder-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  gap: 1rem;
+  margin-top: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .erp-builder-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.erp-builder-panel {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.erp-builder-panel-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1e3932;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.5rem;
+}
+
+/* ── Live A4 Canvas ── */
+.erp-a4-canvas {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  padding: 2.5rem 2rem;
+  min-height: 800px;
+  position: relative;
+  font-family: inherit;
+  color: #0f172a;
+}
+
+.erp-canvas-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #1e3932;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.erp-canvas-org-name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1e3932;
+}
+
+.erp-canvas-org-sub {
+  font-size: 0.78rem;
+  color: #475569;
+  margin-top: 0.2rem;
+}
+
+.erp-canvas-doc-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1e3932;
+  text-align: right;
+}
+
+.erp-canvas-doc-num {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #c89348;
+  text-align: right;
+  margin-top: 0.2rem;
+}
+
+.erp-canvas-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2rem 0;
+  font-size: 0.8rem;
+}
+
+.erp-canvas-table th {
+  background: #f1f5f9;
+  color: #1e3932;
+  font-weight: 700;
+  border: 1px solid #cbd5e1;
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+}
+
+.erp-canvas-table td {
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 0.6rem;
+}
+
+.erp-canvas-totals {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+
+.erp-canvas-grand-total {
+  background: #1e3932;
+  color: #fff;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.erp-canvas-terms {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-top: 1.5rem;
+  font-size: 0.78rem;
+}
+
+.erp-canvas-signatures {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3.5rem;
+  padding-top: 1rem;
+}
+
+.erp-sig-block {
+  text-align: center;
+  border-top: 1px solid #94a3b8;
+  padding-top: 0.4rem;
+  min-width: 180px;
+}
+
+/* ── Column & Row Editor items ── */
+.erp-editor-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.6rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+/* ── Alert Bar ── */
+.erp-doc-alert {
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.erp-doc-alert-success { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+.erp-doc-alert-error   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+/* ── Action Buttons in Table ── */
+.erp-doc-action-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.erp-doc-action-btn {
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.1s;
+}
+
+.erp-doc-action-btn-green  { background: #ecfdf5; color: #059669; }
+.erp-doc-action-btn-green:hover  { background: #d1fae5; }
+.erp-doc-action-btn-gold   { background: #fff7ed; color: #c89348; }
+.erp-doc-action-btn-gold:hover   { background: #fed7aa; }
+.erp-doc-action-btn-blue   { background: #eff6ff; color: #2563eb; }
+.erp-doc-action-btn-blue:hover   { background: #dbeafe; }
+.erp-doc-action-btn-red    { background: #fef2f2; color: #dc2626; }
+.erp-doc-action-btn-red:hover    { background: #fee2e2; }
+
+/* ── Modal ── */
+.erp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.erp-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}

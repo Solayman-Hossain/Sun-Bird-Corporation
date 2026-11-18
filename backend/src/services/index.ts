@@ -134,3 +134,22 @@ export { PhysicalCountService } from './PhysicalCountService';
 export * from './InventoryEngineService';
 export { InventoryEngineService } from './InventoryEngineService';
 
+// ─── Module 07: Document Management & Dynamic Template Engine ────────────────
+export * from './AmountInWordsService';
+export { AmountInWordsService } from './AmountInWordsService';
+
+export * from './DocumentCalculationService';
+export { DocumentCalculationService } from './DocumentCalculationService';
+
+export * from './DocumentDataResolver';
+export { DocumentDataResolver } from './DocumentDataResolver';
+
+export * from './DocumentTemplateService';
+export { DocumentTemplateService } from './DocumentTemplateService';
+
+export * from './SalesDocumentService';
+export { SalesDocumentService } from './SalesDocumentService';
+
+export * from './DocumentPdfService';
+export { DocumentPdfService } from './DocumentPdfService';
+
