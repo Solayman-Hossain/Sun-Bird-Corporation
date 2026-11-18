@@ -15,6 +15,7 @@ import portalCustomerRouter from './portal/customerRoutes';
 import publicCheckoutRouter from './public/checkoutRoutes';
 import publicTrackingRouter from './public/trackingRoutes';
 import erpSalesRouter from './erp/salesRoutes';
+import erpOrderProcessingRouter from './erp/orderProcessingRoutes';
 import erpPosRouter from './erp/posRoutes';
 import erpLogisticsRouter from './erp/logisticsRoutes';
 import erpAccountingRouter from './erp/accountingRoutes';
@@ -95,6 +96,9 @@ apiV1Router.use('/public/track-order', publicTrackingRouter);
 
 // ERP sales, credit profiles, challans, invoices, and orders mounted at /api/v1/erp/sales
 apiV1Router.use('/erp/sales', erpSalesRouter);
+
+// ERP Module 09 Order Processing, picking, packing, dispatch & delivery mounted at /api/v1/erp/orders
+apiV1Router.use('/erp/orders', erpOrderProcessingRouter);
 
 // ERP POS showroom checkout and offline batch sync mounted at /api/v1/erp/pos
 apiV1Router.use('/erp/pos', erpPosRouter);

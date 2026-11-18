@@ -1688,6 +1688,36 @@ export interface MoneyReceiptDocItem {
   createdAt: string;
 }
 
+// =========================================================
+// MODULE 09: ORDER PROCESSING & E-COMMERCE INTEGRATION TYPES
+// =========================================================
+
+export type OrderSubmodule =
+  | 'order-dashboard'
+  | 'online-orders'
+  | 'sales-orders'
+  | 'order-details'
+  | 'payment-verification'
+  | 'order-approval'
+  | 'order-reservation'
+  | 'stock-availability'
+  | 'order-picking'
+  | 'order-packing'
+  | 'packing-list'
+  | 'dispatch-management'
+  | 'delivery-management'
+  | 'delivery-tracking'
+  | 'partial-delivery'
+  | 'order-cancellation'
+  | 'sales-return'
+  | 'order-timeline'
+  | 'order-documents'
+  | 'customer-history'
+  | 'order-reports'
+  | 'order-activity-logs'
+  | 'order-settings';
+
+
 export interface CreditNoteDocItem {
   _id: string;
   creditNoteNumber: string;
@@ -1704,3 +1734,4 @@ export interface CreditNoteDocItem {
   isPosted?: boolean;
   createdAt: string;
 }
+

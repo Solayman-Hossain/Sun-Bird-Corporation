@@ -1752,3 +1752,54 @@ Implemented Module 08: Accounts, Finance, Partnership and Financial Management e
 
 Verification: Execute `npm run test:accounting-module` (37 assertions passed, 0 failed), run `npm run build` on backend (0 errors) and frontend (0 errors), and verify zero TypeScript compilation issues.
 ```
+
+---
+
+## PROMPT 70: MODULE 09 — ORDER PROCESSING & E-COMMERCE INTEGRATION
+```
+Implemented Module 09: Complete Order Processing & E-Commerce Integration in the Sun Bird Corporation ERP & E-commerce application without modifying existing architecture, public website, or database collections.
+
+1. Architecture & Core Workflow Engine:
+   - Order-to-Delivery Lifecycle: Managed complete transition matrix across SUBMITTED -> CONFIRMED -> PROCESSING / RESERVED -> PICKING / PICKED -> PACKED / READY_FOR_DISPATCH -> DISPATCHED / IN_TRANSIT -> DELIVERED, preventing invalid status jumps.
+   - Atomic FEFO Reservation Engine: First-Expired-First-Out batch inventory reservations allocating exact quantities on ProductBatchModel without duplicate allocations.
+   - Multi-Carton Packing: Generates structured packages with carton types, weights (kg), dimensions (L x W x H in cm), packaging materials, and barcode numbers.
+   - Physical Stock Ledger Posting: Permanent deduction from batch inventory and posting to StockLedgerModel upon delivery confirmation (movementType: DISPATCH).
+   - Dual-Rail Payment & COD Settlement: Advance payment recording and verification for digital channels (bKash, Nagad, Bank Transfer) alongside courier COD cash collection and deposit account reconciliation.
+   - Official Document Engine: Automatic generation of NBR Mushak-6.3 Delivery Challan and Sales Invoices using sequential counter sequences.
+   - Public Customer-Facing Tracking: Privacy-masked 5-stage delivery tracker accessible via order number or consignment code.
+   - Full Audit Logging: Chronological audit trail using AuditLogService.record across all order status transitions, stock locks, payments, and cancellations.
+
+2. Submodules & Capabilities (23 Submodules):
+   - 01. Order Processing Dashboard: KPIs (Total Orders, Total Value, Delivered, In Transit, Pending Verification, Due), status/channel distributions, and daily trends.
+   - 02. Online Orders: E-commerce online orders queue with customer contacts, delivery instructions, and quick confirmation actions.
+   - 03. Sales Orders: B2B direct and manual sales orders creation with multi-item line pricing, item-level discounts, and VAT/tax computation.
+   - 04. Order Details: Drawer modal displaying customer address, item lines, payment records, stock reservations, timeline events, and action triggers.
+   - 05. Payment Verification: Verification and rejection workflow for bank transfers and mobile wallets with transaction reference checking.
+   - 06. Order Approval: High-discount and high-value order approval gates requiring manager authorization.
+   - 07. Order Reservation: Batch allocation monitor with one-click reserve and release functionality.
+   - 08. Stock Availability: Real-time inventory check across warehouses and bins reporting physical, reserved, and sellable stock.
+   - 09. Order Picking: Warehouse picking list generator with barcode scanning simulation, item verification, and completion workflow.
+   - 10. Order Packing: Packing session creation with multiple package configurations, gross weights, and dimensions.
+   - 11. Packing List: Manifest and shipping label view with package-level item contents.
+   - 12. Dispatch Management: Logistics integration supporting Steadfast Courier, Pathao, and Own Fleet with tracking numbers and dispatch notes.
+   - 13. Delivery Management: Delivery confirmation with receiver identity, contact, signature/photo evidence, and automatic stock ledger deduction.
+   - 14. Delivery Tracking: Real-time 5-stage visual progress timeline (Ordered -> Confirmed -> Packed -> Dispatched -> Delivered).
+   - 15. Partial Delivery: Split order fulfillment recording delivered quantities per line item and marking remaining items pending.
+   - 16. Order Cancellation: Cancellation modal with reason capture and automatic release of reserved batch inventory.
+   - 17. Sales Return Integration: Links delivered orders to RMA and returns processing for damaged or rejected products.
+   - 18. Order Timeline: Chronological tamper-proof event audit log tracking every user and system touchpoint.
+   - 19. Order Documents: One-click generation and preview of official Delivery Challans and Sales Invoices.
+   - 20. Customer Order History: Customer purchase history view reporting lifetime order count and total spend.
+   - 21. Order Reports: Fulfillment performance, cancellation reasons, and COD collection reports with date and warehouse filtering.
+   - 22. Order Activity Logs: Centralized audit trail filtered by ORDER_PROCESSING module.
+   - 23. Order Settings: Organization-level workflow toggles (auto-confirm, auto-reserve, COD limits, courier partners, discount thresholds).
+
+3. Backend & Frontend Implementation:
+   - Models: Extended `Order.ts` with organization, warehouse, timeline, payment records, and status fields; created `OrderReservation.ts`, `PickingSession.ts`, `PackingSession.ts`, and `OrderSettings.ts`.
+   - Services: `OrderProcessingService.ts`, `OrderReservationService.ts`, `OrderPickingPackingService.ts`, `OrderDispatchDeliveryService.ts`, `OrderPaymentVerificationService.ts`, `OrderTimelineReportService.ts`.
+   - Controller & Routes: `OrderProcessingController.ts` (30 handlers), `orderProcessingRoutes.ts` (30 endpoints) mounted at `/api/v1/erp/orders`.
+   - Automated Verification: `backend/src/services/verify-order-module.ts` (58 assertions across 15 test steps, 100% passed).
+   - Frontend: `frontend/src/services/orderProcessing.service.ts`, `frontend/src/types/index.ts` (`OrderSubmodule`), `frontend/src/components/erp/ErpOrdersView.tsx` (all 23 submodules connected to real APIs), `frontend/src/app/erp/page.tsx` (23-submodule sidebar accordion).
+
+Verification: Execute `npm run test:order-module` (58 assertions passed, 0 failed), run `npm run build` on backend (0 errors) and frontend (58/58 static pages generated in Next.js 16.4.5 Turbopack, 0 errors).
+```

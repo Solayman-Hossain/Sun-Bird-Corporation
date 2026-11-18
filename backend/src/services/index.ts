@@ -172,3 +172,22 @@ export { BudgetService } from './BudgetService';
 export * from './AccountsDashboardService';
 export { AccountsDashboardService } from './AccountsDashboardService';
 
+// ─── Module 09: Order Processing & E-Commerce Integration ─────────────────────
+export * from './OrderProcessingService';
+export { OrderProcessingService } from './OrderProcessingService';
+
+export * from './OrderPaymentVerificationService';
+export { OrderPaymentVerificationService } from './OrderPaymentVerificationService';
+
+export * from './OrderReservationService';
+export { OrderReservationService } from './OrderReservationService';
+
+export * from './OrderPickingPackingService';
+export { OrderPickingPackingService } from './OrderPickingPackingService';
+
+export * from './OrderDispatchDeliveryService';
+export { OrderDispatchDeliveryService } from './OrderDispatchDeliveryService';
+
+export * from './OrderTimelineReportService';
+export { OrderTimelineReportService } from './OrderTimelineReportService';
+

@@ -51,7 +51,7 @@ import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUs
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
 import { ErpPurchaseView } from '../../components/erp/ErpPurchaseView';
-import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule } from '../../types';
+import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -122,6 +122,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isProductMenuExpanded, setIsProductMenuExpanded] = useState<boolean>(true);
   const [purchaseSubmodule, setPurchaseSubmodule] = useState<PurchaseSubmodule>('purchase-dashboard');
   const [isPurchaseMenuExpanded, setIsPurchaseMenuExpanded] = useState<boolean>(true);
+  const [orderSubmodule, setOrderSubmodule] = useState<OrderSubmodule>('order-dashboard');
+  const [isOrderMenuExpanded, setIsOrderMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -639,10 +641,95 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
               )}
             </div>
 
+            {/* 7. Expandable Order Processing Section (Module 09) */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeTab !== 'orders') setActiveTab('orders');
+                  setIsOrderMenuExpanded(!isOrderMenuExpanded);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'orders'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+                title="Order Processing & E-commerce"
+              >
+                <div className="flex items-center gap-3 truncate">
+                  <Package
+                    className={`w-4 h-4 shrink-0 ${activeTab === 'orders' ? 'text-[#e6b980]' : 'text-slate-400'}`}
+                  />
+                  {isSidebarOpen && (
+                    <div className="text-left truncate">
+                      <span className="block leading-tight">Order Processing</span>
+                      <span className="text-[10px] opacity-75 font-normal block">অর্ডার ও কুরিয়ার হাব</span>
+                    </div>
+                  )}
+                </div>
+                {isSidebarOpen && (
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 shrink-0 transition-transform ${
+                      isOrderMenuExpanded ? 'rotate-180 text-[#e6b980]' : 'text-slate-500'
+                    }`}
+                  />
+                )}
+              </button>
+
+              {/* 23 Submodules Accordion for Order Processing */}
+              {isSidebarOpen && isOrderMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5 max-h-72 overflow-y-auto no-scrollbar">
+                  {[
+                    { id: 'order-dashboard' as OrderSubmodule, label: '1. Order Dashboard' },
+                    { id: 'online-orders' as OrderSubmodule, label: '2. Online Orders' },
+                    { id: 'sales-orders' as OrderSubmodule, label: '3. Sales Orders (B2B)' },
+                    { id: 'order-details' as OrderSubmodule, label: '4. Order Details' },
+                    { id: 'payment-verification' as OrderSubmodule, label: '5. Payment Verification' },
+                    { id: 'order-approval' as OrderSubmodule, label: '6. Order Approval' },
+                    { id: 'order-reservation' as OrderSubmodule, label: '7. Order Reservation' },
+                    { id: 'stock-availability' as OrderSubmodule, label: '8. Stock Availability' },
+                    { id: 'order-picking' as OrderSubmodule, label: '9. Order Picking' },
+                    { id: 'order-packing' as OrderSubmodule, label: '10. Order Packing' },
+                    { id: 'packing-list' as OrderSubmodule, label: '11. Packing List' },
+                    { id: 'dispatch-management' as OrderSubmodule, label: '12. Dispatch Management' },
+                    { id: 'delivery-management' as OrderSubmodule, label: '13. Delivery Management' },
+                    { id: 'delivery-tracking' as OrderSubmodule, label: '14. Delivery Tracking' },
+                    { id: 'partial-delivery' as OrderSubmodule, label: '15. Partial Delivery' },
+                    { id: 'order-cancellation' as OrderSubmodule, label: '16. Order Cancellation' },
+                    { id: 'sales-return' as OrderSubmodule, label: '17. Sales Return Integration' },
+                    { id: 'order-timeline' as OrderSubmodule, label: '18. Order Timeline' },
+                    { id: 'order-documents' as OrderSubmodule, label: '19. Order Documents' },
+                    { id: 'customer-history' as OrderSubmodule, label: '20. Customer Order History' },
+                    { id: 'order-reports' as OrderSubmodule, label: '21. Order Reports' },
+                    { id: 'order-activity-logs' as OrderSubmodule, label: '22. Order Activity Logs' },
+                    { id: 'order-settings' as OrderSubmodule, label: '23. Order Settings' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'orders' && orderSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('orders');
+                          setOrderSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {/* Standard ERP Modules */}
             {[
               { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
-              { id: 'orders' as ErpTab, label: 'Order Processing', labelBn: 'অর্ডার ও কুরিয়ার কিউ', icon: Package },
               { id: 'inventory' as ErpTab, label: 'Inventory & FEFO', labelBn: 'ইনভেন্টরি ও FEFO মেয়াদ', icon: Boxes },
               { id: 'accounting' as ErpTab, label: 'Accounts & Partnership', labelBn: 'আয়-ব্যয় ও পার্টনারশিপ', icon: DollarSign },
               { id: 'hrm' as ErpTab, label: 'HRM & Payroll', labelBn: 'এইচ আর ও পে-রোল', icon: User },
@@ -838,8 +925,13 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
             />
           )}
 
-          {/* TAB 2: Order Processing (Prompt 35) */}
-          {activeTab === 'orders' && <ErpOrdersView />}
+          {/* TAB 2: Order Processing (Module 09) */}
+          {activeTab === 'orders' && (
+            <ErpOrdersView
+              initialSubmodule={orderSubmodule}
+              onSubmoduleChange={(sub) => setOrderSubmodule(sub)}
+            />
+          )}
 
           {/* TAB 3: Inventory & FEFO Management (Module 06) */}
           {activeTab === 'inventory' && <ErpInventoryManagementView currentSubmodule="inv-dashboard" />}
