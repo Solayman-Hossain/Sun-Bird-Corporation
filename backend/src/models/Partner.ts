@@ -9,8 +9,16 @@ export interface IPartnerAllocation {
 
 export interface IPartner extends Document {
   _id: Types.ObjectId;
+  organizationId?: Types.ObjectId;
   userId: Types.ObjectId;
+  partnerCode?: string;
   partnerName: string;
+  partnerType?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  nid?: string;
+  notes?: string;
   capitalContribution: number;
   currentAccountBalance: number;
   joinedDate: Date;
@@ -49,10 +57,45 @@ export const PartnerAllocationSchema = new Schema<IPartnerAllocation>(
 
 export const PartnerSchema = new Schema<IPartner>(
   {
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+      index: true,
+    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      default: () => new Types.ObjectId(),
+    },
+    partnerCode: {
+      type: String,
+      trim: true,
+      index: true,
+    },
+    partnerType: {
+      type: String,
+      default: 'EQUITY_PARTNER',
+      trim: true,
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
+    email: {
+      type: String,
+      trim: true,
+    },
+    address: {
+      type: String,
+      trim: true,
+    },
+    nid: {
+      type: String,
+      trim: true,
+    },
+    notes: {
+      type: String,
+      trim: true,
     },
     partnerName: {
       type: String,

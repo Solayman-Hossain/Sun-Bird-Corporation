@@ -153,3 +153,22 @@ export { SalesDocumentService } from './SalesDocumentService';
 export * from './DocumentPdfService';
 export { DocumentPdfService } from './DocumentPdfService';
 
+// ─── Module 08: Accounts, Finance, Partnership & Financial Management ────────
+export * from './CashBankService';
+export { CashBankService } from './CashBankService';
+
+export * from './BankReconciliationService';
+export { BankReconciliationService } from './BankReconciliationService';
+
+export * from './ReceivablePayableService';
+export { ReceivablePayableService } from './ReceivablePayableService';
+
+export * from './PartnerFinancialService';
+export { PartnerFinancialService } from './PartnerFinancialService';
+
+export * from './BudgetService';
+export { BudgetService } from './BudgetService';
+
+export * from './AccountsDashboardService';
+export { AccountsDashboardService } from './AccountsDashboardService';
+

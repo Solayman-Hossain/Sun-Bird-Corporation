@@ -97,6 +97,58 @@ export interface GeneralLedgerEntry {
   runningBalance: number;
 }
 
+export interface CashFlowStatementReport {
+  period: {
+    startDate?: Date;
+    endDate?: Date;
+  };
+  operatingActivities: {
+    netProfit: number;
+    depreciation: number;
+    changeInReceivables: number;
+    changeInInventory: number;
+    changeInPayables: number;
+    totalOperatingCashFlow: number;
+  };
+  investingActivities: {
+    fixedAssetPurchases: number;
+    totalInvestingCashFlow: number;
+  };
+  financingActivities: {
+    partnerCapitalInflow: number;
+    partnerDrawingsOutflow: number;
+    loanNetMovement: number;
+    totalFinancingCashFlow: number;
+  };
+  netCashFlow: number;
+  openingCashBalance: number;
+  closingCashBalance: number;
+  generatedAt: Date;
+}
+
+export interface FinancialAnalysisReport {
+  asOfDate: Date;
+  ratios: {
+    currentRatio: number;
+    quickRatio: number;
+    grossProfitMargin: number;
+    netProfitMargin: number;
+    operatingMargin: number;
+    debtToEquityRatio: number;
+    workingCapital: number;
+  };
+  summary: {
+    totalRevenue: number;
+    totalExpenses: number;
+    netProfit: number;
+    totalAssets: number;
+    totalLiabilities: number;
+    totalEquity: number;
+  };
+  definitions: Record<string, string>;
+  generatedAt: Date;
+}
+
 export interface GeneralLedgerReport {
   accountCode: number;
   accountName: string;
@@ -678,6 +730,198 @@ export class FinancialReportService {
       periodTotalDebit,
       periodTotalCredit,
       closingBalance,
+      generatedAt: new Date(),
+    };
+  }
+
+  /**
+   * Cash Flow Statement: Operating, Investing, and Financing activities computed from posted journal entries.
+   */
+  public static async getCashFlowStatement(
+    startDate?: Date | string,
+    endDate?: Date | string
+  ): Promise<CashFlowStatementReport> {
+    const { start, end } = this.normalizeDateRange(startDate, endDate);
+
+    // 1. Get P&L for base net profit
+    const pnl = await this.getProfitAndLoss(start, end);
+    const netProfit = pnl.netOperatingProfit || 0;
+
+    // 2. Query posted journals for movements
+    const match: any = { status: 'POSTED' };
+    if (start || end) {
+      match.transactionDate = {};
+      if (start) match.transactionDate.$gte = start;
+      if (end) match.transactionDate.$lte = end;
+    }
+
+    const journals = await JournalEntryModel.find(match).lean();
+
+    let changeInAR = 0;
+    let changeInInventory = 0;
+    let changeInAP = 0;
+    let fixedAssetPurchases = 0;
+    let partnerCapitalInflow = 0;
+    let partnerDrawingsOutflow = 0;
+    let loanNetMovement = 0;
+
+    for (const jv of journals) {
+      for (const line of jv.lines) {
+        // Accounts Receivable (1020)
+        if (line.accountCode === 1020) {
+          // Increase in AR is an outflow of operating cash: -(Debit - Credit)
+          changeInAR -= (line.debit || 0) - (line.credit || 0);
+        }
+        // Inventory (1050)
+        else if (line.accountCode === 1050) {
+          // Increase in Inventory is an outflow: -(Debit - Credit)
+          changeInInventory -= (line.debit || 0) - (line.credit || 0);
+        }
+        // Accounts Payable (2010)
+        else if (line.accountCode === 2010) {
+          // Increase in AP is a source of operating cash: +(Credit - Debit)
+          changeInAP += (line.credit || 0) - (line.debit || 0);
+        }
+        // Fixed Assets (1200 - 1299)
+        else if (line.accountCode >= 1200 && line.accountCode <= 1299) {
+          fixedAssetPurchases += (line.debit || 0) - (line.credit || 0);
+        }
+        // Partner Capital (3001)
+        else if (line.accountCode === 3001) {
+          partnerCapitalInflow += (line.credit || 0) - (line.debit || 0);
+        }
+        // Partner Drawings (3002)
+        else if (line.accountCode === 3002) {
+          partnerDrawingsOutflow += (line.debit || 0) - (line.credit || 0);
+        }
+        // Loans (2020)
+        else if (line.accountCode === 2020) {
+          loanNetMovement += (line.credit || 0) - (line.debit || 0);
+        }
+      }
+    }
+
+    const depreciation = 0; // Derived if recorded
+    const totalOperating = Number(
+      (netProfit + depreciation + changeInAR + changeInInventory + changeInAP).toFixed(2)
+    );
+    const totalInvesting = Number((-fixedAssetPurchases).toFixed(2));
+    const totalFinancing = Number(
+      (partnerCapitalInflow - partnerDrawingsOutflow + loanNetMovement).toFixed(2)
+    );
+
+    const netCashFlow = Number((totalOperating + totalInvesting + totalFinancing).toFixed(2));
+
+    // Get current cash & bank balance from Trial Balance
+    const tb = await this.getTrialBalance(undefined, end);
+    let closingCash = 0;
+    for (const acc of tb.accounts) {
+      if (acc.accountCode === 1005 || acc.accountCode === 1010) {
+        closingCash += acc.netDebit - acc.netCredit;
+      }
+    }
+    const openingCash = Number((closingCash - netCashFlow).toFixed(2));
+
+    return {
+      period: { startDate: start, endDate: end },
+      operatingActivities: {
+        netProfit,
+        depreciation,
+        changeInReceivables: Number(changeInAR.toFixed(2)),
+        changeInInventory: Number(changeInInventory.toFixed(2)),
+        changeInPayables: Number(changeInAP.toFixed(2)),
+        totalOperatingCashFlow: totalOperating,
+      },
+      investingActivities: {
+        fixedAssetPurchases: Number(fixedAssetPurchases.toFixed(2)),
+        totalInvestingCashFlow: totalInvesting,
+      },
+      financingActivities: {
+        partnerCapitalInflow: Number(partnerCapitalInflow.toFixed(2)),
+        partnerDrawingsOutflow: Number(partnerDrawingsOutflow.toFixed(2)),
+        loanNetMovement: Number(loanNetMovement.toFixed(2)),
+        totalFinancingCashFlow: totalFinancing,
+      },
+      netCashFlow,
+      openingCashBalance: openingCash,
+      closingCashBalance: Number(closingCash.toFixed(2)),
+      generatedAt: new Date(),
+    };
+  }
+
+  /**
+   * Financial Analysis: Real-time calculation of key financial performance ratios
+   */
+  public static async getFinancialAnalysis(asOfDate?: Date | string): Promise<FinancialAnalysisReport> {
+    const date = asOfDate ? new Date(asOfDate) : new Date();
+    const [bs, pnl] = await Promise.all([
+      this.getBalanceSheet(date),
+      this.getProfitAndLoss(undefined, date),
+    ]);
+
+    const totalRevenue = pnl.revenue.totalRevenue || 0;
+    const totalExpenses = (pnl.cogs.totalCogs || 0) + (pnl.operatingExpenses.totalOperatingExpenses || 0);
+    const netProfit = pnl.netOperatingProfit || 0;
+    const grossProfit = pnl.grossProfit || 0;
+
+    const totalAssets = bs.assets.totalAssets || 0;
+    const totalLiabilities = bs.liabilities.totalLiabilities || 0;
+    const totalEquity = bs.equity.totalEquity || 0;
+
+    // Filter current assets and current liabilities
+    let currentAssets = 0;
+    let quickAssets = 0;
+    for (const a of bs.assets.items) {
+      if (a.accountCode >= 1000 && a.accountCode < 1200) {
+        currentAssets += a.amount;
+        if (a.accountCode !== 1050) { // Exclude inventory for quick assets
+          quickAssets += a.amount;
+        }
+      }
+    }
+
+    let currentLiabilities = 0;
+    for (const l of bs.liabilities.items) {
+      if (l.accountCode >= 2000 && l.accountCode < 2200) {
+        currentLiabilities += l.amount;
+      }
+    }
+
+    const currentRatio = currentLiabilities > 0 ? Number((currentAssets / currentLiabilities).toFixed(2)) : 0;
+    const quickRatio = currentLiabilities > 0 ? Number((quickAssets / currentLiabilities).toFixed(2)) : 0;
+    const grossProfitMargin = totalRevenue > 0 ? Number(((grossProfit / totalRevenue) * 100).toFixed(2)) : 0;
+    const netProfitMargin = totalRevenue > 0 ? Number(((netProfit / totalRevenue) * 100).toFixed(2)) : 0;
+    const operatingMargin = totalRevenue > 0 ? Number(((netProfit / totalRevenue) * 100).toFixed(2)) : 0;
+    const debtToEquityRatio = totalEquity > 0 ? Number((totalLiabilities / totalEquity).toFixed(2)) : 0;
+    const workingCapital = Number((currentAssets - currentLiabilities).toFixed(2));
+
+    return {
+      asOfDate: date,
+      ratios: {
+        currentRatio,
+        quickRatio,
+        grossProfitMargin,
+        netProfitMargin,
+        operatingMargin,
+        debtToEquityRatio,
+        workingCapital,
+      },
+      summary: {
+        totalRevenue,
+        totalExpenses,
+        netProfit,
+        totalAssets,
+        totalLiabilities,
+        totalEquity,
+      },
+      definitions: {
+        currentRatio: 'Current Assets / Current Liabilities (Liquidity benchmark: ≥ 1.5)',
+        quickRatio: '(Cash + Receivables) / Current Liabilities (Acid-test liquidity)',
+        grossProfitMargin: '(Gross Profit / Total Revenue) * 100',
+        netProfitMargin: '(Net Profit / Total Revenue) * 100',
+        debtToEquityRatio: 'Total Liabilities / Total Equity (Leverage risk)',
+        workingCapital: 'Current Assets - Current Liabilities (Short-term capital buffer)',
+      },
       generatedAt: new Date(),
     };
   }

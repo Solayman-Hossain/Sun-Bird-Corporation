@@ -1714,3 +1714,41 @@ Verification: Execute `npm run test:document-module` (51 assertions passed, 0 fa
 
 *Document v1.5 — Backend Master Prompts Blueprint — Sun Bird Corporation Integrated Cloud ERP Platform*  
 *Node.js · Express.js · TypeScript · MongoDB Atlas · Redis BullMQ · Next.js 16+*
+
+
+---
+
+## PROMPT 69: MODULE 08 — COMPLETE ACCOUNTS, FINANCE, PARTNERSHIP & FINANCIAL MANAGEMENT
+```
+Implemented Module 08: Accounts, Finance, Partnership and Financial Management extending the existing double-entry accounting engine without duplicate ledgers.
+
+1. Architecture & Core Accounting Engine:
+   - Double-Entry Enforcement: Strict debit = credit balance verification in Mongoose pre-validate hook and AccountingService, rejecting unbalanced vouchers.
+   - General Ledger & Running Balance: Dynamic aggregation across journal entries computing progressive debit/credit running balances per account.
+   - Dual-Tier Approval Integration: Low-value vouchers auto-posted, high-value (>1,000,000 BDT) staged for multi-signatory approval workflow.
+   - Idempotency & Concurrency: Idempotency keys preventing duplicate financial postings during concurrent API calls.
+   - Organization Isolation: Multi-tenancy isolation via organizationId across all ledger and financial collections.
+
+2. Submodules & Capabilities:
+   - 01. Accounts Dashboard: Real-time financial summary (Assets, Liabilities, Equity, Working Capital, Revenue, Expenses, Net Profit), Alerts, Cash Flow breakdown, and Recent Vouchers.
+   - 02. Chart of Accounts (COA): 5 core categories (ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE), normal balance rules, parent-child hierarchies, and active status tracking.
+   - 03. General Ledger: Detailed drilldown per account code with date filtering and progressive balances.
+   - 04. Journal Vouchers: Multi-line journal vouchers with double-entry balance check, draft/approval/post workflow, and reversal with audit tracking.
+   - 05. Cash Book & Bank Book: Inflows (Receipts) and Outflows (Payments) mapped to GL accounts with real-time balance calculations.
+   - 06. Bank Reconciliation: Monthly bank statement line matching against posted journal vouchers with variance reconciliation.
+   - 07. Accounts Receivable (AR): Aging analysis (<30, 31-60, 61-90, >90 days), top debtors, customer ledgers, and Money Receipt allocation to invoices.
+   - 08. Accounts Payable (AP): Aging buckets, top creditors, supplier ledgers, and Supplier Payment recording with purchase invoice allocation.
+   - 09. Partnership Management: Partner profiles, initial capital, additional equity contributions, drawings/withdrawals, annual profit distribution preview & posting via JV, and settlement.
+   - 10. Budget Management: Annual/quarterly budgets per account with Budget vs Actual variance analysis and percentage utilization.
+   - 11. Financial Reports: Real-time Trial Balance (Debit = Credit verification), Profit & Loss Statement (Gross/Operating/Net profit), Balance Sheet (Assets = Liabilities + Equity), Cash Flow Statement, and Financial Analysis ratios.
+   - 12. Accounting Settings: Per-organization default account code mapping and approval threshold automation.
+
+3. Backend & Frontend Implementation:
+   - Models: `Budget.ts`, `BankReconciliation.ts`, `PartnerTransaction.ts`, `AccountingSettings.ts`, extended `ChartOfAccounts.ts`, `JournalEntry.ts`, `Partner.ts`, `PurchaseInvoice.ts`.
+   - Services: `CashBankService.ts`, `BankReconciliationService.ts`, `ReceivablePayableService.ts`, `PartnerFinancialService.ts`, `BudgetService.ts`, `AccountsDashboardService.ts`, extended `FinancialReportService.ts`.
+   - Controller & Routes: `AccountingController.ts` (30+ handlers), `accountingRoutes.ts` (40 endpoints) mounted at `/api/v1/erp/accounts`.
+   - Verification: `backend/src/services/verify-accounting-module.ts` (37 assertions across 14 test suites, 100% passed).
+   - Frontend: `frontend/src/services/accounting.service.ts` (359 lines), `frontend/src/components/erp/ErpAccountingView.tsx` (real API-connected with 10 tab views and 9 modal workflows).
+
+Verification: Execute `npm run test:accounting-module` (37 assertions passed, 0 failed), run `npm run build` on backend (0 errors) and frontend (0 errors), and verify zero TypeScript compilation issues.
+```

@@ -2,8 +2,15 @@ import { Request, Response, NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { ChartOfAccountsModel } from '../models/ChartOfAccounts';
 import { JournalEntryModel } from '../models/JournalEntry';
+import { AccountingSettingsModel } from '../models/AccountingSettings';
 import { AccountingService } from '../services/AccountingService';
 import { FinancialReportService } from '../services/FinancialReportService';
+import { CashBankService } from '../services/CashBankService';
+import { BankReconciliationService } from '../services/BankReconciliationService';
+import { ReceivablePayableService } from '../services/ReceivablePayableService';
+import { PartnerFinancialService } from '../services/PartnerFinancialService';
+import { BudgetService } from '../services/BudgetService';
+import { AccountsDashboardService } from '../services/AccountsDashboardService';
 import { NotFoundError, ValidationError, UnauthorizedError } from '../errors/AppError';
 import logger from '../config/logger';
 
@@ -407,6 +414,438 @@ export class AccountingController {
         statusCode: 200,
         data: report,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // ── Module 08: Accounts & Finance Upgraded Endpoints ───────────────────────
+
+  /**
+   * @route GET /api/v1/erp/accounts/dashboard
+   */
+  public static async getDashboard(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const orgId = req.query.organizationId as string | undefined;
+      const data = await AccountsDashboardService.getDashboardMetrics(orgId);
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/cash-book
+   */
+  public static async getCashBook(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await CashBankService.getCashBook({
+        organizationId: req.query.organizationId as string,
+        accountCode: req.query.accountCode ? parseInt(String(req.query.accountCode), 10) : undefined,
+        startDate: req.query.startDate ? new Date(String(req.query.startDate)) : undefined,
+        endDate: req.query.endDate ? new Date(String(req.query.endDate)) : undefined,
+      });
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/bank-book
+   */
+  public static async getBankBook(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await CashBankService.getBankBook({
+        organizationId: req.query.organizationId as string,
+        accountCode: req.query.accountCode ? parseInt(String(req.query.accountCode), 10) : undefined,
+        startDate: req.query.startDate ? new Date(String(req.query.startDate)) : undefined,
+        endDate: req.query.endDate ? new Date(String(req.query.endDate)) : undefined,
+      });
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/cash-bank/transfer
+   */
+  public static async recordCashBankTransaction(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) throw new UnauthorizedError('User authentication required');
+      const data = await CashBankService.recordCashBankTransaction({ ...req.body, userId });
+      res.status(201).json({ success: true, statusCode: 201, message: 'Cash/Bank transaction posted successfully', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/bank-reconciliations
+   */
+  public static async getBankReconciliations(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await BankReconciliationService.getReconciliations({
+        organizationId: req.query.organizationId as string,
+        bankAccountCode: req.query.bankAccountCode ? parseInt(String(req.query.bankAccountCode), 10) : undefined,
+      });
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/bank-reconciliations
+   */
+  public static async createBankReconciliation(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await BankReconciliationService.createReconciliation(req.body);
+      res.status(201).json({ success: true, statusCode: 201, message: 'Bank reconciliation started', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/bank-reconciliations/:id/match
+   */
+  public static async matchStatementLine(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { lineId, voucherNo } = req.body;
+      const data = await BankReconciliationService.matchStatementLine(String(req.params.id), lineId, voucherNo);
+      res.status(200).json({ success: true, statusCode: 200, message: 'Statement line matched', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/bank-reconciliations/:id/finalize
+   */
+  public static async finalizeBankReconciliation(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) throw new UnauthorizedError('User authentication required');
+      const data = await BankReconciliationService.finalizeReconciliation(String(req.params.id), userId);
+      res.status(200).json({ success: true, statusCode: 200, message: 'Bank reconciliation finalized', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/receivables
+   */
+  public static async getReceivables(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await ReceivablePayableService.getReceivablesDashboard(req.query.organizationId ? String(req.query.organizationId) : undefined);
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/receivables/customer-ledger/:customerId
+   */
+  public static async getCustomerLedger(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await ReceivablePayableService.getCustomerLedger(String(req.params.customerId));
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/receivables/allocate-payment
+   */
+  public static async allocateCustomerPayment(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { receiptId, allocations } = req.body;
+      const data = await ReceivablePayableService.allocateCustomerPayment(receiptId, allocations);
+      res.status(200).json({ success: true, statusCode: 200, message: 'Customer payment allocated', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/payables
+   */
+  public static async getPayables(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await ReceivablePayableService.getPayablesDashboard(req.query.organizationId ? String(req.query.organizationId) : undefined);
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/payables/supplier-ledger/:supplierId
+   */
+  public static async getSupplierLedger(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await ReceivablePayableService.getSupplierLedger(String(req.params.supplierId));
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/payables/record-payment
+   */
+  public static async recordSupplierPayment(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) throw new UnauthorizedError('User authentication required');
+      const data = await ReceivablePayableService.recordSupplierPayment({ ...req.body, userId });
+      res.status(201).json({ success: true, statusCode: 201, message: 'Supplier payment recorded and posted', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/partners
+   */
+  public static async getPartnersList(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await PartnerFinancialService.getPartners(req.query.organizationId as string);
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/partners
+   */
+  public static async createPartnerProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await PartnerFinancialService.createPartner(req.body);
+      res.status(201).json({ success: true, statusCode: 201, message: 'Partner registered successfully', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/partners/capital-contribution
+   */
+  public static async recordCapitalContribution(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) throw new UnauthorizedError('User authentication required');
+      const data = await PartnerFinancialService.recordCapitalContribution({ ...req.body, userId });
+      res.status(201).json({ success: true, statusCode: 201, message: 'Capital contribution posted', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/partners/withdrawal
+   */
+  public static async recordPartnerWithdrawal(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) throw new UnauthorizedError('User authentication required');
+      const data = await PartnerFinancialService.recordPartnerWithdrawal({ ...req.body, userId });
+      res.status(201).json({ success: true, statusCode: 201, message: 'Partner withdrawal recorded', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/partners/profit-distribution/preview
+   */
+  public static async previewProfitDistribution(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await PartnerFinancialService.calculateProfitDistributionPreview(req.body);
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/partners/profit-distribution/post
+   */
+  public static async postProfitDistribution(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) throw new UnauthorizedError('User authentication required');
+      const data = await PartnerFinancialService.postProfitDistribution({ ...req.body, userId });
+      res.status(201).json({ success: true, statusCode: 201, message: 'Profit distribution posted to GL', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/partners/settlement
+   */
+  public static async recordPartnerSettlement(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) throw new UnauthorizedError('User authentication required');
+      const data = await PartnerFinancialService.recordPartnerSettlement({ ...req.body, userId });
+      res.status(201).json({ success: true, statusCode: 201, message: 'Partner settlement posted', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/partners/:partnerId/ledger
+   */
+  public static async getPartnerLedger(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await PartnerFinancialService.getPartnerLedger(String(req.params.partnerId));
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/budgets
+   */
+  public static async getBudgets(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await BudgetService.getBudgets({
+        organizationId: req.query.organizationId ? String(req.query.organizationId) : undefined,
+        fiscalYear: req.query.fiscalYear ? String(req.query.fiscalYear) : undefined,
+      });
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/budgets
+   */
+  public static async createBudget(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await BudgetService.createBudget(req.body);
+      res.status(201).json({ success: true, statusCode: 201, message: 'Budget created successfully', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route POST /api/v1/erp/accounts/budgets/:id/approve
+   */
+  public static async approveBudget(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) throw new UnauthorizedError('User authentication required');
+      const data = await BudgetService.approveBudget(String(req.params.id), userId);
+      res.status(200).json({ success: true, statusCode: 200, message: 'Budget approved', data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/budgets/vs-actual
+   */
+  public static async getBudgetVsActual(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const data = await BudgetService.getBudgetVsActual({
+        organizationId: req.query.organizationId as string,
+        fiscalYear: req.query.fiscalYear as string,
+        startDate: req.query.startDate ? new Date(String(req.query.startDate)) : undefined,
+        endDate: req.query.endDate ? new Date(String(req.query.endDate)) : undefined,
+      });
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/reports/cash-flow
+   */
+  public static async getCashFlowStatement(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const startDate = req.query.startDate ? new Date(String(req.query.startDate)) : undefined;
+      const endDate = req.query.endDate ? new Date(String(req.query.endDate)) : undefined;
+      const data = await FinancialReportService.getCashFlowStatement(startDate, endDate);
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/reports/financial-analysis
+   */
+  public static async getFinancialAnalysis(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const asOfDate = req.query.asOfDate ? new Date(String(req.query.asOfDate)) : undefined;
+      const data = await FinancialReportService.getFinancialAnalysis(asOfDate);
+      res.status(200).json({ success: true, statusCode: 200, data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route GET /api/v1/erp/accounts/settings
+   */
+  public static async getAccountingSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const orgId = req.query.organizationId ? new Types.ObjectId(String(req.query.organizationId)) : new Types.ObjectId();
+      let settings: any = await AccountingSettingsModel.findOne({ organizationId: orgId }).lean();
+      if (!settings) {
+        settings = (await AccountingSettingsModel.create({
+          organizationId: orgId,
+          salesRevenueAccountCode: 4010,
+          accountsReceivableAccountCode: 1020,
+          accountsPayableAccountCode: 2010,
+          inventoryAccountCode: 1050,
+          cogsAccountCode: 5010,
+          taxPayableAccountCode: 2050,
+          cashAccountCode: 1005,
+          bankAccountCode: 1010,
+          discountAccountCode: 4020,
+          purchaseExpenseAccountCode: 5020,
+          partnerCapitalAccountCode: 3001,
+          partnerProfitPayableAccountCode: 2040,
+          retainedEarningsAccountCode: 3010,
+          loanAccountCode: 2020,
+          interestExpenseAccountCode: 6010,
+          autoPostVouchers: true,
+        })).toObject();
+      }
+      res.status(200).json({ success: true, statusCode: 200, data: settings });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route PUT /api/v1/erp/accounts/settings
+   */
+  public static async updateAccountingSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const orgId = req.body.organizationId ? new Types.ObjectId(String(req.body.organizationId)) : new Types.ObjectId();
+      const settings = await AccountingSettingsModel.findOneAndUpdate(
+        { organizationId: orgId },
+        { ...req.body },
+        { new: true, upsert: true }
+      );
+      res.status(200).json({ success: true, statusCode: 200, message: 'Accounting settings updated', data: settings });
     } catch (error) {
       next(error);
     }

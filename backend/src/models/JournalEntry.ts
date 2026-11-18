@@ -28,10 +28,12 @@ export interface IJournalLine {
 
 export interface IJournalEntry extends Document {
   _id: Types.ObjectId;
+  organizationId?: Types.ObjectId;
   voucherNo: string;
   voucherType: VoucherType;
   transactionDate: Date;
   sourceDocumentRef: string;
+  description?: string;
   lines: IJournalLine[];
   totalDebit: number;
   totalCredit: number;
@@ -81,6 +83,11 @@ export const JournalLineSchema = new Schema<IJournalLine>(
 
 export const JournalEntrySchema = new Schema<IJournalEntry>(
   {
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+      index: true,
+    },
     voucherNo: {
       type: String,
       required: true,
@@ -100,6 +107,10 @@ export const JournalEntrySchema = new Schema<IJournalEntry>(
     sourceDocumentRef: {
       type: String,
       required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
       trim: true,
     },
     lines: {

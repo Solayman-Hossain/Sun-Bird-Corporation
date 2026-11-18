@@ -46,6 +46,7 @@ export interface IPurchaseInvoice extends Document {
   grandTotal: number;
   paidAmount: number;
   outstandingAmount: number;
+  dueAmount?: number;
   paymentTerms?: string;
   attachments: string[];
   notes?: string;

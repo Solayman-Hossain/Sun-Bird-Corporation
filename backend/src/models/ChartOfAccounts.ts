@@ -1,9 +1,10 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 
 export type AccountType = 'ASSET' | 'LIABILITY' | 'EQUITY' | 'REVENUE' | 'EXPENSE';
 export type NormalBalance = 'DEBIT' | 'CREDIT';
 
 export interface IChartOfAccounts extends Document {
+  organizationId?: Types.ObjectId;
   accountCode: number;
   accountName: string;
   accountType: AccountType;
@@ -11,12 +12,19 @@ export interface IChartOfAccounts extends Document {
   parentCode?: number;
   isControl: boolean;
   isActive: boolean;
+  description?: string;
+  openingBalance?: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export const ChartOfAccountsSchema = new Schema<IChartOfAccounts>(
   {
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+      index: true,
+    },
     accountCode: {
       type: Number,
       required: true,
@@ -46,6 +54,14 @@ export const ChartOfAccountsSchema = new Schema<IChartOfAccounts>(
     isActive: {
       type: Boolean,
       default: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    openingBalance: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }
