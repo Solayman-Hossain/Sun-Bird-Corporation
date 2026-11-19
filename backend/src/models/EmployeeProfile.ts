@@ -98,6 +98,39 @@ export interface IEmployeeProfile extends Document {
   documents?: IEmployeeDocument[];
   salaryStructureId?: Types.ObjectId;
   isActive: boolean;
+  // Extended Desktop Employee Details Sheet Fields
+  againstId?: string; // কার পরিবর্তে যোগদান করছে তার আইডি
+  againstName?: string; // কার পরিবর্তে যোগদান করছে তার নাম
+  fatherOrHusbandName?: string;
+  motherName?: string;
+  age?: number;
+  qualification?: string;
+  highQualification?: string;
+  jobGrade?: string;
+  joiningSalary?: number;
+  currentSalary?: number;
+  allowance?: number;
+  overtime?: number;
+  dateOfModify?: Date;
+  jobDuration?: string;
+  jobDescriptionCategory?: string;
+  jobDescriptionIndividual?: string;
+  responsibilitiesIndividual?: string;
+  cityDistrict?: string;
+  depSl?: number;
+  salSl?: number;
+  idCardGiven?: boolean;
+  idCardGivenDate?: Date;
+  isResigned?: boolean;
+  terminationOrResignedDate?: Date;
+  leaveReport?: {
+    cl?: number;
+    sl?: number;
+    wp?: number;
+    ml?: number;
+    el?: number;
+    gh?: number;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -285,6 +318,39 @@ export const EmployeeProfileSchema = new Schema<IEmployeeProfile>(
     isActive: {
       type: Boolean,
       default: true,
+    },
+    // Extended Desktop Employee Details Sheet Fields
+    againstId: { type: String, trim: true },
+    againstName: { type: String, trim: true },
+    fatherOrHusbandName: { type: String, trim: true },
+    motherName: { type: String, trim: true },
+    age: { type: Number },
+    qualification: { type: String, trim: true },
+    highQualification: { type: String, trim: true },
+    jobGrade: { type: String, trim: true },
+    joiningSalary: { type: Number, default: 0 },
+    currentSalary: { type: Number, default: 0 },
+    allowance: { type: Number, default: 0 },
+    overtime: { type: Number, default: 0 },
+    dateOfModify: { type: Date },
+    jobDuration: { type: String, trim: true },
+    jobDescriptionCategory: { type: String, trim: true },
+    jobDescriptionIndividual: { type: String, trim: true },
+    responsibilitiesIndividual: { type: String, trim: true },
+    cityDistrict: { type: String, trim: true },
+    depSl: { type: Number, default: 0 },
+    salSl: { type: Number, default: 0 },
+    idCardGiven: { type: Boolean, default: false },
+    idCardGivenDate: { type: Date },
+    isResigned: { type: Boolean, default: false },
+    terminationOrResignedDate: { type: Date },
+    leaveReport: {
+      cl: { type: Number, default: 0 },
+      sl: { type: Number, default: 0 },
+      wp: { type: Number, default: 0 },
+      ml: { type: Number, default: 0 },
+      el: { type: Number, default: 0 },
+      gh: { type: Number, default: 0 },
     },
   },
   {

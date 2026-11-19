@@ -39,13 +39,38 @@ export class HrmController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const employee = await EmployeeService.createEmployee(req.body);
+      const employee = await EmployeeManagementService.createEmployee(
+        req.body,
+        String((req as any).user?.userId || '')
+      );
 
       res.status(201).json({
         success: true,
         statusCode: 201,
         message: 'Employee onboarded successfully',
         data: employee,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @route   GET /api/v1/erp/hrm/employees/next-code
+   * @desc    Previews next sequential employee code
+   * @access  Bearer JWT (hrm:READ)
+   */
+  public static async getNextEmployeeCode(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const prefix = req.query.prefix ? String(req.query.prefix) : 'SBC-EMP';
+      const code = await EmployeeManagementService.getNextEmployeeCode(prefix);
+      res.status(200).json({
+        success: true,
+        data: { nextCode: code },
       });
     } catch (error) {
       next(error);
@@ -123,7 +148,11 @@ export class HrmController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const employee = await EmployeeService.updateEmployee(String(req.params.id), req.body);
+      const employee = await EmployeeManagementService.updateEmployee(
+        String(req.params.id),
+        req.body,
+        String((req as any).user?.userId || '')
+      );
 
       res.status(200).json({
         success: true,

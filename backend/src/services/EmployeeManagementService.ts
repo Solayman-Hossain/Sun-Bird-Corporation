@@ -11,6 +11,7 @@ import {
   EmploymentTypeModel,
   IEmploymentType,
   CounterModel,
+  UserModel,
 } from '../models';
 import { AuditLogService } from './AuditLogService';
 import logger from '../config/logger';
@@ -89,6 +90,39 @@ export interface CreateEmployeeDTO {
     verified?: boolean;
   }>;
   salaryStructureId?: string | Types.ObjectId;
+  // Extended Desktop Employee Details Sheet Fields
+  againstId?: string;
+  againstName?: string;
+  fatherOrHusbandName?: string;
+  motherName?: string;
+  age?: number;
+  qualification?: string;
+  highQualification?: string;
+  jobGrade?: string;
+  joiningSalary?: number;
+  currentSalary?: number;
+  allowance?: number;
+  overtime?: number;
+  dateOfModify?: Date | string;
+  jobDuration?: string;
+  jobDescriptionCategory?: string;
+  jobDescriptionIndividual?: string;
+  responsibilitiesIndividual?: string;
+  cityDistrict?: string;
+  depSl?: number;
+  salSl?: number;
+  idCardGiven?: boolean;
+  idCardGivenDate?: Date | string;
+  isResigned?: boolean;
+  terminationOrResignedDate?: Date | string;
+  leaveReport?: {
+    cl?: number;
+    sl?: number;
+    wp?: number;
+    ml?: number;
+    el?: number;
+    gh?: number;
+  };
 }
 
 export class EmployeeManagementService {
@@ -106,6 +140,16 @@ export class EmployeeManagementService {
   }
 
   /**
+   * Previews next sequential employee code without incrementing
+   */
+  public static async getNextEmployeeCode(prefix = 'SBC-EMP'): Promise<string> {
+    const counterKey = `EMPLOYEE_${prefix}`;
+    const counter = await CounterModel.findById(counterKey);
+    const nextSeq = counter ? counter.seq + 1 : 1;
+    return `${prefix}-${String(nextSeq).padStart(3, '0')}`;
+  }
+
+  /**
    * Creates a new employee with onboarding workflow
    */
   public static async createEmployee(
@@ -113,6 +157,36 @@ export class EmployeeManagementService {
     actorId?: string,
     actorRole = 'HR_ADMIN'
   ): Promise<IEmployeeProfile> {
+    let userId = data.userId;
+    if (!userId) {
+      const email =
+        data.contactInfo?.personalEmail ||
+        data.contactInfo?.officialEmail ||
+        `emp.${Date.now()}@sunbirdcorp.com`;
+      const mobile =
+        data.contactInfo?.personalPhone ||
+        data.contactInfo?.officialPhone ||
+        `017${Date.now().toString().slice(-8)}`;
+      const fullName =
+        (data.personalInfo?.firstName
+          ? `${data.personalInfo.firstName} ${data.personalInfo.lastName || ''}`.trim()
+          : '') || 'Employee';
+
+      let user = await UserModel.findOne({ $or: [{ email }, { mobile }] });
+      if (!user) {
+        user = await UserModel.create({
+          fullName,
+          email,
+          mobile,
+          userType: 'STAFF',
+          role: 'ADMIN',
+          status: 'ACTIVE',
+          passwordHash: 'default_staff_hash',
+        });
+      }
+      userId = user._id;
+    }
+
     const employeeCode = data.employeeCode || (await this.generateEmployeeCode());
 
     // Basic onboarding checklist if not provided
@@ -133,6 +207,7 @@ export class EmployeeManagementService {
 
     const employee = new EmployeeProfileModel({
       ...data,
+      userId,
       employeeCode,
       grossSalary: gross,
       employmentDetails: {

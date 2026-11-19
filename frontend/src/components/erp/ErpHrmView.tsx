@@ -40,6 +40,7 @@ import {
 import { useToast } from '../../context/ToastContext';
 import { HrmSubmodule } from '../../types';
 import { hrmService, EmployeeProfileData } from '../../services/hrm.service';
+import { EmployeeDetailsSheet } from './EmployeeDetailsSheet';
 
 interface ErpHrmViewProps {
   submodule?: HrmSubmodule;
@@ -566,9 +567,16 @@ export function ErpHrmView({ submodule = 'hr-dashboard', onSelectSubmodule }: Er
       )}
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 2. SUBMODULE: EMPLOYEE MANAGEMENT & DIRECTORY */}
+      {/* 2. SUBMODULE: EMPLOYEE MANAGEMENT (DETAILS SHEET) */}
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {['employee-management', 'employee-directory', 'employee-profile'].includes(activeSubmodule) && (
+      {activeSubmodule === 'employee-management' && (
+        <EmployeeDetailsSheet />
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {/* 2B. SUBMODULE: EMPLOYEE DIRECTORY & PROFILE */}
+      {/* ─────────────────────────────────────────────────────────────────── */}
+      {['employee-directory', 'employee-profile'].includes(activeSubmodule) && (
         <div className="space-y-4">
           {/* Search & Filter Bar */}
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row gap-3 items-center justify-between">

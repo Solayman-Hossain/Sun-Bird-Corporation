@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
 export const createEmployeeSchema = z.object({
-  userId: z.string().min(1),
+  userId: z.string().optional(),
   employeeCode: z.string().optional(),
   department: z.string().min(1),
   designation: z.string().min(1),
   joiningDate: z.string().or(z.date()).optional(),
-  basicSalary: z.number().min(0),
+  basicSalary: z.number().min(0).optional(),
   houseRentAllowance: z.number().min(0).optional().default(0),
   medicalAllowance: z.number().min(0).optional().default(0),
   conveyanceAllowance: z.number().min(0).optional().default(0),
@@ -20,7 +20,7 @@ export const createEmployeeSchema = z.object({
     })
     .optional(),
   isActive: z.boolean().optional().default(true),
-});
+}).passthrough();
 
 export const updateEmployeeSchema = z.object({
   department: z.string().min(1).optional(),
@@ -38,7 +38,7 @@ export const updateEmployeeSchema = z.object({
     })
     .optional(),
   isActive: z.boolean().optional(),
-});
+}).passthrough();
 
 export const mobilePunchSchema = z.object({
   punchType: z.enum(['IN', 'OUT']),

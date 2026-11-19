@@ -31,6 +31,13 @@ router.get(
 );
 
 router.get(
+  '/employees/next-code',
+  authGuard,
+  hasPermission('hrm', 'READ'),
+  HrmController.getNextEmployeeCode
+);
+
+router.get(
   '/employees/:id',
   authGuard,
   hasPermission('hrm', 'READ'),

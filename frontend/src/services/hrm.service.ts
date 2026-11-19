@@ -74,6 +74,39 @@ export interface EmployeeProfileData {
     verified?: boolean;
   }>;
   isActive: boolean;
+  // Extended Desktop Employee Details Sheet Fields
+  againstId?: string;
+  againstName?: string;
+  fatherOrHusbandName?: string;
+  motherName?: string;
+  age?: number;
+  qualification?: string;
+  highQualification?: string;
+  jobGrade?: string;
+  joiningSalary?: number;
+  currentSalary?: number;
+  allowance?: number;
+  overtime?: number;
+  dateOfModify?: string;
+  jobDuration?: string;
+  jobDescriptionCategory?: string;
+  jobDescriptionIndividual?: string;
+  responsibilitiesIndividual?: string;
+  cityDistrict?: string;
+  depSl?: number;
+  salSl?: number;
+  idCardGiven?: boolean;
+  idCardGivenDate?: string;
+  isResigned?: boolean;
+  terminationOrResignedDate?: string;
+  leaveReport?: {
+    cl?: number;
+    sl?: number;
+    wp?: number;
+    ml?: number;
+    el?: number;
+    gh?: number;
+  };
 }
 
 export const hrmService = {
@@ -87,6 +120,13 @@ export const hrmService = {
       `/erp/hrm/employees?${q.toString()}`
     );
     return { employees: res.data || [], pagination: res.pagination };
+  },
+
+  async getNextEmployeeCode(prefix = 'SBC-EMP'): Promise<string> {
+    const res = await apiClient<{ success: boolean; data: { nextCode: string } }>(
+      `/erp/hrm/employees/next-code?prefix=${prefix}`
+    );
+    return res.data?.nextCode || `${prefix}-001`;
   },
 
   async getEmployeeById(id: string): Promise<EmployeeProfileData> {
