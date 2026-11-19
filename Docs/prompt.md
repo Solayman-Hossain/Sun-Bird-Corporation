@@ -1841,3 +1841,35 @@ Implemented Module 10: Complete HRM, Employee Management, Attendance, Leave, Pay
 
 Verification: Execute `npm run test:hrm-module` (51 assertions passed, 0 failed), run `npm run build` on backend (0 errors) and frontend (58/58 static pages generated in Next.js 16.4.5 Turbopack, 0 errors).
 ```
+
+---
+
+## PROMPT 72: HRM EMPLOYEE DETAILS SHEET — DESKTOP SHEET EXTENSION (AUTO ID, AGAINST LOOKUP, QUALIFICATION, BLOOD GROUP, AUTO GRADE, PRINT, CSV DOWNLOAD & UPDATE)
+```text
+Task: Implement a full-featured desktop-style Employee Details Sheet in Sun Bird Corporation ERP (/erp/hrm) matching the legacy desktop HR sheet layout, with auto serial employee ID generation, replacement (against) tracking, educational qualification, blood group, auto job grade population, printable format, CSV data export, and complete record management.
+
+1. Business Logic & UI Features:
+   - Auto Serial Employee ID: Generates sequential next employee ID (e.g., SBC-EMP-001) using MongoDB atomic counter via GET /api/v1/erp/hrm/employees/next-code on clicking "Add".
+   - Replacement / Against Tracking: "Against ID" and "Against Name" (কার পরিবর্তে যোগদান) records who the employee is replacing, with real-time employee code lookup and automatic name population.
+   - Educational Qualification: Full entry support for "Qualification" (text) and "High Qualification" (H.S.C, S.S.C, Bachelor/Degree, Masters, Diploma, PhD, Other).
+   - Blood Group & Demographics: Standard blood group selection (A+, A-, B+, B-, O+, O-, AB+, AB-), nationality, religion, age, gender, marital status, NID, father/husband name, mother name.
+   - Designation-Linked Auto Job Grade: Automatically assigns Job Grade (Grade-A, Grade-B, Grade-C) based on designation hierarchy with manual override.
+   - Salary & Allowances: Joining salary, current salary, allowance breakdown, and overtime fields.
+   - Leave & Attendance Overview: Numeric counters for Leave Report (CL, SL, WP, ML, EL, GH), WP comment box, and attendance count with signature check.
+   - Print Layout: Formatted window.print() view with Sun Bird Corporation official letterhead, complete tabular employee profile, and signature blocks.
+   - Data Download: One-click CSV/Excel export of complete employee dataset with UTF-8 BOM encoding.
+   - Desktop Toolbar & Navigation: Record navigation (◄◄ First, ◄ Prev, ► Next, ►► Last), Add, Edit, Update, Cancel, Print, Data Download, Resigned List filter, and full tabular "Display" toggle.
+
+2. Backend Implementation:
+   - Models: Extended `EmployeeProfile.ts` with 33 sheet fields (againstId, againstName, fatherOrHusbandName, motherName, age, qualification, highQualification, jobGrade, joiningSalary, currentSalary, allowance, overtime, dateOfModify, jobDuration, cityDistrict, depSl, salSl, idCardGiven, isResigned, leaveReport, etc.).
+   - Service: Extended `EmployeeManagementService.ts` with `getNextEmployeeCode()` and user auto-creation when registering new employees directly from the sheet.
+   - Controller & Routes: `HrmController.ts` delegating create/update to EmployeeManagementService; added `/employees/next-code` route in `hrmRoutes.ts`.
+   - Validator: `hrm.validator.ts` updated with optional userId/basicSalary and passthrough support for extended attributes.
+
+3. Frontend Implementation:
+   - Component: `frontend/src/components/erp/EmployeeDetailsSheet.tsx` (compact desktop layout, reactive against lookup, auto-grade assignment, navigation, inline editing, printable sheet, CSV export).
+   - Integration: Connected into `frontend/src/components/erp/ErpHrmView.tsx` under the `employee-management` submodule.
+   - Service: Extended `frontend/src/services/hrm.service.ts` with typed EmployeeProfileData interface and `getNextEmployeeCode()` method.
+
+Verification: Backend test suite `npm run test:hrm-module` passed with 51/51 tests (100%), TypeScript compiled with 0 errors across both backend and frontend (`tsc --noEmit`), and HTTP 200 verified on `/erp/hrm`.
+```
