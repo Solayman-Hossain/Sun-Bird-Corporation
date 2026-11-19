@@ -1,8 +1,26 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
+export interface IEmployeeEmergencyContact {
+  name: string;
+  relationship: string;
+  phone: string;
+  altPhone?: string;
+  address?: string;
+  isPrimary?: boolean;
+}
+
+export interface IEmployeeDocument {
+  docType: string;
+  title: string;
+  docUrl: string;
+  expiryDate?: Date;
+  verified?: boolean;
+}
+
 export interface IEmployeeProfile extends Document {
   _id: Types.ObjectId;
   userId: Types.ObjectId;
+  organizationId?: Types.ObjectId;
   employeeCode: string;
   department: string;
   designation: string;
@@ -24,6 +42,61 @@ export interface IEmployeeProfile extends Document {
     lat?: number;
     lng?: number;
   };
+  personalInfo?: {
+    firstName?: string;
+    lastName?: string;
+    dateOfBirth?: Date;
+    gender?: 'MALE' | 'FEMALE' | 'OTHER';
+    bloodGroup?: string;
+    nidNumber?: string;
+    passportNumber?: string;
+    maritalStatus?: string;
+    religion?: string;
+    nationality?: string;
+    photoUrl?: string;
+    signatureUrl?: string;
+  };
+  contactInfo?: {
+    personalEmail?: string;
+    officialEmail?: string;
+    personalPhone?: string;
+    officialPhone?: string;
+    presentAddress?: string;
+    permanentAddress?: string;
+  };
+  emergencyContacts?: IEmployeeEmergencyContact[];
+  employmentDetails?: {
+    departmentId?: Types.ObjectId;
+    designationId?: Types.ObjectId;
+    jobGradeId?: Types.ObjectId;
+    employmentTypeId?: Types.ObjectId;
+    reportingToId?: Types.ObjectId;
+    shiftId?: Types.ObjectId;
+    employmentType?: string;
+    status?: 'PROBATION' | 'CONFIRMED' | 'SUSPENDED' | 'RESIGNED' | 'TERMINATED' | 'RETIRED';
+    probationEndDate?: Date;
+    confirmationDate?: Date;
+    resignationDate?: Date;
+    lastWorkingDate?: Date;
+    offboardingNotes?: string;
+    offboardingClearance?: {
+      itClearance: boolean;
+      accountsClearance: boolean;
+      adminClearance: boolean;
+      hrClearance: boolean;
+    };
+    onboardingChecklist?: Array<{ task: string; completed: boolean; completedAt?: Date }>;
+  };
+  bankDetails?: {
+    bankName?: string;
+    branchName?: string;
+    accountName?: string;
+    accountNo?: string;
+    routingNo?: string;
+    paymentMethod?: 'BANK' | 'CASH' | 'MFS' | 'CHEQUE';
+  };
+  documents?: IEmployeeDocument[];
+  salaryStructureId?: Types.ObjectId;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -115,6 +188,99 @@ export const EmployeeProfileSchema = new Schema<IEmployeeProfile>(
     officeLatLng: {
       lat: { type: Number },
       lng: { type: Number },
+    },
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organization',
+    },
+    personalInfo: {
+      firstName: { type: String, trim: true },
+      lastName: { type: String, trim: true },
+      dateOfBirth: { type: Date },
+      gender: { type: String, enum: ['MALE', 'FEMALE', 'OTHER'] },
+      bloodGroup: { type: String, trim: true },
+      nidNumber: { type: String, trim: true },
+      passportNumber: { type: String, trim: true },
+      maritalStatus: { type: String, trim: true },
+      religion: { type: String, trim: true },
+      nationality: { type: String, trim: true, default: 'Bangladeshi' },
+      photoUrl: { type: String, trim: true },
+      signatureUrl: { type: String, trim: true },
+    },
+    contactInfo: {
+      personalEmail: { type: String, trim: true, lowercase: true },
+      officialEmail: { type: String, trim: true, lowercase: true },
+      personalPhone: { type: String, trim: true },
+      officialPhone: { type: String, trim: true },
+      presentAddress: { type: String, trim: true },
+      permanentAddress: { type: String, trim: true },
+    },
+    emergencyContacts: [
+      {
+        name: { type: String, required: true },
+        relationship: { type: String, required: true },
+        phone: { type: String, required: true },
+        altPhone: { type: String },
+        address: { type: String },
+        isPrimary: { type: Boolean, default: false },
+      },
+    ],
+    employmentDetails: {
+      departmentId: { type: Schema.Types.ObjectId, ref: 'Department' },
+      designationId: { type: Schema.Types.ObjectId, ref: 'Designation' },
+      jobGradeId: { type: Schema.Types.ObjectId, ref: 'JobGrade' },
+      employmentTypeId: { type: Schema.Types.ObjectId, ref: 'EmploymentType' },
+      reportingToId: { type: Schema.Types.ObjectId, ref: 'EmployeeProfile' },
+      shiftId: { type: Schema.Types.ObjectId, ref: 'Shift' },
+      employmentType: { type: String, default: 'PERMANENT' },
+      status: {
+        type: String,
+        enum: ['PROBATION', 'CONFIRMED', 'SUSPENDED', 'RESIGNED', 'TERMINATED', 'RETIRED'],
+        default: 'PROBATION',
+      },
+      probationEndDate: { type: Date },
+      confirmationDate: { type: Date },
+      resignationDate: { type: Date },
+      lastWorkingDate: { type: Date },
+      offboardingNotes: { type: String },
+      offboardingClearance: {
+        itClearance: { type: Boolean, default: false },
+        accountsClearance: { type: Boolean, default: false },
+        adminClearance: { type: Boolean, default: false },
+        hrClearance: { type: Boolean, default: false },
+      },
+      onboardingChecklist: [
+        {
+          task: { type: String, required: true },
+          completed: { type: Boolean, default: false },
+          completedAt: { type: Date },
+        },
+      ],
+    },
+    bankDetails: {
+      bankName: { type: String, trim: true },
+      branchName: { type: String, trim: true },
+      accountName: { type: String, trim: true },
+      accountNo: { type: String, trim: true },
+      routingNo: { type: String, trim: true },
+      paymentMethod: {
+        type: String,
+        enum: ['BANK', 'CASH', 'MFS', 'CHEQUE'],
+        default: 'BANK',
+      },
+    },
+    documents: [
+      {
+        docType: { type: String, required: true },
+        title: { type: String, required: true },
+        docUrl: { type: String, required: true },
+        expiryDate: { type: Date },
+        verified: { type: Boolean, default: false },
+      },
+    ],
+    salaryStructureId: {
+      type: Schema.Types.ObjectId,
+      ref: 'SalaryStructure',
     },
     isActive: {
       type: Boolean,

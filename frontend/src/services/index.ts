@@ -18,3 +18,4 @@ export * from './inventoryManagement.service';
 export * from './documentManagement.service';
 export * from './accounting.service';
 export * from './orderProcessing.service';
+export * from './hrm.service';

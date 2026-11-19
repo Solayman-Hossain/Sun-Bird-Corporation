@@ -13,6 +13,7 @@
     "test:pos-checkout": "ts-node -r dotenv/config src/services/verify-pos-checkout.ts",
     "test:document-service": "ts-node src/services/verify-document-service.ts",
     "test:order-module": "ts-node -r dotenv/config src/services/verify-order-module.ts",
+    "test:hrm-module": "ts-node -r dotenv/config src/services/verify-hrm-module.ts",
     "test:document-module": "ts-node src/services/verify-document-module.ts",
     "test:accounting-module": "ts-node src/services/verify-accounting-module.ts",
     "test:logistics-service": "ts-node -r dotenv/config src/services/verify-logistics-service.ts",

@@ -51,7 +51,7 @@ import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUs
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
 import { ErpPurchaseView } from '../../components/erp/ErpPurchaseView';
-import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule } from '../../types';
+import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -124,6 +124,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isPurchaseMenuExpanded, setIsPurchaseMenuExpanded] = useState<boolean>(true);
   const [orderSubmodule, setOrderSubmodule] = useState<OrderSubmodule>('order-dashboard');
   const [isOrderMenuExpanded, setIsOrderMenuExpanded] = useState<boolean>(true);
+  const [hrmSubmodule, setHrmSubmodule] = useState<HrmSubmodule>('hr-dashboard');
+  const [isHrmMenuExpanded, setIsHrmMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -727,12 +729,119 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
               )}
             </div>
 
+            {/* HRM & Payroll Module — Accordion (Module 10) */}
+            <div>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('hrm');
+                  setIsHrmMenuExpanded(!isHrmMenuExpanded);
+                }}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'hrm'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+              >
+                <User className={`w-4 h-4 shrink-0 ${activeTab === 'hrm' ? 'text-[#e6b980]' : 'text-slate-400'}`} />
+                {isSidebarOpen && (
+                  <>
+                    <div className="text-left truncate flex-1">
+                      <span className="block leading-tight">07. HR &amp; Payroll</span>
+                      <span className="text-[10px] opacity-75 font-normal block">এইচ আর ও পে-রোল</span>
+                    </div>
+                    {isHrmMenuExpanded ? (
+                      <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+                    ) : (
+                      <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+                    )}
+                  </>
+                )}
+              </button>
+              {isHrmMenuExpanded && isSidebarOpen && activeTab === 'hrm' && (
+                <div className="ml-3 mt-1 space-y-0.5 border-l border-slate-700/60 pl-3 max-h-96 overflow-y-auto">
+                  {[
+                    { id: 'hr-dashboard' as HrmSubmodule, label: '01. HR Dashboard' },
+                    { id: 'employee-management' as HrmSubmodule, label: '02. Employee Management' },
+                    { id: 'employee-directory' as HrmSubmodule, label: '03. Employee Directory' },
+                    { id: 'employee-profile' as HrmSubmodule, label: '04. Employee Profile' },
+                    { id: 'employee-onboarding' as HrmSubmodule, label: '05. Employee Onboarding' },
+                    { id: 'employee-offboarding' as HrmSubmodule, label: '06. Employee Offboarding' },
+                    { id: 'departments' as HrmSubmodule, label: '07. Departments' },
+                    { id: 'designations' as HrmSubmodule, label: '08. Designations' },
+                    { id: 'job-grades' as HrmSubmodule, label: '09. Job Grades' },
+                    { id: 'employment-types' as HrmSubmodule, label: '10. Employment Types' },
+                    { id: 'employee-documents' as HrmSubmodule, label: '11. Employee Documents' },
+                    { id: 'employee-id-card' as HrmSubmodule, label: '12. Employee ID Card' },
+                    { id: 'employee-contacts' as HrmSubmodule, label: '13. Employee Contacts' },
+                    { id: 'emergency-contacts' as HrmSubmodule, label: '14. Emergency Contacts' },
+                    { id: 'org-chart' as HrmSubmodule, label: '15. Organization Chart' },
+                    { id: 'attendance-management' as HrmSubmodule, label: '16. Attendance Management' },
+                    { id: 'attendance-dashboard' as HrmSubmodule, label: '17. Attendance Dashboard' },
+                    { id: 'attendance-entry' as HrmSubmodule, label: '18. Attendance Entry' },
+                    { id: 'attendance-import' as HrmSubmodule, label: '19. Attendance Import' },
+                    { id: 'attendance-correction' as HrmSubmodule, label: '20. Attendance Correction' },
+                    { id: 'shift-management' as HrmSubmodule, label: '21. Shift Management' },
+                    { id: 'shift-assignment' as HrmSubmodule, label: '22. Shift Assignment' },
+                    { id: 'roster-management' as HrmSubmodule, label: '23. Roster Management' },
+                    { id: 'holiday-management' as HrmSubmodule, label: '24. Holiday Management' },
+                    { id: 'leave-management' as HrmSubmodule, label: '25. Leave Management' },
+                    { id: 'leave-requests' as HrmSubmodule, label: '26. Leave Requests' },
+                    { id: 'leave-approval' as HrmSubmodule, label: '27. Leave Approval' },
+                    { id: 'leave-types' as HrmSubmodule, label: '28. Leave Types' },
+                    { id: 'leave-balance' as HrmSubmodule, label: '29. Leave Balance' },
+                    { id: 'leave-calendar' as HrmSubmodule, label: '30. Leave Calendar' },
+                    { id: 'overtime-management' as HrmSubmodule, label: '31. Overtime Management' },
+                    { id: 'late-early-leave' as HrmSubmodule, label: '32. Late & Early Leave' },
+                    { id: 'payroll-management' as HrmSubmodule, label: '33. Payroll Management' },
+                    { id: 'payroll-dashboard' as HrmSubmodule, label: '34. Payroll Dashboard' },
+                    { id: 'salary-structure' as HrmSubmodule, label: '35. Salary Structure' },
+                    { id: 'salary-components' as HrmSubmodule, label: '36. Salary Components' },
+                    { id: 'salary-assignment' as HrmSubmodule, label: '37. Salary Assignment' },
+                    { id: 'payroll-processing' as HrmSubmodule, label: '38. Payroll Processing' },
+                    { id: 'payroll-review' as HrmSubmodule, label: '39. Payroll Review' },
+                    { id: 'payroll-approval' as HrmSubmodule, label: '40. Payroll Approval' },
+                    { id: 'salary-payment' as HrmSubmodule, label: '41. Salary Payment' },
+                    { id: 'payslip' as HrmSubmodule, label: '42. Payslip' },
+                    { id: 'payroll-history' as HrmSubmodule, label: '43. Payroll History' },
+                    { id: 'employee-loan' as HrmSubmodule, label: '44. Employee Loan' },
+                    { id: 'employee-advance' as HrmSubmodule, label: '45. Employee Advance' },
+                    { id: 'loan-repayment' as HrmSubmodule, label: '46. Loan Repayment' },
+                    { id: 'expense-reimbursement' as HrmSubmodule, label: '47. Expense Reimbursement' },
+                    { id: 'performance-management' as HrmSubmodule, label: '48. Performance Management' },
+                    { id: 'training-development' as HrmSubmodule, label: '49. Training & Development' },
+                    { id: 'hr-reports' as HrmSubmodule, label: '50. HR Reports' },
+                    { id: 'hr-audit-logs' as HrmSubmodule, label: '51. HR Audit Logs' },
+                    { id: 'hr-settings' as HrmSubmodule, label: '52. HR Settings' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'hrm' && hrmSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('hrm');
+                          setHrmSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {/* Standard ERP Modules */}
             {[
               { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
               { id: 'inventory' as ErpTab, label: 'Inventory & FEFO', labelBn: 'ইনভেন্টরি ও FEFO মেয়াদ', icon: Boxes },
               { id: 'accounting' as ErpTab, label: 'Accounts & Partnership', labelBn: 'আয়-ব্যয় ও পার্টনারশিপ', icon: DollarSign },
-              { id: 'hrm' as ErpTab, label: 'HRM & Payroll', labelBn: 'এইচ আর ও পে-রোল', icon: User },
               { id: 'banners' as ErpTab, label: 'Banners & Social', labelBn: 'ব্যানার ও সোশ্যাল মিডিয়া', icon: Menu },
               { id: 'lc' as ErpTab, label: 'Import L/C Tracker', labelBn: 'আমদানি এল/সি ট্র্যাকার', icon: Ship },
               { id: 'support' as ErpTab, label: 'RMA & Support Desk', labelBn: 'RMA ওয়ারেন্টি ও ইনবক্স', icon: ShieldAlert },
@@ -940,7 +1049,12 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
           {activeTab === 'accounting' && <ErpAccountingView />}
 
           {/* TAB: HRM & Payroll */}
-          {activeTab === 'hrm' && <ErpHrmView />}
+          {activeTab === 'hrm' && (
+            <ErpHrmView
+              submodule={hrmSubmodule}
+              onSelectSubmodule={(sub) => setHrmSubmodule(sub)}
+            />
+          )}
 
           {/* TAB: Banner & Social Manager */}
           {activeTab === 'banners' && <ErpBannerManagerView />}

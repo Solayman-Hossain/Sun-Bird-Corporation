@@ -70,5 +70,28 @@ export * from './PickingSession';
 export * from './PackingSession';
 export * from './OrderSettings';
 
+// HR & Payroll Module 10 Models
+export * from './Department';
+export * from './Designation';
+export * from './JobGrade';
+export * from './EmploymentType';
+export * from './Shift';
+export * from './RosterSchedule';
+export * from './Holiday';
+export * from './AttendanceCorrection';
+export * from './LeaveType';
+export * from './LeaveRequest';
+export * from './LeaveBalance';
+export * from './SalaryComponent';
+export * from './SalaryStructure';
+export * from './PayrollBatch';
+export * from './Payslip';
+export * from './EmployeeAdvance';
+export * from './ExpenseReimbursement';
+export * from './PerformanceReview';
+export * from './TrainingRecord';
+export * from './HrSettings';
+
+
 
 

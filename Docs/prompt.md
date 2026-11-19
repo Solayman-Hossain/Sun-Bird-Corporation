@@ -1803,3 +1803,41 @@ Implemented Module 09: Complete Order Processing & E-Commerce Integration in the
 
 Verification: Execute `npm run test:order-module` (58 assertions passed, 0 failed), run `npm run build` on backend (0 errors) and frontend (58/58 static pages generated in Next.js 16.4.5 Turbopack, 0 errors).
 ```
+
+
+---
+
+## PROMPT 71: MODULE 10 — COMPLETE HRM, EMPLOYEE MANAGEMENT, ATTENDANCE, LEAVE, PAYROLL & EXPENSES
+```
+Implemented Module 10: Complete HRM, Employee Management, Attendance, Leave, Payroll & Salary Management inside Sun Bird Corporation ERP with zero duplicate collections and strict double-entry General Ledger integration.
+
+1. Architecture & Business Logic:
+   - Central Employee Master: In-place extension of `EmployeeProfile` with organization isolation, structured personal/contact data, emergency contacts, employment milestones, and salary structure linking.
+   - Geofenced & Biometric Attendance: GPS distance verification with configurable geofencing threshold, grace period (15m default), automated late flag calculation, and bulk biometric punch importing.
+   - Leave Accrual & Balance Control: Annual quota initialization, paid vs unpaid leaves, balance deduction validation preventing negative balances, and multi-tier approval workflow.
+   - Automated Salary & Payroll Batch Computation: Earnings (Basic, HRA, Medical, Conveyance, Allowances), deductions (Tax, Loan installments, Salary advances), and net pay calculation.
+   - Real-Time Double-Entry General Ledger Posting: Automated generation and posting of balanced Journal Vouchers via `AccountingService.createJournalVoucher()`:
+     * Accrual: Debit Salaries Expense (6110), Credit Accrued Salaries (2100).
+     * Salary Advance: Debit Employee Advances (1150), Credit Bank/Cash (1020).
+     * Expense Reimbursement: Debit Respective Expense Account, Credit Bank/Cash (1020).
+     * Settlement & Disbursement: Debit Accrued Salaries (2100), Credit Bank/Cash (1020), transitioning advances to RECOVERED.
+   - Full Audit Logging: Auditing every create, update, approval, and disbursement using AuditLogService.
+
+2. Submodule Coverage (52 Submodules):
+   - 01-15 Employee Management: HR Dashboard, Employee Management, Employee Directory, Employee Profile, Employee Onboarding (interactive checklist), Employee Offboarding (departmental clearance: IT, Accounts, Admin, HR), Departments, Designations, Job Grades, Employment Types, Employee Documents, Employee ID Card (digital view with blood group and QR payload), Employee Contacts, Emergency Contacts, Organization Chart.
+   - 16-24 Attendance & Schedules: Attendance Management, Attendance Dashboard, Attendance Entry (GPS Geofence + Biometric), Attendance Import, Attendance Correction Requests & Processing, Shift Management, Shift Assignment, Roster Management, Holiday Management.
+   - 25-32 Leave & Overtime: Leave Management, Leave Requests, Leave Approval, Leave Types, Leave Balance Tracking, Leave Calendar, Overtime Management, Late & Early Leave Tracking.
+   - 33-43 Payroll & Payslips: Payroll Management, Payroll Dashboard, Salary Structure, Salary Components, Salary Assignment, Payroll Processing (batch compute), Payroll Review, Payroll Approval, Salary Payment (bank transfer/cash disbursement), Payslip (digital itemized view and print format), Payroll History.
+   - 44-47 Loans, Advances & Claims: Employee Loan (installment schedule generation), Employee Advance (request, approval, disbursement with journal vouchers), Loan Repayment, Expense Reimbursement (receipt submission, managerial approval, accounts settlement).
+   - 48-52 Performance, Analytics & Administration: Performance Management (KPI metrics, scoring, increments), Training & Development (programs, certifications, attendee tracking), HR Reports (Headcount report, Payroll analytics), HR Audit Logs, HR Settings (work days, grace periods).
+
+3. Backend & Frontend Implementation:
+   - Models (21 Models in backend/src/models/): Department, Designation, JobGrade, EmploymentType, Shift, RosterSchedule, Holiday, AttendanceCorrection, LeaveType, LeaveRequest, LeaveBalance, SalaryComponent, SalaryStructure, PayrollBatch, Payslip, EmployeeAdvance, ExpenseReimbursement, PerformanceReview, TrainingRecord, HrSettings, extended EmployeeProfile.
+   - Services: EmployeeManagementService, AttendanceShiftService, LeaveManagementService, PayrollCalculationService, EmployeeLoanAdvanceService, HRAuxiliaryService.
+   - Controller & Routes: HrmController (50+ handlers), hrmRoutes.ts (60+ endpoints) mounted at /api/v1/erp/hrm.
+   - Automated Verification: backend/src/services/verify-hrm-module.ts (51 assertions across 19 test suites, 100% passed).
+   - Frontend Types & Service: frontend/src/types/index.ts (HrmSubmodule), frontend/src/services/hrm.service.ts (60+ typed API client functions).
+   - Frontend UI: frontend/src/components/erp/ErpHrmView.tsx (real API-connected view with 6 KPI cards, 5 modal workflows, tables for all submodules), frontend/src/app/erp/page.tsx (52-submodule sidebar accordion under 07. HR & Payroll).
+
+Verification: Execute `npm run test:hrm-module` (51 assertions passed, 0 failed), run `npm run build` on backend (0 errors) and frontend (58/58 static pages generated in Next.js 16.4.5 Turbopack, 0 errors).
+```
