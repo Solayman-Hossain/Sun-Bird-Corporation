@@ -92,6 +92,18 @@ export * from './PerformanceReview';
 export * from './TrainingRecord';
 export * from './HrSettings';
 
+// Marketing, Banners & Social Module 11 Models
+export * from './WebsiteBanner';
+export * from './MarketingCampaign';
+export * from './MarketingPromotion';
+export * from './LandingPage';
+export * from './WebsiteContent';
+export * from './SocialAccount';
+export * from './SocialPost';
+export * from './NavigationMenu';
+export * from './MarketingSettings';
+
+
 
 
 

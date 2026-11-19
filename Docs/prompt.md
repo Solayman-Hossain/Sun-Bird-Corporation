@@ -1873,3 +1873,49 @@ Task: Implement a full-featured desktop-style Employee Details Sheet in Sun Bird
 
 Verification: Backend test suite `npm run test:hrm-module` passed with 51/51 tests (100%), TypeScript compiled with 0 errors across both backend and frontend (`tsc --noEmit`), and HTTP 200 verified on `/erp/hrm`.
 ```
+
+
+---
+
+## PROMPT 73: MODULE 11 — BANNERS, SOCIAL MEDIA, MARKETING & CONTENT MANAGEMENT WITH GEMINI AI CO-PILOT
+```text
+Task: Implement MODULE 11 — Banners, Social Media, Marketing & Content Management in Sun Bird Corporation ERP and E-Commerce storefront with end-to-end Google Gemini AI Co-Pilot integration across all content generation, campaigns, SEO, and social media copy.
+
+1. Business Logic & Marketing Engine Architecture:
+   - Centralized Marketing Hub: Full organization multi-tenancy (organizationId) isolation across all campaigns, banners, landing pages, social accounts, and content items.
+   - Website Banners & Homepage Sliders: Main, Hero, Promotional, Category, Product, Brand, Sidebar, Footer, Mobile, and Custom banners with responsive breakpoints, hex colors, overlay controls, and sequential display ordering.
+   - Secure Public Display Safeguard: Public endpoints (/api/v1/public/marketing/*) strictly enforce status = 'PUBLISHED', approvalStatus = 'APPROVED', startDate <= now <= endDate, and organization matching. Never displays draft, rejected, or expired banners.
+   - Promotional Campaigns: Sequential campaign code generation (CMP-YYYY-XXXX), multi-tier discounts (PERCENTAGE, FIXED_AMOUNT, BUY_X_GET_Y, FREE_SHIPPING), budget tracking, coupon code integration, and quorum approval routing.
+   - Content Versioning & Rollback: WebsiteContent and LandingPage records preserve complete historical versions array with author and timestamp; one-click instant rollback capability.
+   - Multi-Platform Social Media: Official account connection management (Facebook, Instagram, LinkedIn, YouTube, X), platform character length validation, multi-variant post generation, scheduled auto-publishing, and calendar heatmaps.
+   - Gemini AI Co-Pilot Integration: Full integration with Google Gemini 1.5 Pro via @google/genai SDK (MarketingAiService.ts) with human-in-the-loop safeguards and domain-tailored deterministic medical fallbacks. Capabilities include:
+     * Banner copy & CTAs
+     * Campaign concept, strategy & target audience
+     * Multi-platform social captions & trending hashtags
+     * SEO metadata, meta title, meta description & keywords
+     * Promotional landing page structure & hero copy
+     * Content optimization & Tone/Readability enhancement
+   - Automated Publishing Scheduler: MarketingSchedulerService automated background jobs for auto-activation, expiration, and social post publishing.
+   - Performance & Attribution Analytics: Aggregated real KPIs (campaign counts, status breakdown, spend, clicks, impressions, platform content distribution) with zero fabricated statistics.
+
+2. Submodule Coverage (31 Submodules under 08. Banners & Social):
+   - 01-07 Dashboard & Promotions: Marketing Dashboard, Website Banners, Homepage Sliders, Promotional Campaigns, Product Promotions, Category Promotions, Brand Promotions.
+   - 08-13 Website & Content: Landing Pages, Website Content, Homepage Sections, Promotional Popups, Announcement Bar, Navigation Menu Management.
+   - 14-20 Social Media & Calendars: Social Media Management, Social Media Accounts, Social Media Content, Social Media Calendar, Content Planner, Marketing Calendar, Campaign Scheduler.
+   - 21-26 Creative & Publishing: SEO Management, Media Gallery, Content Templates, Content Approval, Scheduled Publishing, Published Content.
+   - 27-31 Analytics & Logs: Campaign Analytics, Social Analytics, Marketing Reports, Marketing Settings, Marketing Activity Logs.
+
+3. Backend & Frontend Implementation:
+   - Models (9 Models in backend/src/models/): WebsiteBanner, MarketingCampaign, MarketingPromotion, LandingPage, WebsiteContent, SocialAccount, SocialPost, NavigationMenu, MarketingSettings.
+   - Services (7 Services in backend/src/services/): MarketingCampaignService, BannerSliderService, WebsiteContentService, SocialMediaService, MarketingSchedulerService, MarketingAnalyticsService, MarketingAiService.
+   - RBAC & Permissions: Registered 'marketing' module in permissionRegistry.ts with 9 granular actions.
+   - Controller & Routes: MarketingController.ts, marketingRoutes.ts (ERP routes mounted at /api/v1/erp/marketing), publicMarketingRoutes.ts (Storefront public routes at /api/v1/public/marketing).
+   - Frontend Types & Service: frontend/src/types/index.ts (MarketingSubmodule), frontend/src/services/marketing.service.ts (typed API client with AI helper functions).
+   - Frontend UI: frontend/src/components/erp/ErpMarketingView.tsx, ErpMarketingView.css (responsive layout, 31 submodules, modal forms with AI Co-Pilot auto-generation buttons, audit log viewer, printable views).
+   - Public Website Integration: HeroBanner.tsx and AnnouncementBar.tsx reactively consuming live published banners/announcements with graceful fallbacks.
+   - ERP Navigation: frontend/src/app/erp/page.tsx updated with expandable accordion for "08. Banners & Social" housing all 31 submodules.
+
+4. Verification:
+   - Automated Backend Test Suite: backend/src/services/verify-marketing-module.ts executed with 12/12 test suites passing (100%).
+   - Strict TypeScript Compilation: backend/tsconfig.json and frontend/tsconfig.json both compile with 0 errors (`tsc --noEmit`).
+```

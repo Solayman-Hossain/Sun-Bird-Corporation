@@ -1,0 +1,27 @@
+.marketing-view-container {
+  min-height: 100%;
+}
+
+.marketing-card {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.marketing-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(30, 57, 50, 0.1), 0 8px 10px -6px rgba(30, 57, 50, 0.05);
+}
+
+.banner-preview-box {
+  background-size: cover;
+  background-position: center;
+  transition: all 0.3s ease;
+}
+
+@media print {
+  body > * {
+    display: none !important;
+  }
+  #printable-marketing-report {
+    display: block !important;
+  }
+}

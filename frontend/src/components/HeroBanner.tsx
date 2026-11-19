@@ -7,7 +7,7 @@ import './HeroBanner.css';
 import { ChevronLeft, ChevronRight, ArrowRight, ShieldCheck, Truck } from 'lucide-react';
 
 export interface HeroSlideData {
-  id: number;
+  id: number | string;
   label: string;
   heading: string;
   description: string;
@@ -113,29 +113,69 @@ export function HeroBanner() {
   const [isTabHidden, setIsTabHidden] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  // Sync custom banners from storage
+  // Sync banners from live Marketing API with localStorage & static fallback
   useEffect(() => {
-    const loadCustomBanners = () => {
+    let isCancelled = false;
+
+    const loadBanners = async () => {
+      // 1. First try live public marketing API
+      try {
+        const res = await fetch('/api/v1/public/marketing/banners?type=HERO_SLIDER');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+            const liveSlides: HeroSlideData[] = json.data.map((b: any, index: number) => ({
+              id: b._id || index + 1,
+              label: b.subtitle || 'আধুনিক সমাধান',
+              heading: b.title || b.bannerName,
+              description: b.description || 'সান বার্ড কর্পোরেশনের ডিজিডিএ অনুমোদিত মেডিকেল পণ্য ও বিশ্বস্ত সেবা।',
+              primaryCta: {
+                label: b.buttonText || 'পণ্য দেখুন',
+                href: b.buttonUrl || '#products',
+              },
+              secondaryCta: {
+                label: 'অর্ডার ট্র্যাক করুন',
+                href: '/track',
+              },
+              image: b.desktopImageUrl || b.bannerImageUrl || '/images/products/icu-bed.svg',
+              alt: b.title || b.bannerName || 'মেডিকেল ব্যানার',
+            }));
+            if (!isCancelled) {
+              setSlides(liveSlides);
+              return;
+            }
+          }
+        }
+      } catch {
+        // Fall through to localStorage/fallback
+      }
+
+      // 2. Next check localStorage
       if (typeof window !== 'undefined') {
         const saved = localStorage.getItem('sbc_custom_banners');
         if (saved) {
           try {
             const parsed = JSON.parse(saved);
             if (Array.isArray(parsed) && parsed.length > 0) {
-              setSlides(parsed);
+              if (!isCancelled) setSlides(parsed);
               return;
             }
           } catch {
             // fallback
           }
         }
-        setSlides(HERO_SLIDES);
       }
+
+      // 3. Fallback to default slides
+      if (!isCancelled) setSlides(HERO_SLIDES);
     };
 
-    loadCustomBanners();
-    window.addEventListener('sbc_banners_updated', loadCustomBanners);
-    return () => window.removeEventListener('sbc_banners_updated', loadCustomBanners);
+    loadBanners();
+    window.addEventListener('sbc_banners_updated', loadBanners);
+    return () => {
+      isCancelled = true;
+      window.removeEventListener('sbc_banners_updated', loadBanners);
+    };
   }, []);
 
   const touchStartXRef = useRef<number | null>(null);

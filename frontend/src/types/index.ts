@@ -1789,3 +1789,38 @@ export interface CreditNoteDocItem {
   createdAt: string;
 }
 
+// Module 11 — Banners, Social Media, Marketing & Content Management Submodules (31 Submodules)
+export type MarketingSubmodule =
+  | 'marketing-dashboard'
+  | 'website-banners'
+  | 'homepage-sliders'
+  | 'promotional-campaigns'
+  | 'product-promotions'
+  | 'category-promotions'
+  | 'brand-promotions'
+  | 'landing-pages'
+  | 'website-content'
+  | 'homepage-sections'
+  | 'promotional-popups'
+  | 'announcement-bar'
+  | 'navigation-menu'
+  | 'social-media-management'
+  | 'social-accounts'
+  | 'social-content'
+  | 'social-calendar'
+  | 'content-planner'
+  | 'marketing-calendar'
+  | 'campaign-scheduler'
+  | 'seo-management'
+  | 'media-gallery'
+  | 'content-templates'
+  | 'content-approval'
+  | 'scheduled-publishing'
+  | 'published-content'
+  | 'campaign-analytics'
+  | 'social-analytics'
+  | 'marketing-reports'
+  | 'marketing-settings'
+  | 'marketing-activity-logs';
+
+

@@ -12,6 +12,7 @@
     "test:cart-checkout": "ts-node -r dotenv/config src/services/verify-cart-checkout.ts",
     "test:pos-checkout": "ts-node -r dotenv/config src/services/verify-pos-checkout.ts",
     "test:document-service": "ts-node src/services/verify-document-service.ts",
+    "test:marketing-module": "ts-node -r dotenv/config src/services/verify-marketing-module.ts",
     "test:order-module": "ts-node -r dotenv/config src/services/verify-order-module.ts",
     "test:hrm-module": "ts-node -r dotenv/config src/services/verify-hrm-module.ts",
     "test:document-module": "ts-node src/services/verify-document-module.ts",

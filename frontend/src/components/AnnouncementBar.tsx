@@ -7,6 +7,7 @@ import { Truck, ShieldCheck, Gift, PhoneCall, X } from 'lucide-react';
 
 export function AnnouncementBar() {
   const [isVisible, setIsVisible] = useState(true);
+  const [customAnnouncement, setCustomAnnouncement] = useState<{ text: string; link?: string } | null>(null);
 
   useEffect(() => {
     try {
@@ -17,6 +18,31 @@ export function AnnouncementBar() {
     } catch {
       // LocalStorage access fallback
     }
+
+    // Check for live published announcement bar from Marketing Module
+    let isMounted = true;
+    const fetchLiveAnnouncement = async () => {
+      try {
+        const res = await fetch('/api/v1/public/marketing/announcements');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            if (isMounted) {
+              setCustomAnnouncement({
+                text: json.data.title || json.data.description || json.data.bannerName,
+                link: json.data.buttonUrl,
+              });
+            }
+          }
+        }
+      } catch {
+        // Fallback
+      }
+    };
+    fetchLiveAnnouncement();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleDismiss = () => {
@@ -33,12 +59,22 @@ export function AnnouncementBar() {
   return (
     <div className="bg-[#1e3932] text-white text-xs font-medium border-b border-[#2d5248] relative z-50">
       <div className="max-w-7xl mx-auto px-4 h-9 flex items-center justify-between gap-4">
-        {/* Left message: Free Shipping */}
+        {/* Left message: Free Shipping or Live Custom Announcement */}
         <div className="flex items-center gap-2 text-slate-100">
           <Truck className="w-3.5 h-3.5 text-[#e6b980] shrink-0" />
-          <span className="truncate">
-            Free shipping on orders over <strong className="text-[#e6b980] font-semibold">৳5,000</strong> across 64 districts
-          </span>
+          {customAnnouncement ? (
+            customAnnouncement.link ? (
+              <a href={customAnnouncement.link} className="truncate hover:underline text-[#e6b980]">
+                {customAnnouncement.text}
+              </a>
+            ) : (
+              <span className="truncate text-[#e6b980] font-semibold">{customAnnouncement.text}</span>
+            )
+          ) : (
+            <span className="truncate">
+              Free shipping on orders over <strong className="text-[#e6b980] font-semibold">৳5,000</strong> across 64 districts
+            </span>
+          )}
         </div>
 
         {/* Center message: DGDA Certification & Warranty (Hidden on mobile) */}

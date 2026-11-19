@@ -66,7 +66,7 @@ export function ErpBannerManagerView() {
 
   const [activeTab, setActiveTab] = useState<'BANNERS' | 'SOCIAL'>('BANNERS');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingBannerId, setEditingBannerId] = useState<number | null>(null);
+  const [editingBannerId, setEditingBannerId] = useState<number | string | null>(null);
 
   // Banner form state
   const [label, setLabel] = useState('');
@@ -162,7 +162,7 @@ export function ErpBannerManagerView() {
     setIsEditModalOpen(false);
   };
 
-  const handleDeleteBanner = (id: number) => {
+  const handleDeleteBanner = (id: number | string) => {
     if (banners.length <= 1) {
       showToast('হোমপেজে কমপক্ষে ১টি সক্রিয় ব্যানার থাকতে হবে।', 'error');
       return;

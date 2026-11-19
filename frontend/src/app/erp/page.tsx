@@ -45,13 +45,13 @@ import { ErpSupportView } from '../../components/erp/ErpSupportView';
 import { ErpDocumentManagementView } from '../../components/erp/ErpDocumentManagementView';
 import { ErpProductEntryView } from '../../components/erp/ErpProductEntryView';
 import { ErpHrmView } from '../../components/erp/ErpHrmView';
-import { ErpBannerManagerView } from '../../components/erp/ErpBannerManagerView';
+import { ErpMarketingView } from '../../components/erp/ErpMarketingView';
 import { ErpOrganizationView, OrgSubmodule } from '../../components/erp/ErpOrganizationView';
 import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUserManagementView';
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
 import { ErpPurchaseView } from '../../components/erp/ErpPurchaseView';
-import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule } from '../../types';
+import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -126,6 +126,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isOrderMenuExpanded, setIsOrderMenuExpanded] = useState<boolean>(true);
   const [hrmSubmodule, setHrmSubmodule] = useState<HrmSubmodule>('hr-dashboard');
   const [isHrmMenuExpanded, setIsHrmMenuExpanded] = useState<boolean>(true);
+  const [marketingSubmodule, setMarketingSubmodule] = useState<MarketingSubmodule>('marketing-dashboard');
+  const [isMarketingMenuExpanded, setIsMarketingMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -837,12 +839,100 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
               )}
             </div>
 
+            {/* Banners, Social Media & Marketing Module — Accordion (Module 11) */}
+            <div>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('banners');
+                  setIsMarketingMenuExpanded(!isMarketingMenuExpanded);
+                }}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'banners'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+              >
+                <Menu className={`w-4 h-4 shrink-0 ${activeTab === 'banners' ? 'text-[#e6b980]' : 'text-slate-400'}`} />
+                {isSidebarOpen && (
+                  <>
+                    <div className="text-left truncate flex-1">
+                      <span className="block leading-tight">08. Banners &amp; Social</span>
+                      <span className="text-[10px] opacity-75 font-normal block">ব্যানার ও সোশ্যাল মিডিয়া</span>
+                    </div>
+                    {isMarketingMenuExpanded ? (
+                      <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+                    ) : (
+                      <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+                    )}
+                  </>
+                )}
+              </button>
+
+              {/* 31 Submodules Accordion for Marketing */}
+              {isSidebarOpen && isMarketingMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5 max-h-60 overflow-y-auto">
+                  {[
+                    { id: 'marketing-dashboard' as MarketingSubmodule, label: '1. Marketing Dashboard' },
+                    { id: 'website-banners' as MarketingSubmodule, label: '2. Website Banners' },
+                    { id: 'homepage-sliders' as MarketingSubmodule, label: '3. Homepage Sliders' },
+                    { id: 'promotional-campaigns' as MarketingSubmodule, label: '4. Promotional Campaigns' },
+                    { id: 'product-promotions' as MarketingSubmodule, label: '5. Product Promotions' },
+                    { id: 'category-promotions' as MarketingSubmodule, label: '6. Category Promotions' },
+                    { id: 'brand-promotions' as MarketingSubmodule, label: '7. Brand Promotions' },
+                    { id: 'landing-pages' as MarketingSubmodule, label: '8. Landing Pages' },
+                    { id: 'website-content' as MarketingSubmodule, label: '9. Website Content' },
+                    { id: 'homepage-sections' as MarketingSubmodule, label: '10. Homepage Sections' },
+                    { id: 'promotional-popups' as MarketingSubmodule, label: '11. Promotional Popups' },
+                    { id: 'announcement-bar' as MarketingSubmodule, label: '12. Announcement Bar' },
+                    { id: 'navigation-menu' as MarketingSubmodule, label: '13. Navigation Menu Management' },
+                    { id: 'social-media-management' as MarketingSubmodule, label: '14. Social Media Management' },
+                    { id: 'social-accounts' as MarketingSubmodule, label: '15. Social Media Accounts' },
+                    { id: 'social-content' as MarketingSubmodule, label: '16. Social Media Content' },
+                    { id: 'social-calendar' as MarketingSubmodule, label: '17. Social Media Calendar' },
+                    { id: 'content-planner' as MarketingSubmodule, label: '18. Content Planner' },
+                    { id: 'marketing-calendar' as MarketingSubmodule, label: '19. Marketing Calendar' },
+                    { id: 'campaign-scheduler' as MarketingSubmodule, label: '20. Campaign Scheduler' },
+                    { id: 'seo-management' as MarketingSubmodule, label: '21. SEO Management' },
+                    { id: 'media-gallery' as MarketingSubmodule, label: '22. Media Gallery' },
+                    { id: 'content-templates' as MarketingSubmodule, label: '23. Content Templates' },
+                    { id: 'content-approval' as MarketingSubmodule, label: '24. Content Approval' },
+                    { id: 'scheduled-publishing' as MarketingSubmodule, label: '25. Scheduled Publishing' },
+                    { id: 'published-content' as MarketingSubmodule, label: '26. Published Content' },
+                    { id: 'campaign-analytics' as MarketingSubmodule, label: '27. Campaign Analytics' },
+                    { id: 'social-analytics' as MarketingSubmodule, label: '28. Social Analytics' },
+                    { id: 'marketing-reports' as MarketingSubmodule, label: '29. Marketing Reports' },
+                    { id: 'marketing-settings' as MarketingSubmodule, label: '30. Marketing Settings' },
+                    { id: 'marketing-activity-logs' as MarketingSubmodule, label: '31. Marketing Activity Logs' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'banners' && marketingSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('banners');
+                          setMarketingSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {/* Standard ERP Modules */}
             {[
               { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
               { id: 'inventory' as ErpTab, label: 'Inventory & FEFO', labelBn: 'ইনভেন্টরি ও FEFO মেয়াদ', icon: Boxes },
               { id: 'accounting' as ErpTab, label: 'Accounts & Partnership', labelBn: 'আয়-ব্যয় ও পার্টনারশিপ', icon: DollarSign },
-              { id: 'banners' as ErpTab, label: 'Banners & Social', labelBn: 'ব্যানার ও সোশ্যাল মিডিয়া', icon: Menu },
               { id: 'lc' as ErpTab, label: 'Import L/C Tracker', labelBn: 'আমদানি এল/সি ট্র্যাকার', icon: Ship },
               { id: 'support' as ErpTab, label: 'RMA & Support Desk', labelBn: 'RMA ওয়ারেন্টি ও ইনবক্স', icon: ShieldAlert },
             ].map((item) => {
@@ -1056,8 +1146,13 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
             />
           )}
 
-          {/* TAB: Banner & Social Manager */}
-          {activeTab === 'banners' && <ErpBannerManagerView />}
+          {/* TAB: Banner, Social Media & Marketing Module */}
+          {activeTab === 'banners' && (
+            <ErpMarketingView
+              submodule={marketingSubmodule}
+              onSelectSubmodule={setMarketingSubmodule}
+            />
+          )}
 
           {/* TAB 5: Import L/C Tracker */}
           {activeTab === 'lc' && (

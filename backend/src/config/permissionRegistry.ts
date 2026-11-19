@@ -160,6 +160,23 @@ export const PERMISSION_REGISTRY: ModulePermissionDefinition[] = [
     ],
   },
   {
+    moduleId: 'marketing',
+    moduleNameEn: 'Banners, Social & Marketing',
+    moduleNameBn: 'ব্যানার, সোশ্যাল ও মার্কেটিং',
+    description: 'Website banners, homepage sliders, campaigns, promotions, landing pages, CMS content, and social media',
+    actions: [
+      { action: 'VIEW', actionLabelEn: 'View Marketing Hub', actionLabelBn: 'মার্কেটিং হাব দেখুন' },
+      { action: 'CREATE', actionLabelEn: 'Create Banner/Campaign', actionLabelBn: 'ব্যানার ও ক্যাম্পেইন তৈরি' },
+      { action: 'READ', actionLabelEn: 'Read Marketing Details', actionLabelBn: 'মার্কেটিং বিবরণ পড়ুন' },
+      { action: 'UPDATE', actionLabelEn: 'Edit Marketing Content', actionLabelBn: 'মার্কেটিং কনটেন্ট সম্পাদনা' },
+      { action: 'DELETE', actionLabelEn: 'Delete Draft Content', actionLabelBn: 'ড্রাফট কনটেন্ট মুছুন', isDangerous: true },
+      { action: 'APPROVE', actionLabelEn: 'Approve Content/Campaigns', actionLabelBn: 'ক্যাম্পেইন ও কনটেন্ট অনুমোদন' },
+      { action: 'PUBLISH', actionLabelEn: 'Publish Content Live', actionLabelBn: 'কনটেন্ট প্রকাশ করুন' },
+      { action: 'MANAGE_SOCIAL', actionLabelEn: 'Manage Social Media', actionLabelBn: 'সোশ্যাল মিডিয়া পরিচালনা' },
+      { action: 'MANAGE_SETTINGS', actionLabelEn: 'Configure Marketing Settings', actionLabelBn: 'মার্কেটিং সেটিংস' },
+    ],
+  },
+  {
     moduleId: 'audit',
     moduleNameEn: 'Audit Trail & Compliance',
     moduleNameBn: 'অডিট ট্রেইল ও নিরাপত্তা',
