@@ -1011,7 +1011,7 @@ export function ErpMarketingView({
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
               <Calendar className="w-4 h-4 text-[#1e3932]" />
-              <span>মার্কেটিং মাস্টার ক্যালেন্ডার</span>
+              <span>মার্কেটিং মাস্টার ক্যালেন্ডার ({new Date().getFullYear()})</span>
             </h3>
             <span className="text-xs text-slate-500">ক্যাম্পেইন ও সোশ্যাল পোস্টের সমন্বিত সূচি</span>
           </div>

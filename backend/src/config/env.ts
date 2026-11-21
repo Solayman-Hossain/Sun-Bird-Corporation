@@ -1,8 +1,24 @@
 import dotenv from 'dotenv';
+import path from 'path';
 import { cleanEnv, str, port, url, bool } from 'envalid';
 
-// Load environment variables from .env file
+// Load environment variables from cwd .env and backend/.env
 dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+// Standardize configuration names across Docker, local, and deployment environments
+if (!process.env.MONGODB_URI && process.env.MONGO_URI) {
+  process.env.MONGODB_URI = process.env.MONGO_URI;
+}
+if (!process.env.MONGO_URI && process.env.MONGODB_URI) {
+  process.env.MONGO_URI = process.env.MONGODB_URI;
+}
+if (!process.env.JWT_ACCESS_SECRET && process.env.JWT_SECRET) {
+  process.env.JWT_ACCESS_SECRET = process.env.JWT_SECRET;
+}
+if (!process.env.JWT_SECRET && process.env.JWT_ACCESS_SECRET) {
+  process.env.JWT_SECRET = process.env.JWT_ACCESS_SECRET;
+}
 
 export const env = cleanEnv(process.env, {
   PORT: port({

@@ -1464,11 +1464,10 @@ export function EmployeeDetailsSheet() {
 
           <button
             onClick={() => setFilterResignedOnly(!filterResignedOnly)}
-            className={`px-2 py-1 border rounded font-semibold text-xs shadow-xs ${
-              filterResignedOnly
+            className={`px-2 py-1 border rounded font-semibold text-xs shadow-xs ${filterResignedOnly
                 ? 'bg-rose-600 text-white border-rose-700'
                 : 'bg-white text-slate-700 border-[#b2b8c2] hover:bg-slate-100'
-            }`}
+              }`}
           >
             Resigned List
           </button>
@@ -1514,9 +1513,8 @@ export function EmployeeDetailsSheet() {
                       loadEmployeeIntoForm(emp);
                       setMode('view');
                     }}
-                    className={`cursor-pointer hover:bg-emerald-50 transition-colors ${
-                      currentIndex === index ? 'bg-amber-50 font-semibold' : ''
-                    }`}
+                    className={`cursor-pointer hover:bg-emerald-50 transition-colors ${currentIndex === index ? 'bg-amber-50 font-semibold' : ''
+                      }`}
                   >
                     <td className="px-3 py-1 font-mono font-bold text-slate-900">{emp.employeeCode}</td>
                     <td className="px-3 py-1 font-semibold text-slate-800">
@@ -1530,13 +1528,12 @@ export function EmployeeDetailsSheet() {
                     <td className="px-3 py-1 font-mono">৳{(emp.currentSalary || emp.basicSalary || 0).toLocaleString()}</td>
                     <td className="px-3 py-1">
                       <span
-                        className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
-                          emp.isResigned
+                        className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${emp.isResigned
                             ? 'bg-rose-100 text-rose-700'
                             : emp.isActive
-                            ? 'bg-emerald-100 text-emerald-700'
-                            : 'bg-slate-100 text-slate-600'
-                        }`}
+                              ? 'bg-emerald-100 text-emerald-700'
+                              : 'bg-slate-100 text-slate-600'
+                          }`}
                       >
                         {emp.isResigned ? 'পদত্যাগকৃত' : emp.isActive ? 'সক্রিয়' : 'নিষ্ক্রিয়'}
                       </span>

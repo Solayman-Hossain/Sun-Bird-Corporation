@@ -69,15 +69,15 @@ export function ErpDocumentBuilderView() {
 
   // Document meta
   const [docType, setDocType] = useState<'QUOTATION' | 'INVOICE' | 'CHALLAN' | 'VOUCHER'>('QUOTATION');
-  const [docNumber, setDocNumber] = useState('SBC-QT-2026-0941');
-  const [date, setDate] = useState('27/06/2026');
-  const [recipientTitle, setRecipientTitle] = useState('Managing Director');
-  const [recipientCompany, setRecipientCompany] = useState('Samorita Hospital Ltd.');
-  const [recipientAddress, setRecipientAddress] = useState('89/1, Panthapath, Dhaka-1215.');
-  const [subject, setSubject] = useState('Price offer letter of Pathology Items.');
-  const [salutation, setSalutation] = useState('Dear Sir,');
+  const [docNumber, setDocNumber] = useState('SBC-QT-2026-0001');
+  const [date, setDate] = useState('');
+  const [recipientTitle, setRecipientTitle] = useState('');
+  const [recipientCompany, setRecipientCompany] = useState('');
+  const [recipientAddress, setRecipientAddress] = useState('');
+  const [subject, setSubject] = useState('Price Offer / Commercial Quotation');
+  const [salutation, setSalutation] = useState('Dear Sir/Madam,');
   const [openingText, setOpeningText] = useState(
-    'We are supplying these items to various hospitals across Bangladesh. We are willing to supply these certified medical items to your reputed hospital. Below is our price quotation:-'
+    'Thank you for your interest in our certified medical equipment and healthcare products. We are pleased to submit our competitive commercial quotation for your kind review and consideration:-'
   );
 
   // Pad print mode: hide header and footer so user can feed official printed pad into printer
@@ -85,7 +85,7 @@ export function ErpDocumentBuilderView() {
 
   // Dynamic table columns and rows
   const [columns, setColumns] = useState<DynamicDocumentColumn[]>(SAMORITA_COLUMNS);
-  const [rows, setRows] = useState<DynamicDocumentRow[]>(SAMORITA_ROWS);
+  const [rows, setRows] = useState<DynamicDocumentRow[]>([]);
 
   // New column modal / input
   const [newColLabel, setNewColLabel] = useState('');
@@ -603,6 +603,29 @@ export function ErpDocumentBuilderView() {
               </tr>
             </thead>
             <tbody>
+              {rows.length === 0 && (
+                <tr className="no-print">
+                  <td colSpan={columns.length + 1} className="p-8 text-center text-slate-400 bg-white">
+                    <p className="mb-2 text-sm">কোনো আইটেম যোগ করা হয়নি।</p>
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleAddRow}
+                        className="px-3 py-1.5 bg-[#1e3932] text-white rounded text-xs hover:bg-[#142622] font-semibold"
+                      >
+                        + নতুন আইটেম যোগ করুন
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setRows(SAMORITA_ROWS)}
+                        className="px-3 py-1.5 bg-slate-100 text-slate-700 border border-slate-300 rounded text-xs hover:bg-slate-200"
+                      >
+                        স্যাম্পল কোটেশন লোড করুন
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              )}
               {rows.map((row, idx) => (
                 <tr
                   key={row.id}

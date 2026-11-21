@@ -9,7 +9,7 @@ import {
 import { INITIAL_PRODUCTS } from './initialProducts';
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
 
 // Generate lightweight client-side UUID for request correlation
 function generateRequestId(): string {
@@ -128,33 +128,13 @@ export async function fetchProducts(params?: {
     const res = await apiClient<{ success: boolean; data: Product[] }>(
       `/public/products?${searchParams.toString()}`
     );
-    if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+    if (res && res.success && Array.isArray(res.data)) {
       return res.data;
     }
-    return INITIAL_PRODUCTS;
+    return [];
   } catch (e) {
-    // Graceful fallback to initial catalog
-    let list = [...INITIAL_PRODUCTS];
-    if (params?.category && params.category !== 'All') {
-      list = list.filter((p) => p.category === params.category);
-    }
-    if (params?.query) {
-      const q = params.query.toLowerCase();
-      list = list.filter(
-        (p) =>
-          p.nameEn.toLowerCase().includes(q) ||
-          (p.nameBn && p.nameBn.includes(q)) ||
-          p.sku.toLowerCase().includes(q)
-      );
-    }
-    if (params?.filter === 'featured') {
-      list = list.filter((p) => p.isFeatured);
-    } else if (params?.filter === 'new') {
-      list = list.filter((p) => p.isNewArrival);
-    } else if (params?.filter === 'bestseller') {
-      list = list.filter((p) => p.isBestSeller);
-    }
-    return list;
+    console.error('Failed to fetch public products from API:', e);
+    return [];
   }
 }
 
@@ -166,9 +146,10 @@ export async function fetchProductBySku(sku: string): Promise<Product | null> {
     if (res?.success && res?.data) {
       return res.data;
     }
-    return INITIAL_PRODUCTS.find((p) => p.sku === sku) || null;
-  } catch {
-    return INITIAL_PRODUCTS.find((p) => p.sku === sku) || null;
+    return null;
+  } catch (e) {
+    console.error(`Failed to fetch product ${sku} from API:`, e);
+    return null;
   }
 }
 

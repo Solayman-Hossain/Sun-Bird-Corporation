@@ -55,19 +55,18 @@ export const organizationScope = async (
 
       // Check authorization if user is authenticated
       if (req.user) {
-        const { userType, authorizedOrganizations } = req.user as any;
+        const { userType, authorizedOrganizations, defaultOrganizationId } = req.user as any;
         if (userType !== 'SUPER_ADMIN' && userType !== 'DIRECTOR') {
-          if (
-            authorizedOrganizations &&
-            Array.isArray(authorizedOrganizations) &&
-            authorizedOrganizations.length > 0
-          ) {
-            const hasAccess = authorizedOrganizations.some(
-              (id: any) => id.toString() === org!._id.toString()
-            );
+          const allowedOrgs = [
+            ...(Array.isArray(authorizedOrganizations) ? authorizedOrganizations : []).map((id: any) => id?.toString?.() || String(id)),
+            defaultOrganizationId ? (defaultOrganizationId?.toString?.() || String(defaultOrganizationId)) : null,
+          ].filter(Boolean);
+
+          if (allowedOrgs.length > 0) {
+            const hasAccess = allowedOrgs.includes(org._id.toString());
             if (!hasAccess) {
               throw new ForbiddenError(
-                `Access denied: You are not authorized to view or modify organization '${org.displayName}'`
+                `Access denied: You are not authorized to view or modify organization '${org.displayName || org.legalName}'`
               );
             }
           }
@@ -79,7 +78,19 @@ export const organizationScope = async (
       return next();
     }
 
-    // Fallback: Default organization
+    // Fallback: User default organization or System default organization
+    if (req.user && (req.user as any).defaultOrganizationId) {
+      const userDefOrgId = (req.user as any).defaultOrganizationId;
+      if (Types.ObjectId.isValid(userDefOrgId)) {
+        const userOrg = await OrganizationModel.findById(userDefOrgId);
+        if (userOrg) {
+          req.organizationId = userOrg._id;
+          req.organization = userOrg;
+          return next();
+        }
+      }
+    }
+
     const defaultOrg = await OrganizationService.getDefaultOrganization();
     req.organizationId = defaultOrg._id;
     req.organization = defaultOrg;
