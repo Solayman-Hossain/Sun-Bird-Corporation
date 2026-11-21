@@ -47,6 +47,7 @@ import erpMarketingRouter from './erp/marketingRoutes';
 import publicMarketingRouter from './public/marketingRoutes';
 import erpImportRouter from './erp/importRoutes';
 import erpSupportRouter from './erp/supportRoutes';
+import erpMisRouter from './erp/misRoutes';
 import { AuthController } from '../controllers/AuthController';
 import { InventoryController } from '../controllers/InventoryController';
 import { ProductController } from '../controllers/ProductController';
@@ -173,6 +174,9 @@ apiV1Router.use('/erp/import', erpImportRouter);
 
 // ERP RMA & Support Desk (Module 13)
 apiV1Router.use('/erp/support', erpSupportRouter);
+
+// ERP Overview & Advanced MIS Intelligence (Module 14)
+apiV1Router.use('/erp/mis', erpMisRouter);
 
 
 // External Payment & Courier Webhooks mounted at /api/v1/webhooks

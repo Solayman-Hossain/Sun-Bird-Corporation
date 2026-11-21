@@ -48,12 +48,13 @@ import { ErpHrmView } from '../../components/erp/ErpHrmView';
 import { ErpMarketingView } from '../../components/erp/ErpMarketingView';
 import { ErpImportTrackerView } from '../../components/erp/ErpImportTrackerView';
 import { ErpSupportDeskView } from '../../components/erp/ErpSupportDeskView';
+import { ErpExecutiveMisView } from '../../components/erp/ErpExecutiveMisView';
 import { ErpOrganizationView, OrgSubmodule } from '../../components/erp/ErpOrganizationView';
 import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUserManagementView';
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
 import { ErpPurchaseView } from '../../components/erp/ErpPurchaseView';
-import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule, ImportSubmodule, SupportSubmodule } from '../../types';
+import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule, ImportSubmodule, SupportSubmodule, MisSubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -134,6 +135,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isImportMenuExpanded, setIsImportMenuExpanded] = useState<boolean>(true);
   const [supportSubmodule, setSupportSubmodule] = useState<SupportSubmodule>('support-dashboard');
   const [isSupportMenuExpanded, setIsSupportMenuExpanded] = useState<boolean>(true);
+  const [misSubmodule, setMisSubmodule] = useState<MisSubmodule>('executive-dashboard');
+  const [isMisMenuExpanded, setIsMisMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -240,27 +243,133 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
         >
           {/* Navigation Links */}
           <div className="p-3 space-y-1.5 overflow-y-auto no-scrollbar flex-1">
-            {/* 1. Overview */}
-            <button
-              type="button"
-              onClick={() => setActiveTab('overview')}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                activeTab === 'overview'
-                  ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
-                  : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
-              }`}
-              title="Overview & Metrics"
-            >
-              <TrendingUp
-                className={`w-4 h-4 shrink-0 ${activeTab === 'overview' ? 'text-[#e6b980]' : 'text-slate-400'}`}
-              />
-              {isSidebarOpen && (
-                <div className="text-left truncate">
-                  <span className="block leading-tight">Overview & Metrics</span>
-                  <span className="text-[10px] opacity-75 font-normal block">ড্যাশবোর্ড সারাংশ</span>
+            {/* 1. Overview & Advanced MIS — Upgraded Module 14 (58 Submodules) */}
+            <div>
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeTab !== 'overview') setActiveTab('overview');
+                  setIsMisMenuExpanded(!isMisMenuExpanded);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'overview'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+                title="Overview & Advanced MIS"
+              >
+                <div className="flex items-center gap-3 truncate">
+                  <TrendingUp
+                    className={`w-4 h-4 shrink-0 ${activeTab === 'overview' ? 'text-[#e6b980]' : 'text-slate-400'}`}
+                  />
+                  {isSidebarOpen && (
+                    <div className="text-left truncate">
+                      <span className="block leading-tight">01. Overview & MIS</span>
+                      <span className="text-[10px] opacity-75 font-normal block">এক্সিকিউটিভ ড্যাশবোর্ড ও বিআই</span>
+                    </div>
+                  )}
+                </div>
+                {isSidebarOpen && (
+                  isMisMenuExpanded ? (
+                    <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+                  ) : (
+                    <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+                  )
+                )}
+              </button>
+
+              {/* 58 Submodules Accordion for Overview & Advanced MIS */}
+              {isSidebarOpen && isMisMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5 max-h-60 overflow-y-auto">
+                  {[
+                    // Executive Overview (1-6)
+                    { id: 'executive-dashboard' as MisSubmodule, label: '01. Executive Dashboard' },
+                    { id: 'business-overview' as MisSubmodule, label: '02. Business Overview' },
+                    { id: 'org-wise-dashboard' as MisSubmodule, label: '03. Org-wise Dashboard' },
+                    { id: 'dept-wise-dashboard' as MisSubmodule, label: '04. Dept-wise Dashboard' },
+                    { id: 'management-summary' as MisSubmodule, label: '05. Management Summary' },
+                    { id: 'daily-business-digest' as MisSubmodule, label: '06. Daily Business Digest' },
+                    // Sales & Revenue Intelligence (7-14)
+                    { id: 'sales-performance-overview' as MisSubmodule, label: '07. Sales Performance' },
+                    { id: 'revenue-analytics' as MisSubmodule, label: '08. Revenue Analytics' },
+                    { id: 'product-sales-analytics' as MisSubmodule, label: '09. Product Sales BI' },
+                    { id: 'customer-sales-intelligence' as MisSubmodule, label: '10. Customer Intelligence' },
+                    { id: 'regional-sales-analytics' as MisSubmodule, label: '11. Regional Sales BI' },
+                    { id: 'channel-wise-sales' as MisSubmodule, label: '12. Channel-wise Sales' },
+                    { id: 'sales-team-performance' as MisSubmodule, label: '13. Sales Team Performance' },
+                    { id: 'sales-target-vs-achievement' as MisSubmodule, label: '14. Target vs Achievement' },
+                    // Financial Intelligence (15-24)
+                    { id: 'financial-health-dashboard' as MisSubmodule, label: '15. Financial Health' },
+                    { id: 'profit-loss-analysis' as MisSubmodule, label: '16. Profit & Loss (P&L)' },
+                    { id: 'cash-flow-intelligence' as MisSubmodule, label: '17. Cash Flow BI' },
+                    { id: 'balance-sheet-overview' as MisSubmodule, label: '18. Balance Sheet' },
+                    { id: 'accounts-receivable-aging' as MisSubmodule, label: '19. AR Aging Intelligence' },
+                    { id: 'accounts-payable-intelligence' as MisSubmodule, label: '20. AP Intelligence' },
+                    { id: 'expense-analysis' as MisSubmodule, label: '21. Expense Analysis' },
+                    { id: 'tax-vat-overview' as MisSubmodule, label: '22. Tax & VAT Overview' },
+                    { id: 'working-capital-tracker' as MisSubmodule, label: '23. Working Capital' },
+                    { id: 'financial-ratio-analysis' as MisSubmodule, label: '24. Financial Ratios' },
+                    // Inventory & Procurement Intelligence (25-33)
+                    { id: 'inventory-overview' as MisSubmodule, label: '25. Inventory Overview' },
+                    { id: 'stock-valuation-report' as MisSubmodule, label: '26. Stock Valuation' },
+                    { id: 'slow-moving-dead-stock' as MisSubmodule, label: '27. Slow/Dead Stock' },
+                    { id: 'fast-moving-products' as MisSubmodule, label: '28. Fast Moving SKUs' },
+                    { id: 'stock-reorder-alerts' as MisSubmodule, label: '29. Stock Reorder Alerts' },
+                    { id: 'procurement-spend-analysis' as MisSubmodule, label: '30. Procurement Spend' },
+                    { id: 'supplier-performance-scorecard' as MisSubmodule, label: '31. Supplier Scorecard' },
+                    { id: 'purchase-order-status-tracker' as MisSubmodule, label: '32. PO Status Tracker' },
+                    { id: 'landed-cost-summary' as MisSubmodule, label: '33. Landed Cost Summary' },
+                    // E-commerce & Marketing Intelligence (34-40)
+                    { id: 'ecommerce-sales-overview' as MisSubmodule, label: '34. E-commerce BI' },
+                    { id: 'traffic-conversion-analytics' as MisSubmodule, label: '35. Traffic & Conversion' },
+                    { id: 'cart-abandonment-tracker' as MisSubmodule, label: '36. Cart Abandonment' },
+                    { id: 'digital-marketing-roi' as MisSubmodule, label: '37. Marketing ROI' },
+                    { id: 'campaign-performance' as MisSubmodule, label: '38. Campaign Performance' },
+                    { id: 'coupon-discount-usage' as MisSubmodule, label: '39. Coupon & Discounts' },
+                    { id: 'customer-acquisition-cost' as MisSubmodule, label: '40. CAC Analytics' },
+                    // Import & Operational Intelligence (41-47)
+                    { id: 'import-overview-tracker' as MisSubmodule, label: '41. Import BI Tracker' },
+                    { id: 'lc-status-summary' as MisSubmodule, label: '42. LC Status Summary' },
+                    { id: 'shipment-delay-tracker' as MisSubmodule, label: '43. Shipment Delay Alert' },
+                    { id: 'port-demurrage-risk' as MisSubmodule, label: '44. Demurrage Risk' },
+                    { id: 'order-fulfillment-cycle-time' as MisSubmodule, label: '45. Fulfillment Cycle' },
+                    { id: 'delivery-fleet-performance' as MisSubmodule, label: '46. Fleet Performance' },
+                    { id: 'support-service-sla-tracker' as MisSubmodule, label: '47. Support SLA Tracker' },
+                    // Advanced Business Intelligence (48-58)
+                    { id: 'ai-business-analyst' as MisSubmodule, label: '48. AI Business Analyst' },
+                    { id: 'ai-forecasting-center' as MisSubmodule, label: '49. AI Forecasting Center' },
+                    { id: 'predictive-revenue-model' as MisSubmodule, label: '50. Predictive Revenue' },
+                    { id: 'inventory-demand-forecast' as MisSubmodule, label: '51. Inventory Forecast' },
+                    { id: 'anomaly-risk-detector' as MisSubmodule, label: '52. Anomaly & Risk Radar' },
+                    { id: 'executive-decision-support' as MisSubmodule, label: '53. Decision Support' },
+                    { id: 'custom-report-builder' as MisSubmodule, label: '54. Custom Report Builder' },
+                    { id: 'scheduled-management-reports' as MisSubmodule, label: '55. Scheduled Reports' },
+                    { id: 'comparative-business-trends' as MisSubmodule, label: '56. Comparative Trends' },
+                    { id: 'data-quality-audit-tracker' as MisSubmodule, label: '57. Data Quality Audit' },
+                    { id: 'executive-settings-kpi-targets' as MisSubmodule, label: '58. KPI Target Settings' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'overview' && misSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('overview');
+                          setMisSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
-            </button>
+            </div>
 
             {/* 2. Expandable Organization Management Section */}
             <div className="pt-1">
@@ -1180,109 +1289,12 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
 
         {/* Content Canvas */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
-          {/* TAB 1: Overview & Metrics */}
+          {/* TAB 1: Overview & Advanced MIS Intelligence (Module 14) */}
           {activeTab === 'overview' && (
-            <div className="space-y-6 animate-in fade-in">
-              <div>
-                <h2 className="text-xl font-extrabold text-slate-900 font-serif">
-                  অপারেশন্স ওভারভিউ ও মেকানিক্স (Operations Overview)
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  সান বার্ড সেন্ট্রাল ওয়্যারহাউজ, কুরিয়ার ডিসপ্যাচ ও রেভিনিউ মেকানিক্স।
-                </p>
-              </div>
-
-              {/* 4 Hero Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-slate-400">
-                    <span className="text-xs font-bold uppercase tracking-wider">মাসিক গ্রস রেভিনিউ</span>
-                    <DollarSign className="w-4 h-4 text-emerald-600" />
-                  </div>
-                  <div className="font-extrabold text-2xl font-mono text-slate-900">
-                    ৳৪,৮৫,২৫০
-                  </div>
-                  <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1">
-                    <TrendingUp className="w-3 h-3" />
-                    <span>+১২.৮% গত মাসের তুলনায় বৃদ্ধি</span>
-                  </span>
-                </div>
-
-                <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-slate-400">
-                    <span className="text-xs font-bold uppercase tracking-wider">সক্রিয় কুরিয়ার শিপমেন্ট</span>
-                    <Truck className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <div className="font-extrabold text-2xl font-mono text-slate-900">
-                    ৪২টি পার্সেল
-                  </div>
-                  <span className="text-xs text-blue-700 font-semibold">
-                    পাঠাও ও স্টেডফাস্ট লাইভ ট্রানজিট
-                  </span>
-                </div>
-
-                <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-slate-400">
-                    <span className="text-xs font-bold uppercase tracking-wider">তেজগাঁও ওয়্যারহাউজ ক্যাপাসিটি</span>
-                    <Boxes className="w-4 h-4 text-[#1e3932]" />
-                  </div>
-                  <div className="font-extrabold text-2xl font-mono text-slate-900">
-                    ৭৮.৪%
-                  </div>
-                  <span className="text-xs text-slate-500 font-semibold">
-                    ২,৮৫০টি সার্টিফাইড ইউনিট সংরক্ষিত
-                  </span>
-                </div>
-
-                <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-slate-400">
-                    <span className="text-xs font-bold uppercase tracking-wider">RMA ওয়ারেন্টি ডিসপুট</span>
-                    <ShieldAlert className="w-4 h-4 text-amber-600" />
-                  </div>
-                  <div className="font-extrabold text-2xl font-mono text-slate-900">
-                    ৩টি টিকেট
-                  </div>
-                  <span className="text-xs text-amber-800 font-semibold">
-                    ১টি ল্যাব রিভিউতে অনুমোদিত
-                  </span>
-                </div>
-              </div>
-
-              {/* Quick Navigation Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div
-                  onClick={() => setActiveTab('orders')}
-                  className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-[#1e3932] shadow-xs cursor-pointer transition-all flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
-                      <Package className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900 text-sm">অর্ডার কিউ ও কুরিয়ার ডিসপ্যাচ</h4>
-                      <p className="text-xs text-slate-500">প্যাকেজিং, চালান জেনারেশন ও পাঠাও হ্যান্ডওভার</p>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-slate-400" />
-                </div>
-
-                <div
-                  onClick={() => setActiveTab('inventory')}
-                  className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-[#1e3932] shadow-xs cursor-pointer transition-all flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                      <Boxes className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900 text-sm">ইনভেন্টরি ও FEFO এক্সপায়ারি ট্র্যাকার</h4>
-                      <p className="text-xs text-slate-500">মেয়াদ উত্তীর্ণের ঝুঁকি প্রতিরোধ ও স্টক অ্যাডজাস্টমেন্ট</p>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-slate-400" />
-                </div>
-              </div>
-            </div>
+            <ErpExecutiveMisView
+              submodule={misSubmodule}
+              onSelectSubmodule={setMisSubmodule}
+            />
           )}
 
           {/* TAB: Organization Profile Management (Module 01) */}

@@ -1,0 +1,58 @@
+/* ErpExecutiveMisView.css */
+
+.erp-executive-mis-container {
+  font-family: inherit;
+}
+
+.mis-kpi-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.mis-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.45);
+  border-color: rgba(230, 185, 128, 0.4);
+}
+
+.mis-badge-gold {
+  background: rgba(230, 185, 128, 0.15);
+  color: #e6b980;
+  border: 1px solid rgba(230, 185, 128, 0.3);
+}
+
+.mis-badge-emerald {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.mis-badge-amber {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.mis-badge-rose {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+/* Custom scrollbar */
+.erp-executive-mis-container ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.erp-executive-mis-container ::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.erp-executive-mis-container ::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.8);
+  border-radius: 4px;
+}
+
+.erp-executive-mis-container ::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 1);
+}

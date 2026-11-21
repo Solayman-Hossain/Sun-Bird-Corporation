@@ -1911,3 +1911,72 @@ export type SupportSubmodule =
   | 'support-mis-analytics'
   | 'support-settings'
   | 'support-activity-logs';
+
+
+// Module 14 — Overview & Advanced MIS Submodules (58 Submodules)
+export type MisSubmodule =
+  // 1. Executive Overview (1-6)
+  | 'executive-dashboard'
+  | 'business-overview'
+  | 'org-wise-dashboard'
+  | 'dept-wise-dashboard'
+  | 'management-summary'
+  | 'daily-business-digest'
+  // 2. Sales & Revenue Intelligence (7-14)
+  | 'sales-performance-overview'
+  | 'revenue-analytics'
+  | 'product-sales-analytics'
+  | 'customer-sales-intelligence'
+  | 'regional-sales-analytics'
+  | 'channel-wise-sales'
+  | 'sales-team-performance'
+  | 'sales-target-vs-achievement'
+  // 3. Financial Intelligence (15-24)
+  | 'financial-health-dashboard'
+  | 'profit-loss-analysis'
+  | 'cash-flow-intelligence'
+  | 'balance-sheet-overview'
+  | 'accounts-receivable-aging'
+  | 'accounts-payable-intelligence'
+  | 'expense-analysis'
+  | 'tax-vat-overview'
+  | 'working-capital-tracker'
+  | 'financial-ratio-analysis'
+  // 4. Inventory & Procurement Intelligence (25-33)
+  | 'inventory-overview'
+  | 'stock-valuation-report'
+  | 'slow-moving-dead-stock'
+  | 'fast-moving-products'
+  | 'stock-reorder-alerts'
+  | 'procurement-spend-analysis'
+  | 'supplier-performance-scorecard'
+  | 'purchase-order-status-tracker'
+  | 'landed-cost-summary'
+  // 5. E-commerce & Marketing Intelligence (34-40)
+  | 'ecommerce-sales-overview'
+  | 'traffic-conversion-analytics'
+  | 'cart-abandonment-tracker'
+  | 'digital-marketing-roi'
+  | 'campaign-performance'
+  | 'coupon-discount-usage'
+  | 'customer-acquisition-cost'
+  // 6. Import & Operational Intelligence (41-47)
+  | 'import-overview-tracker'
+  | 'lc-status-summary'
+  | 'shipment-delay-tracker'
+  | 'port-demurrage-risk'
+  | 'order-fulfillment-cycle-time'
+  | 'delivery-fleet-performance'
+  | 'support-service-sla-tracker'
+  // 7. Advanced Business Intelligence (48-58)
+  | 'ai-business-analyst'
+  | 'ai-forecasting-center'
+  | 'predictive-revenue-model'
+  | 'inventory-demand-forecast'
+  | 'anomaly-risk-detector'
+  | 'executive-decision-support'
+  | 'custom-report-builder'
+  | 'scheduled-management-reports'
+  | 'comparative-business-trends'
+  | 'data-quality-audit-tracker'
+  | 'executive-settings-kpi-targets';

@@ -1998,3 +1998,43 @@ Task: Implement MODULE 12 — Import / LC Tracker & AI-Powered Import Management
 4. Verification:
    - Automated Backend Test Suite: backend/src/services/verify-support-module.ts executed with 39/39 tests passing (100%).
    - Strict TypeScript Compilation: backend/tsconfig.json and frontend/tsconfig.json both compile cleanly with 0 errors (`tsc --noEmit`).
+
+
+---
+
+## PROMPT 76 (MODULE 14) — OVERVIEW & ADVANCED MIS: AI-POWERED EXECUTIVE DASHBOARD, BUSINESS INTELLIGENCE & MANAGEMENT DECISION SUPPORT
+
+### Implementation Summary:
+1. Business Logic & Enterprise Architecture:
+   - Organization Isolation: Multi-tenant data segregation (`organizationId`) across all KPI Targets, Forecast Records, Risk Radar Anomaly Records, Strategic Recommendations, Custom Report Templates, Daily Business Digests, and MIS Configuration Settings.
+   - Cross-Module Real ERP Data Integration: Reconciles posted double-entry journal vouchers (`JournalEntryModel`), actual sales orders (`OrderModel`), WAC & FIFO inventory valuations (`ProductModel` & `ProductBatchModel`), purchase commitments (`PurchaseOrderModel`), import letters of credit (`ImportLCModel`), customer service tickets (`SupportTicket`), RMA claims, and employee headcount into a unified executive single source of truth.
+   - Real Financial Intelligence & Standard Ratios: Official computation of Gross Margin %, Operating Margin %, Net Profit Margin %, Current Ratio, Quick Ratio (Acid-Test), Debt-to-Equity, and Working Capital without fake/hardcoded numbers or calculating profit from sales revenue alone.
+   - Gemini 1.5 Pro AI Decision Support Integration (`MisAiService.ts`):
+     * AI Executive Business Analyst Copilot: Real-time natural language query answering in both Bengali and English with granular source citations, confidence scoring (85-99%), and recommended drill-downs.
+     * AI Multi-Scenario Cross-Module Forecasting: Generates Conservative (-5% to -10%), Expected (+5%), and Optimistic (+12% to +18%) econometric projections with boundary calculations (lower/upper bounds), macroeconomic assumptions, and narrative explanations.
+     * Automated Risk & Anomaly Radar: Automated scanning across liquidity buffers, overdue customer receivables, expiring medical inventory batches, and pending support ticket breaches with one-click review/mitigation workflows.
+     * Strategic Management Recommendations: AI-generated strategic actions categorized by revenue optimization, cost reduction, liquidity preservation, and inventory reordering with expected financial impact and review lifecycles.
+     * Automated Daily Business Digest: Daily executive summary narrative synthesized automatically every morning with sales, cash flow, inventory, and operational metrics.
+     * Data Quality & Audit Integrity Tracker: Continuous auditing of unposted draft vouchers, missing product cost prices, and incomplete customer profiles with 0-100 data health scoring.
+
+2. Submodule Coverage (58 Submodules under 01. Overview & MIS):
+   - Executive Overview (01-06): Executive Dashboard, Business Overview, Organization-wise Dashboard, Department-wise Dashboard, Management Summary, Daily Business Digest.
+   - Sales & Revenue Intelligence (07-14): Sales Performance Overview, Revenue Analytics, Product Sales Analytics, Customer Sales Intelligence, Regional Sales Analytics, Channel-wise Sales, Sales Team Performance, Sales Target vs Achievement.
+   - Financial Intelligence (15-24): Financial Health Dashboard, Profit & Loss Analysis, Cash Flow Intelligence, Balance Sheet Overview, Accounts Receivable Aging, Accounts Payable Intelligence, Expense Analysis, Tax & VAT Overview, Working Capital Tracker, Financial Ratio Analysis.
+   - Inventory & Procurement Intelligence (25-33): Inventory Overview, Stock Valuation Report, Slow Moving & Dead Stock, Fast Moving Products, Stock Reorder Alerts, Procurement Spend Analysis, Supplier Performance Scorecard, Purchase Order Status Tracker, Landed Cost Summary.
+   - E-commerce & Marketing Intelligence (34-40): E-commerce Sales Overview, Traffic & Conversion Analytics, Cart Abandonment Tracker, Digital Marketing ROI, Campaign Performance, Coupon & Discount Usage, Customer Acquisition Cost (CAC).
+   - Import & Operational Intelligence (41-47): Import Overview Tracker, LC Status Summary, Shipment Delay Tracker, Port Demurrage Risk, Order Fulfillment Cycle Time, Delivery Fleet Performance, Support Service SLA Tracker.
+   - Advanced Business Intelligence (48-58): AI Business Analyst, AI Forecasting Center, Predictive Revenue Model, Inventory Demand Forecast, Anomaly & Risk Detector, Executive Decision Support, Custom Report Builder, Scheduled Management Reports, Comparative Business Trends, Data Quality Audit Tracker, Executive Settings & KPI Targets.
+
+3. Backend & Frontend Implementation:
+   - Models: KpiTarget, MisForecastRecord, MisRiskRecord, MisRecommendation, CustomReportTemplate, MisSettings, DailyBusinessDigest.
+   - Services: MisAiService, MisExecutiveDashboardService, MisDecisionSupportService.
+   - Permissions: Registered 'mis' module in permissionRegistry.ts with 12 granular actions (`VIEW`, `READ`, `EXPORT`, `FINANCIAL_VIEW`, `KPI_MANAGE`, `FORECAST_VIEW`, `RISK_MANAGE`, `RECOMMENDATION_MANAGE`, `REPORT_BUILDER`, `REPORT_SCHEDULE`, `AI_USE`, `MANAGE_SETTINGS`).
+   - Controller & Routes: MisController.ts, misRoutes.ts mounted at /api/v1/erp/mis.
+   - Frontend Types & Service: MisSubmodule in frontend/src/types/index.ts, mis.service.ts typed API client.
+   - Frontend UI: ErpExecutiveMisView.tsx, ErpExecutiveMisView.css (38 Real KPI cards, 7 functional categories selector tabs, interactive P&L and Balance sheet reconciliation, multi-scenario AI forecasting simulator, risk radar, strategic recommendation actions, daily digest viewer, and Gemini 1.5 Pro AI Business Analyst chat drawer).
+   - ERP Navigation: frontend/src/app/erp/page.tsx upgraded Section "01. Overview & MIS" with expandable sidebar accordion containing all 58 submodules.
+
+4. Verification:
+   - Automated Backend Test Suite: backend/src/services/verify-mis-module.ts executed with 47/47 tests passing (100%).
+   - Strict TypeScript Compilation: backend/tsconfig.json and frontend/tsconfig.json both compile cleanly with 0 errors (`tsc --noEmit`).
