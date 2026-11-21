@@ -107,8 +107,8 @@ export function ErpMarketingView({
     buttonLink: '#products',
     displayPosition: 'HOMEPAGE_HERO',
     displayOrder: 1,
-    startDate: new Date().toISOString().slice(0, 10),
-    endDate: new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10),
+    startDate: '',
+    endDate: '',
     backgroundColor: '#1e3932',
     textColor: '#ffffff',
   });
@@ -117,8 +117,8 @@ export function ErpMarketingView({
     name: '',
     campaignType: 'FESTIVAL',
     description: '',
-    startDate: new Date().toISOString().slice(0, 10),
-    endDate: new Date(Date.now() + 15 * 86400000).toISOString().slice(0, 10),
+    startDate: '',
+    endDate: '',
     budget: 50000,
     discountPercentage: 10,
     couponCode: 'EID2026',
@@ -139,7 +139,7 @@ export function ErpMarketingView({
     primaryCaption: '',
     hashtags: '#SunBirdCorp #MedicalEquipment #Healthcare',
     platform: 'FACEBOOK',
-    scheduledDate: new Date().toISOString().slice(0, 10),
+    scheduledDate: '',
   });
 
   const [aiForm, setAiForm] = useState({
@@ -1011,7 +1011,7 @@ export function ErpMarketingView({
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
               <Calendar className="w-4 h-4 text-[#1e3932]" />
-              <span>মার্কেটিং মাস্টার ক্যালেন্ডার ({new Date().getFullYear()})</span>
+              <span>মার্কেটিং মাস্টার ক্যালেন্ডার</span>
             </h3>
             <span className="text-xs text-slate-500">ক্যাম্পেইন ও সোশ্যাল পোস্টের সমন্বিত সূচি</span>
           </div>

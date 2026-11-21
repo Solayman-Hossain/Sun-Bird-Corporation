@@ -148,7 +148,7 @@ export function ErpSupportDeskView({
     serialNumber: '',
     customerName: '',
     customerPhone: '',
-    purchaseDate: new Date().toISOString().split('T')[0],
+    purchaseDate: '',
     warrantyPeriodMonths: 24,
     policyType: 'COMPREHENSIVE',
   });

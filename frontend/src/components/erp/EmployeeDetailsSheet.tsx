@@ -120,8 +120,8 @@ const defaultForm: EmployeeFormState = {
   qualification: 'HSC',
   highQualification: 'H.S.C',
   jobDuration: '0',
-  currentDate: new Date().toISOString().slice(0, 10),
-  joiningDate: new Date().toISOString().slice(0, 10),
+  currentDate: '',
+  joiningDate: '',
   joiningSalary: 10500,
   currentSalary: 10500,
   allowance: 0,
@@ -129,7 +129,7 @@ const defaultForm: EmployeeFormState = {
   department: '',
   designation: '',
   jobGrade: 'Grade-B',
-  dateOfModify: new Date().toISOString().slice(0, 10),
+  dateOfModify: '',
   idCardGiven: false,
   idCardGivenDate: '',
   isResigned: false,
@@ -1557,7 +1557,7 @@ export function EmployeeDetailsSheet() {
             <h2 className="text-sm font-semibold text-gray-700">EMPLOYEE DETAILS SHEET / কর্মীর তথ্যাবলি</h2>
           </div>
           <div className="text-right text-xs">
-            <div>Printed Date: {new Date().toLocaleDateString('bn-BD')}</div>
+            <div>Printed Date: {form.currentDate || '—'}</div>
             <div className="font-mono font-bold text-base mt-1">ID: {form.employeeCode}</div>
           </div>
         </div>

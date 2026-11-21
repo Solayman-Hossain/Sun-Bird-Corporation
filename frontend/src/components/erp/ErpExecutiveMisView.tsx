@@ -754,7 +754,7 @@ export function ErpExecutiveMisView({
                 <h4 className="font-bold text-white text-sm">দৈনিক বিজনেস ডাইজেস্ট (Daily Digest)</h4>
               </div>
               <span className="text-[10px] text-slate-400 font-mono">
-                {dailyDigest?.digestDate || new Date().toISOString().split('T')[0]}
+                {dailyDigest?.digestDate || '—'}
               </span>
             </div>
 
