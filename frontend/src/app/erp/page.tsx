@@ -38,6 +38,7 @@ import {
   ShoppingCart,
   Bot,
   Sparkles,
+  Server,
 } from 'lucide-react';
 import { ErpOrdersView } from '../../components/erp/ErpOrdersView';
 import { ErpInventoryView } from '../../components/erp/ErpInventoryView';
@@ -52,12 +53,13 @@ import { ErpImportTrackerView } from '../../components/erp/ErpImportTrackerView'
 import { ErpSupportDeskView } from '../../components/erp/ErpSupportDeskView';
 import { ErpExecutiveMisView } from '../../components/erp/ErpExecutiveMisView';
 import { ErpAiCentralView } from '../../components/erp/ErpAiCentralView';
+import { ErpSystemAdminView } from '../../components/erp/ErpSystemAdminView';
 import { ErpOrganizationView, OrgSubmodule } from '../../components/erp/ErpOrganizationView';
 import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUserManagementView';
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
 import { ErpPurchaseView } from '../../components/erp/ErpPurchaseView';
-import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule, ImportSubmodule, SupportSubmodule, MisSubmodule, AiSubmodule } from '../../types';
+import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule, ImportSubmodule, SupportSubmodule, MisSubmodule, AiSubmodule, SystemSubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -75,7 +77,8 @@ export type ErpTab =
   | 'banners'
   | 'lc'
   | 'support'
-  | 'ai';
+  | 'ai'
+  | 'system';
 
 export interface ErpDashboardPageProps {
   initialTab?: ErpTab;
@@ -143,6 +146,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isMisMenuExpanded, setIsMisMenuExpanded] = useState<boolean>(true);
   const [aiSubmodule, setAiSubmodule] = useState<AiSubmodule>('ai-dashboard');
   const [isAiMenuExpanded, setIsAiMenuExpanded] = useState<boolean>(true);
+  const [systemSubmodule, setSystemSubmodule] = useState<SystemSubmodule>('sys-dashboard');
+  const [isSystemMenuExpanded, setIsSystemMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -1330,6 +1335,99 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
               )}
             </div>
 
+            {/* 12. System Administration & Platform Configuration (Module 16) */}
+            <div>
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeTab !== 'system') setActiveTab('system');
+                  setIsSystemMenuExpanded(!isSystemMenuExpanded);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'system'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+                title="System Administration & Platform Configuration"
+              >
+                <div className="flex items-center gap-3 truncate">
+                  <Server
+                    className={`w-4 h-4 shrink-0 ${activeTab === 'system' ? 'text-[#e6b980]' : 'text-slate-400'}`}
+                  />
+                  {isSidebarOpen && (
+                    <div className="text-left truncate">
+                      <span className="block leading-tight">12. System Admin</span>
+                      <span className="text-[10px] opacity-75 font-normal block">সিস্টেম প্রশাসন ও কনফিগারেশন</span>
+                    </div>
+                  )}
+                </div>
+                {isSidebarOpen && (
+                  isSystemMenuExpanded ? (
+                    <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+                  ) : (
+                    <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+                  )
+                )}
+              </button>
+
+              {/* 30 Submodules Accordion for System Administration */}
+              {isSidebarOpen && isSystemMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5 max-h-60 overflow-y-auto">
+                  {[
+                    { id: 'sys-dashboard' as SystemSubmodule, label: '01. System Dashboard' },
+                    { id: 'sys-general-settings' as SystemSubmodule, label: '02. General Settings' },
+                    { id: 'sys-org-settings' as SystemSubmodule, label: '03. Organization Settings' },
+                    { id: 'sys-user-admin' as SystemSubmodule, label: '04. User Administration' },
+                    { id: 'sys-role-perms' as SystemSubmodule, label: '05. Role & Permission Admin' },
+                    { id: 'sys-security-center' as SystemSubmodule, label: '06. Security Center' },
+                    { id: 'sys-session-mgmt' as SystemSubmodule, label: '07. Session Management' },
+                    { id: 'sys-login-history' as SystemSubmodule, label: '08. Login History' },
+                    { id: 'sys-audit-logs' as SystemSubmodule, label: '09. Audit & Activity Logs' },
+                    { id: 'sys-db-monitoring' as SystemSubmodule, label: '10. Database Monitoring' },
+                    { id: 'sys-db-backup' as SystemSubmodule, label: '11. Database Backup' },
+                    { id: 'sys-backup-history' as SystemSubmodule, label: '12. Backup History' },
+                    { id: 'sys-restore-mgmt' as SystemSubmodule, label: '13. Restore Management' },
+                    { id: 'sys-storage-mgmt' as SystemSubmodule, label: '14. File Storage Mgmt' },
+                    { id: 'sys-api-mgmt' as SystemSubmodule, label: '15. API Management' },
+                    { id: 'sys-integration-mgmt' as SystemSubmodule, label: '16. Integration Mgmt' },
+                    { id: 'sys-email-config' as SystemSubmodule, label: '17. Email Configuration' },
+                    { id: 'sys-sms-config' as SystemSubmodule, label: '18. SMS Configuration' },
+                    { id: 'sys-notif-settings' as SystemSubmodule, label: '19. Notification Settings' },
+                    { id: 'sys-job-monitoring' as SystemSubmodule, label: '20. Background Jobs' },
+                    { id: 'sys-queue-mgmt' as SystemSubmodule, label: '21. Queue Management' },
+                    { id: 'sys-app-logs' as SystemSubmodule, label: '22. Application Logs' },
+                    { id: 'sys-error-monitoring' as SystemSubmodule, label: '23. Error Monitoring' },
+                    { id: 'sys-performance-monitoring' as SystemSubmodule, label: '24. Performance Monitor' },
+                    { id: 'sys-system-health' as SystemSubmodule, label: '25. System Health' },
+                    { id: 'sys-maintenance-mode' as SystemSubmodule, label: '26. Maintenance Mode' },
+                    { id: 'sys-feature-flags' as SystemSubmodule, label: '27. Feature Flags' },
+                    { id: 'sys-data-import-export' as SystemSubmodule, label: '28. Data Import & Export' },
+                    { id: 'sys-version-updates' as SystemSubmodule, label: '29. Updates & Version' },
+                    { id: 'sys-settings-access' as SystemSubmodule, label: '30. Settings & Access' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'system' && systemSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('system');
+                          setSystemSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {/* Standard ERP Modules */}
             {[
               { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
@@ -1478,6 +1576,14 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
             <ErpAiCentralView
               submodule={aiSubmodule}
               onSelectSubmodule={setAiSubmodule}
+            />
+          )}
+
+          {/* TAB 8: System Administration & Platform Configuration (Module 16) */}
+          {activeTab === 'system' && (
+            <ErpSystemAdminView
+              submodule={systemSubmodule}
+              onSelectSubmodule={setSystemSubmodule}
             />
           )}
         </main>

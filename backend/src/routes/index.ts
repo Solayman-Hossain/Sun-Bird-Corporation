@@ -49,6 +49,7 @@ import erpImportRouter from './erp/importRoutes';
 import erpSupportRouter from './erp/supportRoutes';
 import erpMisRouter from './erp/misRoutes';
 import erpAiRouter from './erp/aiRoutes';
+import erpSystemAdminRouter from './erp/systemAdminRoutes';
 import { AuthController } from '../controllers/AuthController';
 import { InventoryController } from '../controllers/InventoryController';
 import { ProductController } from '../controllers/ProductController';
@@ -182,6 +183,10 @@ apiV1Router.use('/erp/mis', erpMisRouter);
 // ERP AI Assistant & Central Intelligence System (Module 15)
 apiV1Router.use('/erp/ai', erpAiRouter);
 apiV1Router.use('/ai', erpAiRouter);
+
+// ERP System Administration & Platform Configuration (Module 16)
+apiV1Router.use('/erp/system', erpSystemAdminRouter);
+apiV1Router.use('/system', erpSystemAdminRouter);
 
 
 // External Payment & Courier Webhooks mounted at /api/v1/webhooks

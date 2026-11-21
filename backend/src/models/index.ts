@@ -152,3 +152,13 @@ export * from './AiDocumentJob';
 export * from './AiKnowledgeDocument';
 export * from './AiUsageLog';
 export * from './AiSettings';
+
+// System Administration & Platform Configuration Module 16 Models
+export * from './SystemSettings';
+export * from './SecurityPolicy';
+export * from './BackupRecord';
+export * from './RestoreRecord';
+export * from './IntegrationConfig';
+export * from './FeatureFlag';
+export * from './SystemLog';
+export * from './DataExchangeJob';

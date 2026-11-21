@@ -2090,3 +2090,64 @@ Task: Implement MODULE 12 — Import / LC Tracker & AI-Powered Import Management
 4. Verification:
    - Automated Backend Test Suite: `backend/src/services/verify-ai-central-module.ts` executed with 41/41 tests passing (100%).
    - Strict TypeScript Compilation: Both `backend/tsconfig.json` and `frontend/tsconfig.json` compile cleanly with 0 errors (`tsc --noEmit`).
+
+
+---
+
+## PROMPT 78 (MODULE 16) — SYSTEM ADMINISTRATION & PLATFORM CONFIGURATION: CENTRALIZED PLATFORM GOVERNANCE, SECURITY CENTER, DATABASE BACKUPS & INTEGRATIONS
+
+### Implementation Summary:
+1. Business Logic & Enterprise Architecture:
+   - Central Platform Governance: Unifies multi-organization administration, global/regional settings, security center policies, database monitoring, backup & restore workflows, BullMQ queue management, and application logs into one centralized control center.
+   - Zero-Duplicate Architecture: Reuses existing `UserModel`, `OrganizationModel`, `RefreshTokenModel`, `LoginHistoryModel`, and `AuditLogModel`. Added specialized platform models (`SystemSettings`, `SecurityPolicy`, `BackupRecord`, `RestoreRecord`, `IntegrationConfig`, `FeatureFlag`, `SystemLog`, `DataExchangeJob`).
+   - Security Center & Password Governance: Configurable password complexity rules, failed login attempt thresholds (5 attempts), lockout duration (30-45 mins), concurrent session limits, and one-click administrative session revocation via `RefreshTokenModel`.
+   - Safe Read-Only Database Monitoring: Inspects MongoDB Atlas connection state, database name, collection counts, replica set status, and index health with zero destructive commands exposed.
+   - Cryptographic Database Backup & Controlled Restore: Automated and manual backup generation with SHA-256 checksums, document counts, and S3/local destinations. Restore operations strictly require Super Admin confirmation, create an automated pre-restore snapshot checkpoint, and verify post-restore DB read/write availability.
+   - Central Integrations Hub & Live Diagnostic Pings: Real-time health monitoring and latency pings across MongoDB, Redis, AWS S3/MinIO, Gemini 1.5 Pro AI, SMTP Email, Bangladesh SMS gateway, bKash Payment, and Steadfast Courier with masked credentials.
+   - Centralized Feature Flags & Audit Trail: Granular feature toggles (`AI_COPILOT`, `ADVANCED_MIS`, `DOCUMENT_OCR`, `COMMERCIAL_LC_RADAR`, `RMA_AUTO_TRIAGE`, `ECOMMERCE_EXPRESS_CHECKOUT`) with full change history and audit logging.
+   - Maintenance Mode: Instant platform-wide maintenance toggle with emergency bypass for Super Admins.
+
+2. Submodule Coverage (30 Submodules under 12. System Admin):
+   - 01. System Dashboard (`sys-dashboard`): Live KPI cards, system uptime, and infrastructure health summary.
+   - 02. General Settings (`sys-general-settings`): App title, logo, timezone (`Asia/Dhaka`), pagination, and timeouts.
+   - 03. Organization Settings (`sys-org-settings`): Multi-tenant organization profile and policy management.
+   - 04. User Administration (`sys-user-admin`): Account activation, lockout states, and credential lifecycle.
+   - 05. Role & Permission Administration (`sys-role-perms`): Granular RBAC permissions across all ERP modules.
+   - 06. Security Center (`sys-security-center`): Password complexity, lockout thresholds, and session policies.
+   - 07. Session Management (`sys-session-mgmt`): Active refresh-token tracking with instant session revocation.
+   - 08. Login History (`sys-login-history`): Chronological log of successful, failed, and blocked logins.
+   - 09. Audit & Activity Logs (`sys-audit-logs`): Immutable audit trail of administrative modifications.
+   - 10. Database Monitoring (`sys-db-monitoring`): Safe read-only metrics for collections, documents, and connections.
+   - 11. Database Backup (`sys-db-backup`): Instant snapshot trigger with SHA-256 integrity checks.
+   - 12. Backup History (`sys-backup-history`): Archive of verified backup files and retention statuses.
+   - 13. Restore Management (`sys-restore-mgmt`): Controlled restore workflow with safety rollback snapshots.
+   - 14. File Storage Management (`sys-storage-mgmt`): S3 bucket capacity, MIME types, and upload size rules.
+   - 15. API Management (`sys-api-mgmt`): Request metrics, rate-limits, and client credentials.
+   - 16. Integration Management (`sys-integration-mgmt`): Status and diagnostic ping for 8 core external services.
+   - 17. Email Configuration (`sys-email-config`): SMTP transport settings, sender addresses, and delivery logs.
+   - 18. SMS Configuration (`sys-sms-config`): Bangladesh SMS gateway endpoints, sender IDs, and delivery stats.
+   - 19. Notification Settings (`sys-notif-settings`): Multi-channel alert preferences and queue dispatch rules.
+   - 20. Background Job Monitoring (`sys-job-monitoring`): Real-time metrics for BullMQ distributed workers.
+   - 21. Queue Management (`sys-queue-mgmt`): Queue pause/resume and failed job retry controls.
+   - 22. Application Logs (`sys-app-logs`): Centralized log viewer with severity and module filters.
+   - 23. Error Monitoring (`sys-error-monitoring`): Critical error alerts, request IDs, and stack forensics.
+   - 24. Performance Monitoring (`sys-performance-monitoring`): RSS, heap usage, CPU, and event loop metrics.
+   - 25. System Health (`sys-system-health`): Live connectivity status for backend, DB, cache, and cloud services.
+   - 26. Maintenance Mode (`sys-maintenance-mode`): Platform maintenance toggle with Super Admin access.
+   - 27. Feature Flags (`sys-feature-flags`): Enterprise feature switches with audit history.
+   - 28. Data Import & Export (`sys-data-import-export`): Bulk CSV/JSON export actions for core business entities.
+   - 29. System Updates & Version (`sys-version-updates`): Build identifier, Node.js runtime, and deployment info.
+   - 30. System Settings & Access Control (`sys-settings-access`): Administrative access governance and defaults.
+
+3. Backend & Frontend Implementation:
+   - Models: `SystemSettings`, `SecurityPolicy`, `BackupRecord`, `RestoreRecord`, `IntegrationConfig`, `FeatureFlag`, `SystemLog`, `DataExchangeJob`.
+   - Services: `SystemAdminService` (central admin logic, backup/restore, live diagnostic pings, session management, feature flags).
+   - Permissions: Added `system` module in `backend/src/config/permissionRegistry.ts` with 16 granular actions.
+   - Controller & Routes: `SystemAdminController.ts`, `systemAdminRoutes.ts` mounted at `/api/v1/erp/system` and `/api/system`.
+   - Frontend Types & Service: `SystemSubmodule` in `frontend/src/types/index.ts`, `systemAdmin.service.ts` typed API client.
+   - Frontend UI: `ErpSystemAdminView.tsx`, `ErpSystemAdminView.css` featuring 6 comprehensive tabs (Dashboard & Health, General Settings, Security & Sessions, Database & Backups, Integrations & Queues, Logs & Feature Flags).
+   - ERP Navigation: `frontend/src/app/erp/page.tsx` updated with Section "12. System Admin" containing all 30 submodules.
+
+4. Verification:
+   - Automated Backend Test Suite: `backend/src/services/verify-system-admin-module.ts` executed with 52/52 tests passing (100%).
+   - Strict TypeScript Compilation: Both `backend/tsconfig.json` and `frontend/tsconfig.json` compile cleanly with 0 errors (`tsc --noEmit`).

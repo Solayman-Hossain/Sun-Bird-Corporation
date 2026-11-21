@@ -2005,3 +2005,37 @@ export type AiSubmodule =
   | 'ai-audit-logs'
   | 'ai-security-privacy'
   | 'ai-system-settings';
+
+
+// Module 16 — System Administration & Platform Configuration (30 Submodules)
+export type SystemSubmodule =
+  | 'sys-dashboard'
+  | 'sys-general-settings'
+  | 'sys-org-settings'
+  | 'sys-user-admin'
+  | 'sys-role-perms'
+  | 'sys-security-center'
+  | 'sys-session-mgmt'
+  | 'sys-login-history'
+  | 'sys-audit-logs'
+  | 'sys-db-monitoring'
+  | 'sys-db-backup'
+  | 'sys-backup-history'
+  | 'sys-restore-mgmt'
+  | 'sys-storage-mgmt'
+  | 'sys-api-mgmt'
+  | 'sys-integration-mgmt'
+  | 'sys-email-config'
+  | 'sys-sms-config'
+  | 'sys-notif-settings'
+  | 'sys-job-monitoring'
+  | 'sys-queue-mgmt'
+  | 'sys-app-logs'
+  | 'sys-error-monitoring'
+  | 'sys-performance-monitoring'
+  | 'sys-system-health'
+  | 'sys-maintenance-mode'
+  | 'sys-feature-flags'
+  | 'sys-data-import-export'
+  | 'sys-version-updates'
+  | 'sys-settings-access';

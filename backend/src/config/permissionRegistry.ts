@@ -263,6 +263,30 @@ export const PERMISSION_REGISTRY: ModulePermissionDefinition[] = [
       { action: 'EXPORT', actionLabelEn: 'Export Audit Trail', actionLabelBn: 'অডিট এক্সপোর্ট' },
     ],
   },
+  {
+    moduleId: 'system',
+    moduleNameEn: 'System Administration & Platform',
+    moduleNameBn: 'সিস্টেম প্রশাসন ও কনফিগারেশন',
+    description: 'Centralized platform administration, security center, database monitoring, backup/restore, queues, and health',
+    actions: [
+      { action: 'VIEW', actionLabelEn: 'View System Administration', actionLabelBn: 'সিস্টেম প্রশাসন দেখুন' },
+      { action: 'MANAGE_SETTINGS', actionLabelEn: 'Manage Global & Regional Settings', actionLabelBn: 'গ্লোবাল সেটিংস ব্যবস্থাপনা' },
+      { action: 'SECURITY_CENTER', actionLabelEn: 'Manage Security Policies & Sessions', actionLabelBn: 'নিরাপত্তা নীতি ও সেশন' },
+      { action: 'DATABASE_MONITOR', actionLabelEn: 'Monitor Database Metrics', actionLabelBn: 'ডাটাবেজ পর্যবেক্ষণ' },
+      { action: 'BACKUP_MANAGE', actionLabelEn: 'Manage Database Backups', actionLabelBn: 'ব্যাকআপ ব্যবস্থাপনা' },
+      { action: 'RESTORE_EXECUTE', actionLabelEn: 'Execute Database Restore', actionLabelBn: 'রিস্টোর সম্পাদন', isDangerous: true },
+      { action: 'STORAGE_MANAGE', actionLabelEn: 'Manage File Storage', actionLabelBn: 'স্টোরেজ ব্যবস্থাপনা' },
+      { action: 'API_MANAGE', actionLabelEn: 'Manage API Monitoring & Rate Limits', actionLabelBn: 'এপিআই ব্যবস্থাপনা' },
+      { action: 'INTEGRATIONS_MANAGE', actionLabelEn: 'Manage External Integrations', actionLabelBn: 'ইন্টিগ্রেশন ব্যবস্থাপনা' },
+      { action: 'EMAIL_SMS_CONFIG', actionLabelEn: 'Configure Email & SMS Transports', actionLabelBn: 'ইমেইল ও এসএমএস কনফিগ' },
+      { action: 'QUEUES_MANAGE', actionLabelEn: 'Monitor & Manage BullMQ Queues', actionLabelBn: 'কিউ ব্যবস্থাপনা' },
+      { action: 'LOGS_VIEW', actionLabelEn: 'View & Export Application Logs', actionLabelBn: 'অ্যাপ্লিকেশন লগ দেখুন' },
+      { action: 'HEALTH_CHECK', actionLabelEn: 'Run System Health Diagnostics', actionLabelBn: 'সিস্টেম হেলথ ডায়াগনস্টিকস' },
+      { action: 'MAINTENANCE_TOGGLE', actionLabelEn: 'Toggle Maintenance Mode', actionLabelBn: 'মেইনটেন্যান্স মোড টগল', isDangerous: true },
+      { action: 'FEATURE_FLAGS', actionLabelEn: 'Manage Feature Flags', actionLabelBn: 'ফিচার ফ্ল্যাগ নিয়ন্ত্রণ' },
+      { action: 'DATA_IMPORT_EXPORT', actionLabelEn: 'Manage Bulk Data Import & Export', actionLabelBn: 'ডাটা ইমপোর্ট ও এক্সপোর্ট' },
+    ],
+  },
 ];
 
 /**
