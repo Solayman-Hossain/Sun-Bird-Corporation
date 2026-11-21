@@ -1861,3 +1861,53 @@ export type ImportSubmodule =
 
 
 
+
+// Module 13 — RMA & Support Desk Submodules (43 Submodules)
+export type SupportSubmodule =
+  // Customer Support (1-11)
+  | 'support-dashboard'
+  | 'customer-complaints'
+  | 'support-tickets'
+  | 'live-customer-support'
+  | 'customer-messages'
+  | 'communication-history'
+  | 'customer-call-logs'
+  | 'support-categories'
+  | 'priority-sla-management'
+  | 'support-assignment'
+  | 'escalation-management'
+  // RMA & Return Management (12-22)
+  | 'return-requests'
+  | 'return-approval'
+  | 'rma-register'
+  | 'return-inspection'
+  | 'product-defect-management'
+  | 'replacement-management'
+  | 'refund-management'
+  | 'exchange-management'
+  | 'return-shipping-pickup'
+  | 'return-tracking'
+  | 'return-reports'
+  // Warranty & Service (23-32)
+  | 'warranty-registration'
+  | 'warranty-claims'
+  | 'warranty-verification'
+  | 'warranty-policy-management'
+  | 'repair-service-center'
+  | 'repair-job-cards'
+  | 'spare-parts-management'
+  | 'service-history'
+  | 'product-maintenance'
+  | 'warranty-expiry-alerts'
+  // AI & Analytics (33-43)
+  | 'ai-support-assistant'
+  | 'ai-complaint-analysis'
+  | 'ai-warranty-assistant'
+  | 'ai-return-eligibility'
+  | 'ai-sentiment-analysis'
+  | 'ai-response-generator'
+  | 'ai-support-analytics'
+  | 'customer-satisfaction-reports'
+  | 'support-mis-analytics'
+  | 'support-settings'
+  | 'support-activity-logs';

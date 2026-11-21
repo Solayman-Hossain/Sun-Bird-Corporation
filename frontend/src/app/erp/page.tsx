@@ -47,12 +47,13 @@ import { ErpProductEntryView } from '../../components/erp/ErpProductEntryView';
 import { ErpHrmView } from '../../components/erp/ErpHrmView';
 import { ErpMarketingView } from '../../components/erp/ErpMarketingView';
 import { ErpImportTrackerView } from '../../components/erp/ErpImportTrackerView';
+import { ErpSupportDeskView } from '../../components/erp/ErpSupportDeskView';
 import { ErpOrganizationView, OrgSubmodule } from '../../components/erp/ErpOrganizationView';
 import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUserManagementView';
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
 import { ErpPurchaseView } from '../../components/erp/ErpPurchaseView';
-import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule, ImportSubmodule } from '../../types';
+import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule, ImportSubmodule, SupportSubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -131,6 +132,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isMarketingMenuExpanded, setIsMarketingMenuExpanded] = useState<boolean>(true);
   const [importSubmodule, setImportSubmodule] = useState<ImportSubmodule>('import-dashboard');
   const [isImportMenuExpanded, setIsImportMenuExpanded] = useState<boolean>(true);
+  const [supportSubmodule, setSupportSubmodule] = useState<SupportSubmodule>('support-dashboard');
+  const [isSupportMenuExpanded, setIsSupportMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -1023,12 +1026,116 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
               )}
             </div>
 
+            {/* RMA & Support Desk — Accordion (Module 13) */}
+            <div>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('support');
+                  setIsSupportMenuExpanded(!isSupportMenuExpanded);
+                }}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'support'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+              >
+                <ShieldAlert className={`w-4 h-4 shrink-0 ${activeTab === 'support' ? 'text-[#e6b980]' : 'text-slate-400'}`} />
+                {isSidebarOpen && (
+                  <>
+                    <div className="text-left truncate flex-1">
+                      <span className="block leading-tight">10. RMA &amp; Support Desk</span>
+                      <span className="text-[10px] opacity-75 font-normal block">কাস্টমার সাপোর্ট ও ওয়ারেন্টি</span>
+                    </div>
+                    {isSupportMenuExpanded ? (
+                      <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+                    ) : (
+                      <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+                    )}
+                  </>
+                )}
+              </button>
+
+              {/* 43 Submodules Accordion for RMA & Support */}
+              {isSidebarOpen && isSupportMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5 max-h-60 overflow-y-auto">
+                  {[
+                    // Customer Support (1-11)
+                    { id: 'support-dashboard' as SupportSubmodule, label: '01. Support Dashboard' },
+                    { id: 'customer-complaints' as SupportSubmodule, label: '02. Customer Complaints' },
+                    { id: 'support-tickets' as SupportSubmodule, label: '03. Support Tickets' },
+                    { id: 'live-customer-support' as SupportSubmodule, label: '04. Live Customer Support' },
+                    { id: 'customer-messages' as SupportSubmodule, label: '05. Customer Messages' },
+                    { id: 'communication-history' as SupportSubmodule, label: '06. Email & Comms History' },
+                    { id: 'customer-call-logs' as SupportSubmodule, label: '07. Customer Call Logs' },
+                    { id: 'support-categories' as SupportSubmodule, label: '08. Support Categories' },
+                    { id: 'priority-sla-management' as SupportSubmodule, label: '09. Priority & SLA Mgmt' },
+                    { id: 'support-assignment' as SupportSubmodule, label: '10. Support Assignment' },
+                    { id: 'escalation-management' as SupportSubmodule, label: '11. Escalation Management' },
+                    // RMA & Return Management (12-22)
+                    { id: 'return-requests' as SupportSubmodule, label: '12. Return Requests' },
+                    { id: 'return-approval' as SupportSubmodule, label: '13. Return Approval' },
+                    { id: 'rma-register' as SupportSubmodule, label: '14. RMA Register' },
+                    { id: 'return-inspection' as SupportSubmodule, label: '15. Return Inspection' },
+                    { id: 'product-defect-management' as SupportSubmodule, label: '16. Defect Management' },
+                    { id: 'replacement-management' as SupportSubmodule, label: '17. Replacement Mgmt' },
+                    { id: 'refund-management' as SupportSubmodule, label: '18. Refund Management' },
+                    { id: 'exchange-management' as SupportSubmodule, label: '19. Exchange Management' },
+                    { id: 'return-shipping-pickup' as SupportSubmodule, label: '20. Return Shipping & Pickup' },
+                    { id: 'return-tracking' as SupportSubmodule, label: '21. Return Tracking' },
+                    { id: 'return-reports' as SupportSubmodule, label: '22. Return Reports' },
+                    // Warranty & Service (23-32)
+                    { id: 'warranty-registration' as SupportSubmodule, label: '23. Warranty Registration' },
+                    { id: 'warranty-claims' as SupportSubmodule, label: '24. Warranty Claims' },
+                    { id: 'warranty-verification' as SupportSubmodule, label: '25. Warranty Verification' },
+                    { id: 'warranty-policy-management' as SupportSubmodule, label: '26. Warranty Policy Mgmt' },
+                    { id: 'repair-service-center' as SupportSubmodule, label: '27. Repair & Service Center' },
+                    { id: 'repair-job-cards' as SupportSubmodule, label: '28. Repair Job Cards' },
+                    { id: 'spare-parts-management' as SupportSubmodule, label: '29. Spare Parts Management' },
+                    { id: 'service-history' as SupportSubmodule, label: '30. Service History' },
+                    { id: 'product-maintenance' as SupportSubmodule, label: '31. Product Maintenance' },
+                    { id: 'warranty-expiry-alerts' as SupportSubmodule, label: '32. Warranty Expiry Alerts' },
+                    // AI & Analytics (33-43)
+                    { id: 'ai-support-assistant' as SupportSubmodule, label: '33. AI Support Assistant' },
+                    { id: 'ai-complaint-analysis' as SupportSubmodule, label: '34. AI Complaint Analysis' },
+                    { id: 'ai-warranty-assistant' as SupportSubmodule, label: '35. AI Warranty Assistant' },
+                    { id: 'ai-return-eligibility' as SupportSubmodule, label: '36. AI Return Eligibility' },
+                    { id: 'ai-sentiment-analysis' as SupportSubmodule, label: '37. AI Sentiment Analysis' },
+                    { id: 'ai-response-generator' as SupportSubmodule, label: '38. AI Response Generator' },
+                    { id: 'ai-support-analytics' as SupportSubmodule, label: '39. AI Support Analytics' },
+                    { id: 'customer-satisfaction-reports' as SupportSubmodule, label: '40. CSAT Reports' },
+                    { id: 'support-mis-analytics' as SupportSubmodule, label: '41. Support MIS & Analytics' },
+                    { id: 'support-settings' as SupportSubmodule, label: '42. Support Settings' },
+                    { id: 'support-activity-logs' as SupportSubmodule, label: '43. Support Activity Logs' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'support' && supportSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('support');
+                          setSupportSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {/* Standard ERP Modules */}
             {[
               { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
               { id: 'inventory' as ErpTab, label: 'Inventory & FEFO', labelBn: 'ইনভেন্টরি ও FEFO মেয়াদ', icon: Boxes },
               { id: 'accounting' as ErpTab, label: 'Accounts & Partnership', labelBn: 'আয়-ব্যয় ও পার্টনারশিপ', icon: DollarSign },
-              { id: 'support' as ErpTab, label: 'RMA & Support Desk', labelBn: 'RMA ওয়ারেন্টি ও ইনবক্স', icon: ShieldAlert },
             ].map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -1256,8 +1363,13 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
             />
           )}
 
-          {/* TAB 6: RMA Warranty & Support Desk (Prompt 38) */}
-          {activeTab === 'support' && <ErpSupportView />}
+          {/* TAB 6: RMA, Warranty & Support Desk (Module 13) */}
+          {activeTab === 'support' && (
+            <ErpSupportDeskView
+              submodule={supportSubmodule}
+              onSelectSubmodule={setSupportSubmodule}
+            />
+          )}
         </main>
       </div>
     </div>

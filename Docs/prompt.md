@@ -1962,3 +1962,39 @@ Task: Implement MODULE 12 — Import / LC Tracker & AI-Powered Import Management
    - Automated Backend Test Suite: backend/src/services/verify-import-module.ts executed with 29/29 test suites passing (100%).
    - Strict TypeScript Compilation: backend/tsconfig.json and frontend/tsconfig.json both compile with 0 errors (`tsc --noEmit`).
 ```
+
+---
+
+## PROMPT 75 (MODULE 13) — RMA & SUPPORT DESK: AI-POWERED CUSTOMER SERVICE, RETURN, REPLACEMENT, WARRANTY & COMPLAINT MANAGEMENT SYSTEM
+
+### Implementation Summary:
+1. Business Logic & Enterprise Architecture:
+   - Organization Isolation: Multi-tenant data segregation (`organizationId`) across all Support Tickets, Messages, RMA Requests, Inspections, Warranties, Claims, Repair Job Cards, Knowledge Base, and Settings.
+   - Comprehensive Support & RMA Lifecycle: End-to-end customer complaint management, automated SLA calculation & breach detection, ticket escalation matrix, physical return intake inspections, defect classification, sellable restock authorizations, replacement orders, and refund vouchers.
+   - Warranty & Service Center Operations: Serial number registration, active/expired/voided warranty validation, warranty claim processing, biomedical repair job cards with technician assignments, spare parts consumption, labor rate calculations, QC certification, and out-of-warranty customer billing.
+   - Contextual Gemini AI Co-Pilot Integration (SupportAiService.ts):
+     * AI Complaint Triage & Root Cause Diagnosis: Automatic classification (`DEFECTIVE_PRODUCT`, `BILLING`, `DELIVERY_DELAY`, etc.), priority assignment (`CRITICAL`, `HIGH`, `MEDIUM`, `LOW`), and sentiment score computation (-1.0 to +1.0).
+     * AI Courteous Customer Reply Generator: Drafts empathetic, healthcare-focused customer responses incorporating technician notes, device status, and polite closing.
+     * AI Return Eligibility Evaluator: Audits return requests against the 14-day return window, packaging condition, and discretionary return policies.
+     * AI Warranty Coverage Verification: Analyzes serial numbers, defect descriptions, and policy coverage (comprehensive vs standard parts-only), identifying exclusions for accidental/liquid damage.
+     * AI Biomedical Troubleshooting Engine: Step-by-step diagnostic procedures, high-voltage safety warnings, and spare part suggestions.
+     * AI Interactive Support Assistant Chatbot: Real-time natural language query resolution with confidence scoring and recommended action buttons.
+
+2. Submodule Coverage (43 Submodules under 10. RMA & Support Desk):
+   - Customer Support (01-11): Support Dashboard, Customer Complaints, Support Tickets, Live Customer Support, Customer Messages, Email & Communication History, Customer Call Logs, Support Categories, Priority & SLA Management, Support Assignment, Escalation Management.
+   - RMA & Return Management (12-22): Return Requests, Return Approval, RMA Register, Return Inspection, Product Defect Management, Replacement Management, Refund Management, Exchange Management, Return Shipping & Pickup, Return Tracking, Return Reports.
+   - Warranty & Service (23-32): Warranty Registration, Warranty Claims, Warranty Verification, Warranty Policy Management, Repair & Service Center, Repair Job Cards, Spare Parts Management, Service History, Product Maintenance, Warranty Expiry Alerts.
+   - AI & Analytics (33-43): AI Support Assistant, AI Complaint Analysis, AI Warranty Assistant, AI Return Eligibility Analysis, AI Customer Sentiment Analysis, AI Response Generator, AI Support Analytics, Customer Satisfaction Reports, Support MIS & Analytics, Support Settings, Support Activity & Audit Logs.
+
+3. Backend & Frontend Implementation:
+   - Models: SupportTicket, SupportMessage, RmaRequest, ReturnInspection, WarrantyRecord, WarrantyClaim, RepairJobCard, SupportKnowledgeBase, CustomerFeedback, SupportSettings.
+   - Services: SupportAiService, SupportTicketService, RmaReturnService, WarrantyServiceCenterService, SupportAnalyticsService.
+   - Permissions: Updated 'support' module in permissionRegistry.ts with 14 granular actions.
+   - Controller & Routes: SupportController.ts, supportRoutes.ts mounted at /api/v1/erp/support.
+   - Frontend Types & Service: SupportSubmodule in frontend/src/types/index.ts, support.service.ts typed client.
+   - Frontend UI: ErpSupportDeskView.tsx, ErpSupportDeskView.css (16 KPI metric cards, category tab switcher, live tickets table, RMA register, warranty serial verification bar, repair job cards table, Gemini 1.5 Pro AI Chatbot panel, modal workflows for tickets, RMAs, warranties, and threaded customer messaging with AI reply generator).
+   - ERP Navigation: frontend/src/app/erp/page.tsx updated with expandable sidebar accordion "10. RMA & Support Desk" with all 43 submodules.
+
+4. Verification:
+   - Automated Backend Test Suite: backend/src/services/verify-support-module.ts executed with 39/39 tests passing (100%).
+   - Strict TypeScript Compilation: backend/tsconfig.json and frontend/tsconfig.json both compile cleanly with 0 errors (`tsc --noEmit`).

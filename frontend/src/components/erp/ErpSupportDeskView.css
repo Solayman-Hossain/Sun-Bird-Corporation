@@ -1,0 +1,33 @@
+/* ErpSupportDeskView.css */
+
+.erp-support-desk-container {
+  font-family: inherit;
+}
+
+.kpi-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.4);
+}
+
+/* Custom scrollbars for chat threads & tables */
+.erp-support-desk-container ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.erp-support-desk-container ::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.erp-support-desk-container ::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.8);
+  border-radius: 4px;
+}
+
+.erp-support-desk-container ::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 1);
+}

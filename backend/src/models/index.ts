@@ -118,3 +118,15 @@ export * from './ImportSettings';
 
 
 
+
+// RMA & Support Desk Module 13 Models
+export * from './SupportTicket';
+export * from './SupportMessage';
+export * from './RmaRequest';
+export * from './ReturnInspection';
+export * from './WarrantyRecord';
+export * from './WarrantyClaim';
+export * from './RepairJobCard';
+export * from './SupportKnowledgeBase';
+export * from './CustomerFeedback';
+export * from './SupportSettings';
