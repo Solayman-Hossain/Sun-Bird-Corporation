@@ -23,6 +23,8 @@ export interface IMarketingPromotion extends Document {
   originalPrice?: number;
   promotionalPrice?: number;
   minQuantity: number;
+  minOrderAmount?: number;
+  maxDiscountAmount?: number;
   freeQuantity?: number;
   freeProductId?: Types.ObjectId;
   startDate: Date;
@@ -58,6 +60,8 @@ const MarketingPromotionSchema = new Schema<IMarketingPromotion>(
     originalPrice: { type: Number, min: 0 },
     promotionalPrice: { type: Number, min: 0 },
     minQuantity: { type: Number, default: 1, min: 1 },
+    minOrderAmount: { type: Number, min: 0 },
+    maxDiscountAmount: { type: Number, min: 0 },
     freeQuantity: { type: Number, default: 0 },
     freeProductId: { type: Schema.Types.ObjectId, ref: 'Product' },
     startDate: { type: Date, required: true, index: true },

@@ -162,3 +162,11 @@ export * from './IntegrationConfig';
 export * from './FeatureFlag';
 export * from './SystemLog';
 export * from './DataExchangeJob';
+
+// Public E-Commerce Upgrade Module 17 Models
+export * from './Review';
+export { Review as ReviewModel } from './Review';
+export { RmaRequest as RmaRequestModel } from './RmaRequest';
+export { WarrantyRecord as WarrantyRecordModel } from './WarrantyRecord';
+export * from './CustomerCart';
+export * from './CustomerWishlist';

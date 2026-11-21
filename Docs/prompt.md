@@ -2151,3 +2151,35 @@ Task: Implement MODULE 12 — Import / LC Tracker & AI-Powered Import Management
 4. Verification:
    - Automated Backend Test Suite: `backend/src/services/verify-system-admin-module.ts` executed with 52/52 tests passing (100%).
    - Strict TypeScript Compilation: Both `backend/tsconfig.json` and `frontend/tsconfig.json` compile cleanly with 0 errors (`tsc --noEmit`).
+
+---
+
+### Prompt 79: MODULE 17 — PUBLIC E-COMMERCE UPGRADE
+```text
+Task: Upgrade the public storefront (http://localhost:3000) into a complete, enterprise-grade, ERP-integrated medical equipment e-commerce platform while strictly preserving existing design, routes, branding, and navigation.
+
+Technical Architecture & Deliverables:
+1. Business Logic & Enterprise Architecture:
+   - Preserved Public Experience: Retained existing Next.js 16 storefront layout, header navigation, hero banner, product grid, cart drawer, wishlist drawer, and checkout modal.
+   - Authoritative Backend Synchronization: Connects directly with Module 04 (Catalog Master), Module 06 (FEFO Product Batches & Stock Locks), Module 08 (Chart of Accounts & Invoicing), Module 09 (Sales Orders & Courier Booking), Module 11 (Marketing Promotions & Banners), Module 13 (RMA & Warranty Claims), Module 15 (Central AI Intelligence), and Module 16 (System Administration).
+   - Strict Anti-Leak Security: Public APIs strictly redact confidential internal fields (costPrice, purchasePrice, profitMargin, supplier info, journalEntryId, internal notes) via projection sanitization and AI prompt defenses.
+   - Dynamic Categories & Brands Discovery: Real-time aggregation of active categories and brands with live product counts and image thumbnails.
+   - Authoritative Coupon & Promotion Engine: Server-side validation of promo codes, percentage vs. fixed discounts, minimum spend thresholds, and maximum discount caps with dynamic payable subtotal calculations.
+   - Persistent Server-Side Cart & Wishlist: Real-time price validation against active catalog prices, batch quantity checks, and persistent wishlist storage.
+   - Customer-Facing Bilingual AI Copilot: Natural English and Bengali shopping advisor powered by Google Gemini 1.5 Pro and CentralAiService, answering queries, suggesting DGDA-approved devices, and enforcing confidential data protection.
+   - Verified Buyer Reviews: Authenticated customer review submission with verified purchase badge matching against delivered orders.
+   - Express Checkout with Stock Reservation: 15-minute Redis TTL inventory reservation locks, idempotency key checks, automated sequential order generation, and automated courier consignment dispatch.
+   - Customer Safe Order Tracking: Multi-stage status badge mapping (Order Received, Confirmed, Packing, Dispatched / In Transit, Delivered) with redacted internal operational details.
+
+2. Backend Implementation:
+   - Models: `CustomerCart` (`CustomerCart.ts`), `CustomerWishlist` (`CustomerWishlist.ts`), `Review` (`Review.ts`), extended `IMarketingPromotion` with `minOrderAmount` & `maxDiscountAmount`.
+   - Service: `PublicEcommerceService.ts` (`getPublicCategories`, `getPublicBrands`, `validateCoupon`, `getOrCreateCart`, `addToCart`, `updateCartItemQuantity`, `applyCouponToCart`, `getWishlist`, `toggleWishlist`, `getCustomerOrders`, `customerAiAssistant`, `submitReview`, `getProductReviews`).
+   - Validator: `publicEcommerce.validator.ts` with Zod validation schemas for all storefront interactions.
+   - Controller: `PublicEcommerceController.ts` handling all public endpoints.
+   - Routes: `backend/src/routes/public/ecommerceRoutes.ts` mounted at `/api/v1/public/store` and `/api/v1/public`.
+
+3. Verification:
+   - Automated Test Suite: `backend/src/services/verify-ecommerce-public-module.ts` executed with 30/30 tests passing (100%).
+   - TypeScript Compilation: Backend and frontend TypeScript compilation verified with 0 errors (`tsc --noEmit`).
+   - Comprehensive Implementation Report: `Docs/MODULE-17-PUBLIC-ECOMMERCE-IMPLEMENTATION-REPORT.md`.
+```

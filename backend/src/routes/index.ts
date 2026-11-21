@@ -50,6 +50,7 @@ import erpSupportRouter from './erp/supportRoutes';
 import erpMisRouter from './erp/misRoutes';
 import erpAiRouter from './erp/aiRoutes';
 import erpSystemAdminRouter from './erp/systemAdminRoutes';
+import publicEcommerceRouter from './public/ecommerceRoutes';
 import { AuthController } from '../controllers/AuthController';
 import { InventoryController } from '../controllers/InventoryController';
 import { ProductController } from '../controllers/ProductController';
@@ -170,6 +171,10 @@ apiV1Router.use('/erp/marketing', erpMarketingRouter);
 
 // Public Marketing Banners, Announcements, Content & Landing Pages
 apiV1Router.use('/public/marketing', publicMarketingRouter);
+
+// Public E-Commerce Upgrade Storefront APIs (Module 17)
+apiV1Router.use('/public/store', publicEcommerceRouter);
+apiV1Router.use('/public', publicEcommerceRouter);
 
 // ERP Import / LC Tracker & AI Management System (Module 12)
 apiV1Router.use('/erp/import', erpImportRouter);

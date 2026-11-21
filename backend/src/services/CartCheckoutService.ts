@@ -340,6 +340,7 @@ export class CartCheckoutService {
             paymentStatus: initialPaymentStatus,
             orderStatus: initialOrderStatus,
             shippingAddress: `${checkoutData.deliveryAddress.trim()}, ${checkoutData.district.trim()}`,
+            contactPhone: checkoutData.customerMobile,
             redisReservationKey: primaryReservationKey,
             idempotencyKey: normalizedKey,
           },
