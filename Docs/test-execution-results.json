@@ -1,0 +1,168 @@
+{
+  "results": [
+    {
+      "id": 1,
+      "name": "Module 18 E2E Integration",
+      "script": "src/services/verify-module18-e2e-integration.ts",
+      "passed": 25,
+      "total": 25,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "24.4s"
+    },
+    {
+      "id": 2,
+      "name": "Module 17 E-Commerce Public",
+      "script": "src/services/verify-ecommerce-public-module.ts",
+      "passed": 30,
+      "total": 30,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "20.9s"
+    },
+    {
+      "id": 3,
+      "name": "Module 16 System Admin",
+      "script": "src/services/verify-system-admin-module.ts",
+      "passed": 52,
+      "total": 52,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "21.3s"
+    },
+    {
+      "id": 4,
+      "name": "Module 15 AI Central",
+      "script": "src/services/verify-ai-central-module.ts",
+      "passed": 41,
+      "total": 41,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "11.4s"
+    },
+    {
+      "id": 5,
+      "name": "Module 14 MIS Executive",
+      "script": "src/services/verify-mis-module.ts",
+      "passed": 47,
+      "total": 47,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "10.1s"
+    },
+    {
+      "id": 6,
+      "name": "Module 13 RMA & Support",
+      "script": "src/services/verify-support-module.ts",
+      "passed": 39,
+      "total": 39,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "10.5s"
+    },
+    {
+      "id": 7,
+      "name": "Module 12 Import LC",
+      "script": "src/services/verify-import-module.ts",
+      "passed": 29,
+      "total": 29,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "11.6s"
+    },
+    {
+      "id": 8,
+      "name": "Module 11 Marketing & Banners",
+      "script": "src/services/verify-marketing-module.ts",
+      "passed": 12,
+      "total": 12,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "10.0s"
+    },
+    {
+      "id": 9,
+      "name": "Module 10 HRM & Payroll",
+      "script": "src/services/verify-hrm-module.ts",
+      "passed": 51,
+      "total": 51,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "25.5s"
+    },
+    {
+      "id": 10,
+      "name": "Module 09 Order Processing",
+      "script": "src/services/verify-order-module.ts",
+      "passed": 58,
+      "total": 58,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "11.2s"
+    },
+    {
+      "id": 11,
+      "name": "Module 08 Accounting & Finance",
+      "script": "src/services/verify-accounting-module.ts",
+      "passed": 37,
+      "total": 37,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "12.0s"
+    },
+    {
+      "id": 12,
+      "name": "Module 07 Document Engine",
+      "script": "src/services/verify-document-module.ts",
+      "passed": 51,
+      "total": 51,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "12.6s"
+    },
+    {
+      "id": 13,
+      "name": "Module 08/09 Credit Gate",
+      "script": "src/services/verify-credit-gate.ts",
+      "passed": 33,
+      "total": 33,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "9.4s"
+    },
+    {
+      "id": 14,
+      "name": "Module 06/09 Cart Checkout",
+      "script": "src/services/verify-cart-checkout.ts",
+      "passed": 40,
+      "total": 40,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "12.6s"
+    },
+    {
+      "id": 15,
+      "name": "Module 06/09 POS Checkout",
+      "script": "src/services/verify-pos-checkout.ts",
+      "passed": 42,
+      "total": 42,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "11.4s"
+    },
+    {
+      "id": 16,
+      "name": "Module 09 Logistics Service",
+      "script": "src/services/verify-logistics-service.ts",
+      "passed": 55,
+      "total": 55,
+      "failed": 0,
+      "status": "PASSED",
+      "duration": "8.3s"
+    }
+  ],
+  "grandTotalPassed": 642,
+  "grandTotalAssertions": 642,
+  "grandTotalFailed": 0,
+  "timestamp": "2026-11-21T17:43:01.350Z"
+}
