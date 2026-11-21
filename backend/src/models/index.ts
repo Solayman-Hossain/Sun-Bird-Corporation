@@ -139,3 +139,16 @@ export * from './MisRecommendation';
 export * from './CustomReportTemplate';
 export * from './MisSettings';
 export * from './DailyBusinessDigest';
+
+
+// Central AI Intelligence System Module 15 Models
+export * from './AiProviderConfig';
+export * from './AiModelConfig';
+export * from './AiFeatureConfig';
+export * from './AiPromptTemplate';
+export * from './AiConversation';
+export * from './AiMessage';
+export * from './AiDocumentJob';
+export * from './AiKnowledgeDocument';
+export * from './AiUsageLog';
+export * from './AiSettings';

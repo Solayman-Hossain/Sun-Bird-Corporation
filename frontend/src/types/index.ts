@@ -1980,3 +1980,28 @@ export type MisSubmodule =
   | 'comparative-business-trends'
   | 'data-quality-audit-tracker'
   | 'executive-settings-kpi-targets';
+
+
+// Module 15 — AI Assistant & Central Intelligence System (21 Submodules)
+export type AiSubmodule =
+  | 'ai-dashboard'
+  | 'ai-chat-assistant'
+  | 'ai-control-center'
+  | 'ai-provider-mgmt'
+  | 'ai-model-mgmt'
+  | 'ai-feature-mgmt'
+  | 'ai-prompt-library'
+  | 'ai-doc-intelligence'
+  | 'ai-ocr-extraction'
+  | 'ai-knowledge-base'
+  | 'ai-business-analyst'
+  | 'ai-forecasting-center'
+  | 'ai-risk-center'
+  | 'ai-recommendation-center'
+  | 'ai-workflow-assistant'
+  | 'ai-conversation-history'
+  | 'ai-usage-analytics'
+  | 'ai-budget-mgmt'
+  | 'ai-audit-logs'
+  | 'ai-security-privacy'
+  | 'ai-system-settings';

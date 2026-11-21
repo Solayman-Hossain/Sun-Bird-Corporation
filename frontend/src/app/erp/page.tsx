@@ -36,6 +36,8 @@ import {
   Users,
   KeyRound,
   ShoppingCart,
+  Bot,
+  Sparkles,
 } from 'lucide-react';
 import { ErpOrdersView } from '../../components/erp/ErpOrdersView';
 import { ErpInventoryView } from '../../components/erp/ErpInventoryView';
@@ -49,12 +51,13 @@ import { ErpMarketingView } from '../../components/erp/ErpMarketingView';
 import { ErpImportTrackerView } from '../../components/erp/ErpImportTrackerView';
 import { ErpSupportDeskView } from '../../components/erp/ErpSupportDeskView';
 import { ErpExecutiveMisView } from '../../components/erp/ErpExecutiveMisView';
+import { ErpAiCentralView } from '../../components/erp/ErpAiCentralView';
 import { ErpOrganizationView, OrgSubmodule } from '../../components/erp/ErpOrganizationView';
 import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUserManagementView';
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
 import { ErpPurchaseView } from '../../components/erp/ErpPurchaseView';
-import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule, ImportSubmodule, SupportSubmodule, MisSubmodule } from '../../types';
+import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule, ImportSubmodule, SupportSubmodule, MisSubmodule, AiSubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -71,7 +74,8 @@ export type ErpTab =
   | 'hrm'
   | 'banners'
   | 'lc'
-  | 'support';
+  | 'support'
+  | 'ai';
 
 export interface ErpDashboardPageProps {
   initialTab?: ErpTab;
@@ -137,6 +141,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isSupportMenuExpanded, setIsSupportMenuExpanded] = useState<boolean>(true);
   const [misSubmodule, setMisSubmodule] = useState<MisSubmodule>('executive-dashboard');
   const [isMisMenuExpanded, setIsMisMenuExpanded] = useState<boolean>(true);
+  const [aiSubmodule, setAiSubmodule] = useState<AiSubmodule>('ai-dashboard');
+  const [isAiMenuExpanded, setIsAiMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -1240,6 +1246,90 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
               )}
             </div>
 
+            {/* 11. AI Assistant & Central Intelligence System (Module 15) */}
+            <div>
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeTab !== 'ai') setActiveTab('ai');
+                  setIsAiMenuExpanded(!isAiMenuExpanded);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'ai'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+                title="AI Assistant & Central Intelligence System"
+              >
+                <div className="flex items-center gap-3 truncate">
+                  <Bot
+                    className={`w-4 h-4 shrink-0 ${activeTab === 'ai' ? 'text-[#e6b980]' : 'text-slate-400'}`}
+                  />
+                  {isSidebarOpen && (
+                    <div className="text-left truncate">
+                      <span className="block leading-tight">11. AI Assistant</span>
+                      <span className="text-[10px] opacity-75 font-normal block">সেন্ট্রাল এআই ইন্টেলিজেন্স</span>
+                    </div>
+                  )}
+                </div>
+                {isSidebarOpen && (
+                  isAiMenuExpanded ? (
+                    <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+                  ) : (
+                    <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+                  )
+                )}
+              </button>
+
+              {/* 21 Submodules Accordion for AI Assistant */}
+              {isSidebarOpen && isAiMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5 max-h-60 overflow-y-auto">
+                  {[
+                    { id: 'ai-dashboard' as AiSubmodule, label: '01. AI Dashboard' },
+                    { id: 'ai-chat-assistant' as AiSubmodule, label: '02. AI Chat Assistant' },
+                    { id: 'ai-control-center' as AiSubmodule, label: '03. AI Control Center' },
+                    { id: 'ai-provider-mgmt' as AiSubmodule, label: '04. AI Provider Management' },
+                    { id: 'ai-model-mgmt' as AiSubmodule, label: '05. AI Model Management' },
+                    { id: 'ai-feature-mgmt' as AiSubmodule, label: '06. AI Feature Management' },
+                    { id: 'ai-prompt-library' as AiSubmodule, label: '07. Prompt & Template Library' },
+                    { id: 'ai-doc-intelligence' as AiSubmodule, label: '08. Document Intelligence' },
+                    { id: 'ai-ocr-extraction' as AiSubmodule, label: '09. OCR & Data Extraction' },
+                    { id: 'ai-knowledge-base' as AiSubmodule, label: '10. AI Knowledge Base' },
+                    { id: 'ai-business-analyst' as AiSubmodule, label: '11. AI Business Analyst' },
+                    { id: 'ai-forecasting-center' as AiSubmodule, label: '12. AI Forecasting Center' },
+                    { id: 'ai-risk-center' as AiSubmodule, label: '13. Risk & Anomaly Center' },
+                    { id: 'ai-recommendation-center' as AiSubmodule, label: '14. Recommendation Center' },
+                    { id: 'ai-workflow-assistant' as AiSubmodule, label: '15. AI Workflow Assistant' },
+                    { id: 'ai-conversation-history' as AiSubmodule, label: '16. Conversation History' },
+                    { id: 'ai-usage-analytics' as AiSubmodule, label: '17. Usage & Token Analytics' },
+                    { id: 'ai-budget-mgmt' as AiSubmodule, label: '18. Cost & Budget Management' },
+                    { id: 'ai-audit-logs' as AiSubmodule, label: '19. AI Audit Logs' },
+                    { id: 'ai-security-privacy' as AiSubmodule, label: '20. Security & Privacy Settings' },
+                    { id: 'ai-system-settings' as AiSubmodule, label: '21. AI System Settings' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'ai' && aiSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('ai');
+                          setAiSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {/* Standard ERP Modules */}
             {[
               { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
@@ -1380,6 +1470,14 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
             <ErpSupportDeskView
               submodule={supportSubmodule}
               onSelectSubmodule={setSupportSubmodule}
+            />
+          )}
+
+          {/* TAB 7: AI Assistant & Central Intelligence System (Module 15) */}
+          {activeTab === 'ai' && (
+            <ErpAiCentralView
+              submodule={aiSubmodule}
+              onSelectSubmodule={setAiSubmodule}
             />
           )}
         </main>

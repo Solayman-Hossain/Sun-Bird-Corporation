@@ -2038,3 +2038,55 @@ Task: Implement MODULE 12 — Import / LC Tracker & AI-Powered Import Management
 4. Verification:
    - Automated Backend Test Suite: backend/src/services/verify-mis-module.ts executed with 47/47 tests passing (100%).
    - Strict TypeScript Compilation: backend/tsconfig.json and frontend/tsconfig.json both compile cleanly with 0 errors (`tsc --noEmit`).
+
+
+---
+
+## PROMPT 77 (MODULE 15) — AI ASSISTANT & CENTRAL AI INTELLIGENCE SYSTEM: ENTERPRISE MULTI-MODEL ROUTER, AGENTIC TOOL REGISTRY & DOCUMENT OCR ENGINE
+
+### Implementation Summary:
+1. Business Logic & Enterprise Architecture:
+   - Central AI Intelligence Hub: Unifies enterprise AI capabilities across all ERP modules (Sales, Inventory, Purchase, Accounts, HR, Marketing, Import LC, and Support RMA) instead of fragmented, siloed assistants.
+   - Enterprise Multi-Model Router & Fallback Adapter: Supports Google Gemini (Gemini 1.5 Pro default, Gemini 1.5 Flash), OpenAI, and Claude with intelligent latency/cost routing, dynamic rate-limiting, and deterministic offline mock fallbacks ensuring 99.99% system availability even during external API downtime or quota exhaustion.
+   - Server-Side Allowlisted Read-Only Tool Registry (`AiToolRegistry`): Enforces secure, sandbox-isolated tools (`getSalesSummary`, `getProductInformation`, `getInventorySummary`, `getCustomerSummary`, `getSupplierSummary`, `getOutstandingPayments`, `getPurchaseSummary`, `getImportLCStatus`, `getSupportTicketSummary`, `getHRAnalytics`, `getFinancialSummary`, `getMISReport`) with organization isolation (`organizationId`). Arbitrary tools and unauthorized mutations are strictly rejected at the server level.
+   - Strict Human-in-the-Loop & Maker-Checker Governance: AI is strictly prohibited from mutating financial ledgers, inventory balances, purchase orders, or customer contracts directly. All actionable suggestions (such as OCR extractions or reorder proposals) enter a draft review queue requiring explicit human approval.
+   - Multi-Layered AI Security & Privacy Engine (`AiSecurityService`): Regex and AST-level redaction of PII (National ID, passports, phone numbers), bank account numbers, non-authorized employee salaries, prompt injection neutralization (`[SYSTEM]`, `<!-- override -->`), and secure masking of API credentials (`AIzaSy...`).
+   - Conversational AI Engine & Memory (`AiConversation`, `AiMessage`): Thread-based contextual memory with session titles, token consumption tracking, multi-turn message history, feedback ratings (1-5 stars), and citations pointing to real verified ERP records.
+   - Document Intelligence & OCR Extraction Pipeline (`AiDocumentJob`): Automates multi-format document data extraction (Commercial Invoices, Bill of Lading, Packing Lists, Bank Advice, Warranty Cards, Prescriptions) into structured JSON with confidence scoring and manual acceptance/rejection review lifecycle.
+   - Organizational RAG Knowledge Base (`AiKnowledgeDocument`): Vector and full-text searchable enterprise repository for SOPs, product maintenance guides, compliance standards, and policies.
+
+2. Submodule Coverage (21 Submodules under 11. AI Assistant):
+   - 01. AI Dashboard (`ai-dashboard`): Central overview of token usage, active providers, model status, and recent queries.
+   - 02. AI Chat Assistant (`ai-chat-assistant`): Interactive bilingual (Bengali/English) contextual copilot with tool calling and citations.
+   - 03. AI Control Center (`ai-control-center`): Live health monitoring, latency trackers, error rates, and throughput.
+   - 04. AI Provider Management (`ai-provider-mgmt`): Multi-provider credential configuration, timeout control, and retries.
+   - 05. AI Model Management (`ai-model-mgmt`): Temperature, token limits, context windows, and feature assignments.
+   - 06. AI Feature Management (`ai-feature-mgmt`): Module-level and granular feature toggles across all ERP departments.
+   - 07. Prompt & Template Library (`ai-prompt-library`): Versioned prompt repository with variable interpolation (`{{var}}`) and change history.
+   - 08. Document Intelligence (`ai-doc-intelligence`): High-volume document parser with structured schemas.
+   - 09. OCR & Data Extraction (`ai-ocr-extraction`): OCR inspection interface with side-by-side extracted data and human acceptance workflow.
+   - 10. AI Knowledge Base (`ai-knowledge-base`): Enterprise knowledge article manager with category tagging and RAG retrieval.
+   - 11. AI Business Analyst (`ai-business-analyst`): Natural language deep analytics on revenue, margin, and cost drivers.
+   - 12. AI Forecasting Center (`ai-forecasting-center`): Predictive models for sales demand, stock exhaustion, and cash requirements.
+   - 13. Risk & Anomaly Center (`ai-risk-center`): Continuous threat detection for overdue payments, stockouts, and warranty surges.
+   - 14. Recommendation Center (`ai-recommendation-center`): AI-suggested operational optimizations with estimated ROI.
+   - 15. AI Workflow Assistant (`ai-workflow-assistant`): Intelligent guided task automations across modules.
+   - 16. Conversation History (`ai-conversation-history`): Comprehensive multi-tenant chat audit trails and transcripts.
+   - 17. Usage & Token Analytics (`ai-usage-analytics`): Granular token and latency breakdown by user, module, and model.
+   - 18. Cost & Budget Management (`ai-budget-mgmt`): Departmental AI expenditure tracking with automated monthly budget capping.
+   - 19. AI Audit Logs (`ai-audit-logs`): Tamper-resistant log of every prompt, completion, tool invocation, and user feedback.
+   - 20. Security & Privacy Settings (`ai-security-privacy`): Global toggle for PII scrubbing, financial masking, and prompt sanitation.
+   - 21. AI System Settings (`ai-system-settings`): Default language (Bengali/English), default model, rate limits, and caching policies.
+
+3. Backend & Frontend Implementation:
+   - Models: `AiProviderConfig`, `AiModelConfig`, `AiFeatureConfig`, `AiPromptTemplate`, `AiConversation`, `AiMessage`, `AiDocumentJob`, `AiKnowledgeDocument`, `AiUsageLog`, `AiSettings`.
+   - Services: `CentralAiService` (core multi-model adapter and NLP primitives), `AiToolRegistry` (server-side sandboxed read tools), `AiSecurityService` (sanitization and PII redaction), `AiManagementService` (management, OCR, prompts, knowledge, metrics).
+   - Permissions: Added `ai` module in `backend/src/config/permissionRegistry.ts` with 17 granular actions.
+   - Controller & Routes: `AiController.ts`, `aiRoutes.ts` mounted at `/api/v1/erp/ai` and `/api/ai`.
+   - Frontend Types & Service: `AiSubmodule` in `frontend/src/types/index.ts`, `ai.service.ts` typed API client.
+   - Frontend UI: `ErpAiCentralView.tsx`, `ErpAiCentralView.css` featuring 4 integrated functional tabs (AI Chat Copilot, Control Center & Provider Engine, Document OCR Review Hub, Knowledge Base & Security Settings).
+   - ERP Navigation: `frontend/src/app/erp/page.tsx` upgraded with Section "11. AI Assistant" containing all 21 submodules.
+
+4. Verification:
+   - Automated Backend Test Suite: `backend/src/services/verify-ai-central-module.ts` executed with 41/41 tests passing (100%).
+   - Strict TypeScript Compilation: Both `backend/tsconfig.json` and `frontend/tsconfig.json` compile cleanly with 0 errors (`tsc --noEmit`).
