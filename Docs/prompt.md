@@ -1919,3 +1919,46 @@ Task: Implement MODULE 11 — Banners, Social Media, Marketing & Content Managem
    - Automated Backend Test Suite: backend/src/services/verify-marketing-module.ts executed with 12/12 test suites passing (100%).
    - Strict TypeScript Compilation: backend/tsconfig.json and frontend/tsconfig.json both compile with 0 errors (`tsc --noEmit`).
 ```
+
+
+---
+
+## PROMPT 74: MODULE 12 — IMPORT / LC TRACKER & AI-POWERED IMPORT MANAGEMENT SYSTEM
+```text
+Task: Implement MODULE 12 — Import / LC Tracker & AI-Powered Import Management System in Sun Bird Corporation ERP with end-to-end Google Gemini AI Co-Pilot integration across all document workflows, LC lifecycle management, shipment tracking, customs clearance, landed cost calculations, and risk mitigation.
+
+1. Business Logic & Import Management Architecture:
+   - Centralized Import Hub: Strict organization isolation (organizationId) across all import purchase orders, proforma invoices, LCs, shipments, customs documents, payments, and landed cost records.
+   - Comprehensive LC Lifecycle: Complete management of LC application, 3-tier FX tracking (Opening Rate, Customs Assessment Rate, Final Bank Settlement Rate), bank margins, expiry dates, and presentation periods.
+   - Immutable LC Amendment History: Multi-amendment version tracking (V1 -> V2 -> Vn), preserving previous values, recording changed clauses, approval signatures, and bank confirmations without overwriting history.
+   - Shipments & Vessel Tracking: Multi-shipment support against single LC, BL/AWB mapping, container numbers, transshipment events, and port dwelling tracking against 4-day statutory port free days.
+   - Customs & Port Demurrage: Bill of Entry recording with automated statutory duty calculations (Customs Duty, Regulatory Duty, Supplementary Duty, VAT, AIT, Advance Tax), port handling charges, and C&F agency fees.
+   - Double-Entry Accounting Posting: Balanced Journal Voucher generation via AccountingService for import disbursements (LC Margins: Debit 1160, Credit 1020; Customs: Debit 1200, Credit 1020; Foreign Supplier Settlement: Debit 2010, Credit 1020).
+   - Capitalized Landed Cost Calculation: Integration with LandedCostService allocating expenses (BY_VALUE, BY_WEIGHT, BY_QUANTITY) to inventory batches and moving WAC capitalization upon customs clearance.
+   - Contextual Gemini AI Co-Pilot Integration (ImportAiService.ts):
+     * AI Document Reading & OCR Data Extraction: Structured field extraction from Proforma Invoices, Commercial Invoices, and Packing Lists.
+     * AI Cross-Document Comparison: Side-by-side discrepancy detection (PI vs PO, Commercial Invoice vs PI) with mismatch severity scoring.
+     * AI Shipment Delay & Demurrage Risk Prediction: Transit time analysis, feeder vessel queue risk, and proactive port dwell alerts.
+     * AI Landed Cost Advice: Heuristic expense categorization, anomaly detection, and optimal allocation method recommendations.
+     * Contextual Import AI Assistant: Natural language question answering with live database metrics and suggested action plans.
+     * AI Executive MIS Summaries: Automated management narratives for monthly import registers and financial exposure reports.
+
+2. Submodule Coverage (34 Submodules under 09. Import / LC Tracker):
+   - 01-09 Management & LC Lifecycle: Import Dashboard, Import Purchase Requisition, Import Purchase Order, Proforma Invoice (PI), Import Supplier Management, LC Application & Opening, LC Amendment Management, LC Register, Bank & Financial Documents.
+   - 10-18 Shipment & Shipping Docs: Shipment Management, Shipment Tracking, Commercial Invoice, Packing List, Bill of Lading (BL), Airway Bill (AWB), Certificate of Origin, Insurance Documents, Inspection Certificates.
+   - 19-26 Customs, Costing & GRN: Customs & Port Clearance, Bill of Entry, Duty VAT & Tax Management, Freight & Logistics Expenses, Import Payment Management, LC Margin & Bank Charges, Landed Cost Calculation, Import Goods Receive (GRN) Integration.
+   - 27-34 Repository, AI & Governance: Import Document Management, Import Approval Center, Import Alerts & Notifications, Import AI Assistant, Import MIS & Analytics, Import Reports, Import Settings, Import Activity & Audit Logs.
+
+3. Backend & Frontend Implementation:
+   - Models: Extended ImportLC, extended LandedCost, unified ProformaInvoice, LCAmendment, ImportShipment, ImportDocument, CustomsClearance, ImportPayment, ImportRiskAlert, ImportSettings.
+   - Services: ImportLcService, ImportShipmentService, ImportFinanceService, ImportDocumentService, ImportAnalyticsService, ImportAiService.
+   - Permissions: Registered 'import' module in permissionRegistry.ts with 14 granular actions.
+   - Controller & Routes: ImportController.ts, importRoutes.ts mounted at /api/v1/erp/import.
+   - Frontend Types & Service: ImportSubmodule in frontend/src/types/index.ts, import.service.ts typed API client.
+   - Frontend UI: ErpImportTrackerView.tsx, ErpImportTrackerView.css (15 KPI cards, AI Co-Pilot banner, data tables, modals for LC/PI/Shipment/Customs/Payment, and AI assistant drawer).
+   - ERP Navigation: frontend/src/app/erp/page.tsx updated with expandable sidebar accordion "09. Import / LC Tracker" with all 34 submodules.
+
+4. Verification:
+   - Automated Backend Test Suite: backend/src/services/verify-import-module.ts executed with 29/29 test suites passing (100%).
+   - Strict TypeScript Compilation: backend/tsconfig.json and frontend/tsconfig.json both compile with 0 errors (`tsc --noEmit`).
+```

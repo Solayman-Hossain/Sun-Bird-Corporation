@@ -45,6 +45,7 @@ import erpChatRouter from './erp/chatRoutes';
 import erpDisputeRouter from './erp/disputeRoutes';
 import erpMarketingRouter from './erp/marketingRoutes';
 import publicMarketingRouter from './public/marketingRoutes';
+import erpImportRouter from './erp/importRoutes';
 import { AuthController } from '../controllers/AuthController';
 import { InventoryController } from '../controllers/InventoryController';
 import { ProductController } from '../controllers/ProductController';
@@ -165,6 +166,9 @@ apiV1Router.use('/erp/marketing', erpMarketingRouter);
 
 // Public Marketing Banners, Announcements, Content & Landing Pages
 apiV1Router.use('/public/marketing', publicMarketingRouter);
+
+// ERP Import / LC Tracker & AI Management System (Module 12)
+apiV1Router.use('/erp/import', erpImportRouter);
 
 
 // External Payment & Courier Webhooks mounted at /api/v1/webhooks

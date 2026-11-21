@@ -46,12 +46,13 @@ import { ErpDocumentManagementView } from '../../components/erp/ErpDocumentManag
 import { ErpProductEntryView } from '../../components/erp/ErpProductEntryView';
 import { ErpHrmView } from '../../components/erp/ErpHrmView';
 import { ErpMarketingView } from '../../components/erp/ErpMarketingView';
+import { ErpImportTrackerView } from '../../components/erp/ErpImportTrackerView';
 import { ErpOrganizationView, OrgSubmodule } from '../../components/erp/ErpOrganizationView';
 import { ErpUserManagementView, UserSubmodule } from '../../components/erp/ErpUserManagementView';
 import { ErpApprovalAuditView, ApprovalSubmodule } from '../../components/erp/ErpApprovalAuditView';
 import { ErpProductCatalogView } from '../../components/erp/ErpProductCatalogView';
 import { ErpPurchaseView } from '../../components/erp/ErpPurchaseView';
-import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule } from '../../types';
+import { ProductCatalogSubmodule, PurchaseSubmodule, InventorySubmodule, OrderSubmodule, HrmSubmodule, MarketingSubmodule, ImportSubmodule } from '../../types';
 import { useToast } from '../../context/ToastContext';
 
 export type ErpTab =
@@ -128,6 +129,8 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
   const [isHrmMenuExpanded, setIsHrmMenuExpanded] = useState<boolean>(true);
   const [marketingSubmodule, setMarketingSubmodule] = useState<MarketingSubmodule>('marketing-dashboard');
   const [isMarketingMenuExpanded, setIsMarketingMenuExpanded] = useState<boolean>(true);
+  const [importSubmodule, setImportSubmodule] = useState<ImportSubmodule>('import-dashboard');
+  const [isImportMenuExpanded, setIsImportMenuExpanded] = useState<boolean>(true);
 
   const { showToast } = useToast();
 
@@ -928,12 +931,103 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
               )}
             </div>
 
+            {/* Import / LC Tracker & AI Management — Accordion (Module 12) */}
+            <div>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('lc');
+                  setIsImportMenuExpanded(!isImportMenuExpanded);
+                }}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'lc'
+                    ? 'bg-[#1e3932] text-[#e6b980] shadow-md shadow-[#1e3932]/40 font-bold'
+                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                }`}
+              >
+                <Ship className={`w-4 h-4 shrink-0 ${activeTab === 'lc' ? 'text-[#e6b980]' : 'text-slate-400'}`} />
+                {isSidebarOpen && (
+                  <>
+                    <div className="text-left truncate flex-1">
+                      <span className="block leading-tight">09. Import / LC Tracker</span>
+                      <span className="text-[10px] opacity-75 font-normal block">আমদানি ও এল/সি ট্র্যাকার</span>
+                    </div>
+                    {isImportMenuExpanded ? (
+                      <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+                    ) : (
+                      <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+                    )}
+                  </>
+                )}
+              </button>
+
+              {/* 34 Submodules Accordion for Import */}
+              {isSidebarOpen && isImportMenuExpanded && (
+                <div className="mt-1 ml-4 pl-2 border-l border-slate-800 space-y-0.5 max-h-60 overflow-y-auto">
+                  {[
+                    { id: 'import-dashboard' as ImportSubmodule, label: '1. Import Dashboard' },
+                    { id: 'import-purchase-requisition' as ImportSubmodule, label: '2. Import Requisition' },
+                    { id: 'import-purchase-order' as ImportSubmodule, label: '3. Import Purchase Order' },
+                    { id: 'proforma-invoice' as ImportSubmodule, label: '4. Proforma Invoice (PI)' },
+                    { id: 'import-supplier-management' as ImportSubmodule, label: '5. Import Supplier' },
+                    { id: 'lc-application-opening' as ImportSubmodule, label: '6. LC Application & Opening' },
+                    { id: 'lc-amendment-management' as ImportSubmodule, label: '7. LC Amendment' },
+                    { id: 'lc-register' as ImportSubmodule, label: '8. LC Register' },
+                    { id: 'bank-financial-documents' as ImportSubmodule, label: '9. Bank & Financial Docs' },
+                    { id: 'shipment-management' as ImportSubmodule, label: '10. Shipment Management' },
+                    { id: 'shipment-tracking' as ImportSubmodule, label: '11. Shipment Tracking' },
+                    { id: 'commercial-invoice' as ImportSubmodule, label: '12. Commercial Invoice' },
+                    { id: 'packing-list' as ImportSubmodule, label: '13. Packing List' },
+                    { id: 'bill-of-lading' as ImportSubmodule, label: '14. Bill of Lading (BL)' },
+                    { id: 'airway-bill' as ImportSubmodule, label: '15. Airway Bill (AWB)' },
+                    { id: 'certificate-of-origin' as ImportSubmodule, label: '16. Certificate of Origin' },
+                    { id: 'insurance-documents' as ImportSubmodule, label: '17. Insurance Documents' },
+                    { id: 'inspection-certificates' as ImportSubmodule, label: '18. Inspection Certificates' },
+                    { id: 'customs-port-clearance' as ImportSubmodule, label: '19. Customs & Port Clearance' },
+                    { id: 'bill-of-entry' as ImportSubmodule, label: '20. Bill of Entry' },
+                    { id: 'duty-vat-tax-management' as ImportSubmodule, label: '21. Duty & VAT Management' },
+                    { id: 'freight-logistics-expenses' as ImportSubmodule, label: '22. Freight Expenses' },
+                    { id: 'import-payment-management' as ImportSubmodule, label: '23. Import Payments' },
+                    { id: 'lc-margin-bank-charges' as ImportSubmodule, label: '24. LC Margin & Charges' },
+                    { id: 'landed-cost-calculation' as ImportSubmodule, label: '25. Landed Cost Calculation' },
+                    { id: 'import-goods-receive-grn' as ImportSubmodule, label: '26. Import GRN' },
+                    { id: 'import-document-management' as ImportSubmodule, label: '27. Document Repository' },
+                    { id: 'import-approval-center' as ImportSubmodule, label: '28. Import Approvals' },
+                    { id: 'import-alerts-notifications' as ImportSubmodule, label: '29. Alerts & Notifications' },
+                    { id: 'import-ai-assistant' as ImportSubmodule, label: '30. Import AI Assistant' },
+                    { id: 'import-mis-analytics' as ImportSubmodule, label: '31. Import MIS' },
+                    { id: 'import-reports' as ImportSubmodule, label: '32. Import Reports' },
+                    { id: 'import-settings' as ImportSubmodule, label: '33. Import Settings' },
+                    { id: 'import-activity-audit-logs' as ImportSubmodule, label: '34. Import Audit Logs' },
+                  ].map((sub) => {
+                    const isSubActive = activeTab === 'lc' && importSubmodule === sub.id;
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('lc');
+                          setImportSubmodule(sub.id);
+                        }}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] transition-colors cursor-pointer truncate ${
+                          isSubActive
+                            ? 'text-[#e6b980] bg-slate-800 font-bold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {/* Standard ERP Modules */}
             {[
               { id: 'documents' as ErpTab, label: 'Invoice & Quotation', labelBn: 'ইনভয়েস ও কোটেশন বিল্ডার', icon: FileSpreadsheet },
               { id: 'inventory' as ErpTab, label: 'Inventory & FEFO', labelBn: 'ইনভেন্টরি ও FEFO মেয়াদ', icon: Boxes },
               { id: 'accounting' as ErpTab, label: 'Accounts & Partnership', labelBn: 'আয়-ব্যয় ও পার্টনারশিপ', icon: DollarSign },
-              { id: 'lc' as ErpTab, label: 'Import L/C Tracker', labelBn: 'আমদানি এল/সি ট্র্যাকার', icon: Ship },
               { id: 'support' as ErpTab, label: 'RMA & Support Desk', labelBn: 'RMA ওয়ারেন্টি ও ইনবক্স', icon: ShieldAlert },
             ].map((item) => {
               const Icon = item.icon;
@@ -1154,64 +1248,12 @@ export default function ErpDashboardPage({ initialTab = 'overview' }: ErpDashboa
             />
           )}
 
-          {/* TAB 5: Import L/C Tracker */}
+          {/* TAB 5: Import / LC Tracker & AI Management System (Module 12) */}
           {activeTab === 'lc' && (
-            <div className="space-y-6 animate-in fade-in">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 font-serif">
-                    আন্তর্জাতিক লেটার অব ক্রেডিট ও কাস্টমস ট্র্যাকার (Import L/C)
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    বিদেশি মেডিকেল সরঞ্জাম প্রস্তুতকারকদের সাথে ব্যাংক এল/সি ও চট্টগ্রাম পোর্ট ক্লিয়ারেন্স।
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4">
-                {IMPORT_LC_DATA.map((lc) => (
-                  <div
-                    key={lc.lcNumber}
-                    className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-4"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-                      <div>
-                        <span className="font-mono font-bold text-slate-900 text-sm">
-                          {lc.lcNumber}
-                        </span>
-                        <span className="text-slate-400 mx-2">•</span>
-                        <span className="font-bold text-slate-700">{lc.bank}</span>
-                      </div>
-                      <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-900 self-start sm:self-auto font-mono">
-                        USD ${lc.valueUsd.toLocaleString('en-US')}
-                      </span>
-                    </div>
-
-                    <div className="space-y-1 text-xs">
-                      <div className="font-bold text-slate-800 text-sm">{lc.equipment}</div>
-                      <div className="text-slate-500">সরবরাহকারী: <strong>{lc.beneficiary}</strong></div>
-                      <div className="text-slate-600 font-mono text-[11px] pt-1">
-                        ইটিএ / লজিস্টিকস: <strong>{lc.eta}</strong>
-                      </div>
-                    </div>
-
-                    {/* Progress Bar */}
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-[11px] font-mono font-bold">
-                        <span className="text-slate-500">ক্লিয়ারেন্স অগ্রগতি</span>
-                        <span className="text-emerald-700">{lc.progress}%</span>
-                      </div>
-                      <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-[#c89348] to-[#1e3932] rounded-full transition-all"
-                          style={{ width: `${lc.progress}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <ErpImportTrackerView
+              submodule={importSubmodule}
+              onSelectSubmodule={setImportSubmodule}
+            />
           )}
 
           {/* TAB 6: RMA Warranty & Support Desk (Prompt 38) */}

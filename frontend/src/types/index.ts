@@ -1823,4 +1823,41 @@ export type MarketingSubmodule =
   | 'marketing-settings'
   | 'marketing-activity-logs';
 
+export type ImportSubmodule =
+  | 'import-dashboard'
+  | 'import-purchase-requisition'
+  | 'import-purchase-order'
+  | 'proforma-invoice'
+  | 'import-supplier-management'
+  | 'lc-application-opening'
+  | 'lc-amendment-management'
+  | 'lc-register'
+  | 'bank-financial-documents'
+  | 'shipment-management'
+  | 'shipment-tracking'
+  | 'commercial-invoice'
+  | 'packing-list'
+  | 'bill-of-lading'
+  | 'airway-bill'
+  | 'certificate-of-origin'
+  | 'insurance-documents'
+  | 'inspection-certificates'
+  | 'customs-port-clearance'
+  | 'bill-of-entry'
+  | 'duty-vat-tax-management'
+  | 'freight-logistics-expenses'
+  | 'import-payment-management'
+  | 'lc-margin-bank-charges'
+  | 'landed-cost-calculation'
+  | 'import-goods-receive-grn'
+  | 'import-document-management'
+  | 'import-approval-center'
+  | 'import-alerts-notifications'
+  | 'import-ai-assistant'
+  | 'import-mis-analytics'
+  | 'import-reports'
+  | 'import-settings'
+  | 'import-activity-audit-logs';
+
+
 
