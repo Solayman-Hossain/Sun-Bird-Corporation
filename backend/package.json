@@ -12,6 +12,7 @@
     "test:cart-checkout": "ts-node -r dotenv/config src/services/verify-cart-checkout.ts",
     "test:pos-checkout": "ts-node -r dotenv/config src/services/verify-pos-checkout.ts",
     "test:document-service": "ts-node src/services/verify-document-service.ts",
+    "test:final-integration": "ts-node -r dotenv/config src/services/verify-module18-e2e-integration.ts",
     "test:ecommerce-public": "ts-node -r dotenv/config src/services/verify-ecommerce-public-module.ts",
     "test:system-module": "ts-node -r dotenv/config src/services/verify-system-admin-module.ts",
     "test:ai-module": "ts-node -r dotenv/config src/services/verify-ai-central-module.ts",

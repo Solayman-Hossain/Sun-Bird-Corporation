@@ -55,7 +55,7 @@ async function runSupportModuleVerification() {
     }
     const orgId = org._id.toString();
 
-    let user = await UserModel.findOne({ organizationId: org._id });
+    let user = await UserModel.findOne({ email: 'support.lead@sunbird.com.bd' }) || await UserModel.findOne({ organizationId: org._id });
     if (!user) {
       user = await UserModel.create({
         organizationId: org._id,
