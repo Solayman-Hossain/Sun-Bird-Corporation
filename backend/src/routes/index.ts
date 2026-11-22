@@ -48,6 +48,7 @@ import publicMarketingRouter from './public/marketingRoutes';
 import erpImportRouter from './erp/importRoutes';
 import erpSupportRouter from './erp/supportRoutes';
 import erpMisRouter from './erp/misRoutes';
+import orderRoutes from './orderRoutes';
 import erpAiRouter from './erp/aiRoutes';
 import erpSystemAdminRouter from './erp/systemAdminRoutes';
 import publicEcommerceRouter from './public/ecommerceRoutes';
@@ -98,6 +99,9 @@ apiV1Router.use('/portal/customer', portalCustomerRouter);
 
 // Public storefront checkout mounted at /api/v1/public/checkout
 apiV1Router.use('/public/checkout', publicCheckoutRouter);
+
+// Public storefront order checkout mounted at /api/v1/orders
+apiV1Router.use('/orders', orderRoutes);
 
 // Public order and shipment tracking mounted at /api/v1/public/track-order
 apiV1Router.use('/public/track-order', publicTrackingRouter);
