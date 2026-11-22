@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fbe0ea;
-  --foreground: #1a1a1a;
+  --background: #f8fafc;
+  --foreground: #0f172a;
   
   /* Sun Bird Corporation Brand Design Tokens */
   --color-brand-primary: #1e3932;
   --color-brand-primary-hover: #162f29;
   --color-brand-accent: #c89348;
   --color-brand-accent-light: #e6b980;
-  --color-brand-bg: #fbe0ea;
+  --color-brand-bg: #f8fafc;
   --color-brand-surface: #ffffff;
-  --color-brand-border: #eae5df;
+  --color-brand-border: #e2e8f0;
   --color-brand-muted: #64748b;
   --color-brand-dark: #0f172a;
 }
@@ -37,13 +37,15 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  background-color: #fbe0ea;
+  background-color: #f8fafc;
 }
 
 body, .app-root-layout, .page-global-bg {
-  background-color: #fbe0ea !important;
-  background-image: radial-gradient(rgba(212, 83, 126, 0.5) 1.9px, transparent 1.9px) !important;
-  background-size: 22px 22px !important;
+  background-color: #f8fafc !important;
+  background-image: 
+    radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px),
+    linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  background-size: 24px 24px, 100% 100% !important;
   background-attachment: fixed !important;
   color: var(--foreground);
   font-family: var(--font-sans);

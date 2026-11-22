@@ -7,11 +7,13 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #fbe0ea;
-  background-image: radial-gradient(rgba(212, 83, 126, 0.5) 1.9px, transparent 1.9px);
-  background-size: 22px 22px;
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px),
+    linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  background-size: 24px 24px, 100% 100%;
   background-attachment: fixed;
-  color: #1e293b;
+  color: #0f172a;
   position: relative;
   overflow-x: clip;
 }

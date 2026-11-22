@@ -8,7 +8,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 1rem;
-  border-bottom: 1px solid rgba(212, 83, 126, 0.25);
+  border-bottom: 1px solid #e2e8f0;
   padding-bottom: 0.75rem;
 }
 

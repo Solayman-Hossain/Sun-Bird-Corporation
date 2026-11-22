@@ -4,11 +4,11 @@
 
 .storefront-home-container {
   min-height: 100vh;
-  background-color: var(--color-brand-bg, #faf8f5);
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   font-family: var(--font-sans);
-  color: #1e293b;
+  color: #0f172a;
 }
 
 .storefront-main-catalog {

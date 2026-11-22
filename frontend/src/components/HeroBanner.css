@@ -32,17 +32,15 @@
 .hero {
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
-  background-color: #fbe0ea;
-  background-image: radial-gradient(rgba(212, 83, 126, 0.5) 1.9px, transparent 1.9px);
-  background-size: 22px 22px;
-  border: 1px solid rgba(212, 83, 126, 0.25);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
   outline: none;
-  box-shadow: 0 4px 16px rgba(153, 53, 86, 0.06);
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06);
 }
 
 .hero:focus-visible {
-  ring: 2px solid #993556;
+  ring: 2px solid #1e3932;
 }
 
 /* Carousel Track / Slide Container */
@@ -129,21 +127,21 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.35rem 0.85rem;
-  background-color: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(212, 83, 126, 0.3);
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #72243E;
+  color: #166534;
   letter-spacing: 0.02em;
 }
 
 .hero-heading {
-  font-family: var(--font-serif, Georgia, serif);
+  font-family: var(--font-sans, system-ui, sans-serif);
   font-size: 1.65rem;
   line-height: 1.25;
   font-weight: 800;
-  color: #4B1528;
+  color: #0f172a;
   letter-spacing: -0.02em;
   margin: 0;
 }
@@ -163,7 +161,7 @@
 .hero-description {
   font-size: 0.925rem;
   line-height: 1.6;
-  color: #72243E;
+  color: #475569;
   margin: 0;
   max-width: 540px;
 }
@@ -194,7 +192,7 @@
 
 /* Primary Button exact design specification */
 .hero-btn {
-  background: #993556;
+  background: #1e3932;
   color: #fff;
   padding: 0.75rem 1.65rem;
   font-size: 0.875rem;
@@ -207,26 +205,26 @@
   gap: 0.5rem;
   border: 1px solid transparent;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 12px rgba(153, 53, 86, 0.25);
+  box-shadow: 0 4px 12px rgba(30, 57, 50, 0.25);
   cursor: pointer;
 }
 
 .hero-btn:hover {
-  background: #7d2944;
+  background: #162f29;
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(153, 53, 86, 0.35);
+  box-shadow: 0 6px 16px rgba(30, 57, 50, 0.35);
 }
 
 .hero-btn:active {
   transform: translateY(0);
 }
 
-/* Secondary Button: transparent with 1px #4B1528 border */
+/* Secondary Button: transparent with 1px #1e3932 border */
 .hero-btn-secondary {
   background: transparent;
-  color: #4B1528;
-  border: 1px solid #4B1528;
+  color: #1e3932;
+  border: 1px solid #1e3932;
   padding: 0.75rem 1.5rem;
   font-size: 0.875rem;
   font-weight: 600;
@@ -241,8 +239,8 @@
 }
 
 .hero-btn-secondary:hover {
-  background-color: rgba(75, 21, 40, 0.08);
-  color: #4B1528;
+  background-color: rgba(30, 57, 50, 0.06);
+  color: #162f29;
   transform: translateY(-2px);
 }
 
@@ -264,11 +262,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.9);
+  background: #ffffff;
   padding: 1.25rem;
   border-radius: 12px;
-  border: 1px solid rgba(212, 83, 126, 0.2);
-  box-shadow: 0 6px 20px rgba(153, 53, 86, 0.08);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
   width: 100%;
   max-width: 320px;
   height: 180px;
@@ -302,24 +300,24 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  color: #4B1528;
-  border: 1px solid rgba(212, 83, 126, 0.3);
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(153, 53, 86, 0.12);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
 .hero-arrow:hover {
-  background: #ffffff;
-  color: #993556;
-  border-color: #993556;
+  background: #f8fafc;
+  color: #1e3932;
+  border-color: #cbd5e1;
   transform: translateY(-50%) scale(1.08);
-  box-shadow: 0 4px 12px rgba(153, 53, 86, 0.2);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
 }
 
 .hero-arrow-prev {
@@ -361,7 +359,7 @@
   height: 8px;
   width: 8px;
   border-radius: 9999px;
-  background-color: rgba(153, 53, 86, 0.3);
+  background-color: rgba(30, 57, 50, 0.2);
   border: none;
   cursor: pointer;
   padding: 0;
@@ -369,12 +367,12 @@
 }
 
 .hero-dot:hover {
-  background-color: rgba(153, 53, 86, 0.6);
+  background-color: rgba(30, 57, 50, 0.5);
 }
 
 .hero-dot.active {
   width: 28px;
-  background-color: #993556;
+  background-color: #1e3932;
 }
 
 /* Accessibility: Reduced Motion */
