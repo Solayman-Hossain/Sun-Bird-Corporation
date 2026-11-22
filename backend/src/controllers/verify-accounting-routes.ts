@@ -369,6 +369,9 @@ async function runAccountingRoutesVerificationSuite() {
     console.log('  7. Test Partners Express Routes (/api/v1/erp/partners)');
     console.log('────────────────────────────────────────────────────────────────────────');
 
+    // Clean any residual test partner entries to ensure profit share ratios sum strictly to 100%
+    await PartnerModel.deleteMany({});
+
     // Create partner profile for director
     const partnerRes = await makeRequest(
       '/api/v1/erp/partners',
@@ -428,6 +431,7 @@ async function runAccountingRoutesVerificationSuite() {
     await UserModel.deleteMany({
       _id: { $in: [directorUser._id, accountantUser._id, unprivilegedUser._id] },
     });
+    await PartnerModel.deleteMany({});
     await JournalEntryModel.deleteMany({ sourceDocumentRef: jvPayload.sourceDocumentRef });
     if (assetId) await FixedAssetModel.findByIdAndDelete(assetId);
     if (loanCode) await LoanModel.deleteMany({ loanCode });

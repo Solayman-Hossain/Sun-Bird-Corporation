@@ -99,7 +99,7 @@ export const GoodsReceiveNoteSchema = new Schema<IGoodsReceiveNote>(
     reversedAt: { type: Date },
     reversalReason: { type: String, trim: true },
     createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    idempotencyKey: { type: String, trim: true, sparse: true },
+    idempotencyKey: { type: String, trim: true },
   },
   { timestamps: true, collection: 'goods_receive_notes' }
 );

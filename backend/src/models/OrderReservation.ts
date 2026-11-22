@@ -84,6 +84,7 @@ export const OrderReservationSchema = new Schema<IOrderReservation>(
 
 OrderReservationSchema.index({ organizationId: 1, status: 1 });
 OrderReservationSchema.index({ orderId: 1, warehouseId: 1 });
+OrderReservationSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // MongoDB TTL auto-cleanup on reservation expiry
 
 export const OrderReservationModel = model<IOrderReservation>(
   'OrderReservation',

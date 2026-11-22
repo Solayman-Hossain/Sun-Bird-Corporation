@@ -118,4 +118,7 @@ export const CustomerCartSchema = new Schema<ICustomerCart>(
   }
 );
 
+// Auto-purge abandoned carts after 30 days of inactivity
+CustomerCartSchema.index({ updatedAt: 1 }, { expireAfterSeconds: 2592000 });
+
 export const CustomerCart = model<ICustomerCart>('CustomerCart', CustomerCartSchema);

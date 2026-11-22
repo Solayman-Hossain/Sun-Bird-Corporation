@@ -68,4 +68,7 @@ export const CustomerWishlistSchema = new Schema<ICustomerWishlist>(
   }
 );
 
+// Auto-purge abandoned guest wishlists after 60 days
+CustomerWishlistSchema.index({ updatedAt: 1 }, { expireAfterSeconds: 5184000 });
+
 export const CustomerWishlist = model<ICustomerWishlist>('CustomerWishlist', CustomerWishlistSchema);

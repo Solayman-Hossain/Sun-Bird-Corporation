@@ -340,7 +340,6 @@ export const OrderSchema = new Schema<IOrder>(
     salesRepId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      index: true,
     },
     orderSource: {
       type: String,
@@ -547,8 +546,6 @@ export const OrderSchema = new Schema<IOrder>(
     },
     idempotencyKey: {
       type: String,
-      unique: true,
-      sparse: true,
       trim: true,
     },
   },
@@ -563,6 +560,7 @@ OrderSchema.index({ customerId: 1, orderStatus: 1 });
 OrderSchema.index({ orderStatus: 1, createdAt: -1 });
 OrderSchema.index({ paymentStatus: 1 });
 OrderSchema.index({ salesRepId: 1 });
+OrderSchema.index({ idempotencyKey: 1 }, { unique: true, sparse: true });
 OrderSchema.index({ createdAt: -1 });
 
 export const OrderModel = model<IOrder>('Order', OrderSchema, 'orders');

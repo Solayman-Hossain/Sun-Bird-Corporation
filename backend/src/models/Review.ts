@@ -81,6 +81,7 @@ export const ReviewSchema = new Schema<IReview>(
 );
 
 ReviewSchema.index({ productId: 1, createdAt: -1 });
+ReviewSchema.index({ productSku: 1, status: 1 });
 
 export const Review = model<IReview>('Review', ReviewSchema);
 
