@@ -121,6 +121,47 @@ export class ProductController {
   }
 
   /**
+   * @route   GET /api/v1/public/products/grouped
+   * @desc    Public storefront products grouped by category with strict privacy projection
+   * @access  Public
+   */
+  public static async getPublicProductsGroupedByCategory(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const products = await ProductModel.find({ isActive: true })
+        .select(
+          '-purchasePrice -costPrice -landedCost -costPerUnit -supplier -supplierPrice -supplierId -unitCost -createdBy -__v'
+        )
+        .populate('categoryId', 'name slug')
+        .lean();
+
+      // Group products safely by category name
+      const grouped = products.reduce((acc: Record<string, any[]>, product: any) => {
+        const categoryName =
+          (product.categoryId && typeof product.categoryId === 'object' && (product.categoryId as any).name) ||
+          (typeof product.category === 'string' && product.category.trim()) ||
+          'General Healthcare';
+
+        if (!acc[categoryName]) {
+          acc[categoryName] = [];
+        }
+        acc[categoryName].push(product);
+        return acc;
+      }, {});
+
+      res.status(200).json({
+        success: true,
+        data: grouped,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
    * @route   GET /api/v1/public/products/:idOrSku
    * @desc    Retrieves public product detail by ObjectId or SKU
    * @access  Public
@@ -355,3 +396,6 @@ export class ProductController {
     }
   }
 }
+
+export const getPublicProductsGroupedByCategory = ProductController.getPublicProductsGroupedByCategory;
+

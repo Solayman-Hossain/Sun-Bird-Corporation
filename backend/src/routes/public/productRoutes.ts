@@ -12,6 +12,14 @@ const router = Router();
 router.get('/', ProductController.listPublicProducts);
 
 /**
+ * @route   GET /api/v1/public/products/grouped
+ * @desc    Public storefront products grouped by category with strict privacy projection
+ * @access  Public
+ */
+router.get('/grouped', ProductController.getPublicProductsGroupedByCategory);
+router.get('/grouped-by-category', ProductController.getPublicProductsGroupedByCategory);
+
+/**
  * @route   GET /api/v1/public/products/warranty/verify/:serialNumber
  * @desc    Public equipment warranty authenticity check via URL / QR
  * @access  Public
