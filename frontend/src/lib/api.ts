@@ -69,10 +69,8 @@ export async function apiClient<T>(
   } catch (err: any) {
     clearTimeout(timeoutId);
     if (err.name === 'AbortError') {
-      console.warn(`[API Timeout] Request to ${url} timed out after ${timeoutMs}ms (X-Request-ID: ${requestId})`);
       throw new Error(`Request timed out after ${timeoutMs}ms`);
     }
-    console.warn(`[API Warning] Request to ${url} failed (X-Request-ID: ${requestId}):`, err.message);
     throw err;
   }
 }
@@ -132,8 +130,7 @@ export async function fetchProducts(params?: {
       return res.data;
     }
     return [];
-  } catch (e) {
-    console.error('Failed to fetch public products from API:', e);
+  } catch {
     return [];
   }
 }
@@ -147,8 +144,7 @@ export async function fetchProductBySku(sku: string): Promise<Product | null> {
       return res.data;
     }
     return null;
-  } catch (e) {
-    console.error(`Failed to fetch product ${sku} from API:`, e);
+  } catch {
     return null;
   }
 }
@@ -308,23 +304,9 @@ export async function createCheckout(
       },
     };
   } catch (err: any) {
-    console.warn('API error during checkout:', err.message);
-    const mockOrderNum = `ORD-${Date.now().toString().slice(-6)}`;
-    const mockChallanNum = `CH-2026-${Date.now().toString().slice(-4)}`;
     return {
-      success: true,
-      data: {
-        orderId: `ord_${Date.now()}`,
-        orderNumber: mockOrderNum,
-        challanNumber: mockChallanNum,
-        customerName: payload.customerName,
-        customerMobile: payload.customerMobile,
-        totalAmount: payload.items.reduce((s, i) => s + i.unitPrice * i.quantity, 0) + payload.shippingFee,
-        paymentMethod: payload.paymentMethod,
-        paymentStatus: payload.paymentMethod === 'ONLINE_SSLCOMMERZ' ? 'PENDING_GATEWAY' : 'COD_PENDING',
-        status: 'CONFIRMED',
-        estimatedDelivery: '24-48 Hours (Pathao / Steadfast Express)',
-      },
+      success: false,
+      error: err.message || 'Unable to complete checkout. Please verify server connection and try again.',
     };
   }
 }

@@ -5,10 +5,10 @@ import { WarehouseModel } from '../models/Warehouse';
 import logger from '../config/logger';
 
 export async function seedHealthcareProducts() {
-  console.log('════════════════════════════════════════════════════════════════════════');
-  console.log('  SUN BIRD CORPORATION — HEALTHCARE & MEDICAL STOREFRONT SEEDER');
-  console.log('  (Seeding Master Medical Consumables & Diagnostic Products)');
-  console.log('════════════════════════════════════════════════════════════════════════\n');
+  logger.info('════════════════════════════════════════════════════════════════════════');
+  logger.info('  SUN BIRD CORPORATION — HEALTHCARE & MEDICAL STOREFRONT SEEDER');
+  logger.info('  (Seeding Master Medical Consumables & Diagnostic Products)');
+  logger.info('════════════════════════════════════════════════════════════════════════\n');
 
   await connectDatabase();
 
@@ -19,7 +19,7 @@ export async function seedHealthcareProducts() {
       throw new Error('Central Warehouse (WH-DAC-CENTRAL) not found! Run master seeder first.');
     }
 
-    console.log(`Using Warehouse: ${centralWh.name} (${centralWh.warehouseCode})`);
+    logger.info(`Using Warehouse: ${centralWh.name} (${centralWh.warehouseCode})`);
 
     // 2. Define the exact requested healthcare products
     const healthcareProducts = [
@@ -369,7 +369,7 @@ export async function seedHealthcareProducts() {
       },
     ];
 
-    console.log(`\n--- Seeding ${healthcareProducts.length} Target Healthcare Products & Batches ---`);
+    logger.info(`\n--- Seeding ${healthcareProducts.length} Target Healthcare Products & Batches ---`);
 
     for (const p of healthcareProducts) {
       const { batchData, ...productFields } = p;
@@ -381,7 +381,7 @@ export async function seedHealthcareProducts() {
         { upsert: true, new: true }
       );
 
-      console.log(`✅ Product: [${product.sku}] ${product.nameEn} (MRP: ৳${product.retailPrice})`);
+      logger.info(`✅ Product: [${product.sku}] ${product.nameEn} (MRP: ৳${product.retailPrice})`);
 
       // 2.2 Upsert Batch with stock in Central Depot
       const batchDoc = {
@@ -407,12 +407,12 @@ export async function seedHealthcareProducts() {
         { upsert: true, new: true }
       );
 
-      console.log(`   └─ Batch: [${batchData.batchNumber}] Stock: ${batchData.currentQty} ${product.baseUom} (Unit Cost: ৳${batchData.unitCost})`);
+      logger.info(`   └─ Batch: [${batchData.batchNumber}] Stock: ${batchData.currentQty} ${product.baseUom} (Unit Cost: ৳${batchData.unitCost})`);
     }
 
-    console.log('\n════════════════════════════════════════════════════════════════════════');
-    console.log('  ALL HEALTHCARE PRODUCTS AND INVENTORY BATCHES SUCCESSFULLY PERSISTED!');
-    console.log('════════════════════════════════════════════════════════════════════════\n');
+    logger.info('\n════════════════════════════════════════════════════════════════════════');
+    logger.info('  ALL HEALTHCARE PRODUCTS AND INVENTORY BATCHES SUCCESSFULLY PERSISTED!');
+    logger.info('════════════════════════════════════════════════════════════════════════\n');
   } catch (err: any) {
     logger.error('Error in Healthcare Seeder:', err);
     console.error('❌ Healthcare Seeding failed:', err.message);

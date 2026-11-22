@@ -51,8 +51,8 @@ export default function HomePage() {
         if (liveProducts && liveProducts.length > 0) {
           setProducts(liveProducts);
         }
-      } catch (e) {
-        console.warn('Using initial product catalogue fallback', e);
+      } catch {
+        // Graceful handling when backend is not reached during initial mount
       }
     }
     loadProducts();

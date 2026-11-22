@@ -10,16 +10,16 @@ import { CounterModel } from '../models/Counter';
 import logger from '../config/logger';
 
 export async function runMasterSeeder() {
-  console.log('════════════════════════════════════════════════════════════════════════');
-  console.log('  SUN BIRD CORPORATION — ENTERPRISE DATABASE MASTER SEEDER');
-  console.log('  (Idempotent Master Data Provisioning for 2026 Cloud ERP)');
-  console.log('════════════════════════════════════════════════════════════════════════\n');
+  logger.info('════════════════════════════════════════════════════════════════════════');
+  logger.info('  SUN BIRD CORPORATION — ENTERPRISE DATABASE MASTER SEEDER');
+  logger.info('  (Idempotent Master Data Provisioning for 2026 Cloud ERP)');
+  logger.info('════════════════════════════════════════════════════════════════════════\n');
 
   await connectDatabase();
 
   try {
     // ── 1. Roles & Permissions Master ───────────────────────────────────────
-    console.log('--- Seeding Roles & Permissions ---');
+    logger.info('--- Seeding Roles & Permissions ---');
     const rolesData = [
       {
         roleName: 'Super Admin',
@@ -120,10 +120,10 @@ export async function runMasterSeeder() {
       );
       roleMap[r.slug] = doc._id;
     }
-    console.log(`✅ Roles seeded (${Object.keys(roleMap).length} system roles)`);
+    logger.info(`✅ Roles seeded (${Object.keys(roleMap).length} system roles)`);
 
     // ── 2. Super Admin & Directors ──────────────────────────────────────────
-    console.log('\n--- Seeding Executive Directors & Super Admin ---');
+    logger.info('\n--- Seeding Executive Directors & Super Admin ---');
     const defaultPasswordHash = await bcrypt.hash('SunBird@2026', 10);
 
     const initialUsers = [
@@ -183,10 +183,10 @@ export async function runMasterSeeder() {
         { upsert: true, new: true }
       );
     }
-    console.log(`✅ Executive users seeded (Super Admin, MD, Finance & Admin Directors)`);
+    logger.info(`✅ Executive users seeded (Super Admin, MD, Finance & Admin Directors)`);
 
     // ── 3. Standard 35 Chart of Accounts ────────────────────────────────────
-    console.log('\n--- Seeding Standard 35 Chart of Accounts (COA) ---');
+    logger.info('\n--- Seeding Standard 35 Chart of Accounts (COA) ---');
     const coaData = [
       // ASSETS (1010 - 1510)
       { accountCode: 1010, accountName: 'Cash in Hand (Central Vault)', accountType: 'ASSET', normalBalance: 'DEBIT', isControl: false },
@@ -246,10 +246,10 @@ export async function runMasterSeeder() {
         { upsert: true, new: true }
       );
     }
-    console.log(`✅ Chart of Accounts seeded (${coaData.length} statutory double-entry accounts)`);
+    logger.info(`✅ Chart of Accounts seeded (${coaData.length} statutory double-entry accounts)`);
 
     // ── 4. Central & Regional Warehouses ────────────────────────────────────
-    console.log('\n--- Seeding Warehouses & Showroom Branches ---');
+    logger.info('\n--- Seeding Warehouses & Showroom Branches ---');
     const warehouseData = [
       {
         warehouseCode: 'WH-DAC-CENTRAL',
@@ -320,10 +320,10 @@ export async function runMasterSeeder() {
         { upsert: true, new: true }
       );
     }
-    console.log(`✅ Warehouses seeded (${warehouseData.length} locations with GPS geofencing)`);
+    logger.info(`✅ Warehouses seeded (${warehouseData.length} locations with GPS geofencing)`);
 
     // ── 5. Sample Products (Medical & Diagnostic SKUs) ──────────────────────
-    console.log('\n--- Seeding Medical & Diagnostic Master Products ---');
+    logger.info('\n--- Seeding Medical & Diagnostic Master Products ---');
     const productsData = [
       {
         sku: 'MED-ECG-001',
@@ -421,10 +421,10 @@ export async function runMasterSeeder() {
         { upsert: true, new: true }
       );
     }
-    console.log(`✅ Master Products seeded (${productsData.length} Medical SKUs with NBR HS Codes)`);
+    logger.info(`✅ Master Products seeded (${productsData.length} Medical SKUs with NBR HS Codes)`);
 
     // ── 6. UOM Conversion Master ────────────────────────────────────────────
-    console.log('\n--- Seeding Multi-UOM Conversion Rules ---');
+    logger.info('\n--- Seeding Multi-UOM Conversion Rules ---');
     const uomData = [
       {
         fromUom: 'CARTON',
@@ -449,10 +449,10 @@ export async function runMasterSeeder() {
         { upsert: true, new: true }
       );
     }
-    console.log(`✅ UOM conversion rules seeded (Carton -> Box -> PCS)`);
+    logger.info(`✅ UOM conversion rules seeded (Carton -> Box -> PCS)`);
 
     // ── 7. Sequence Counters Initialized for 2026 ───────────────────────────
-    console.log('\n--- Seeding Sequence Counters for Year 2026 ---');
+    logger.info('\n--- Seeding Sequence Counters for Year 2026 ---');
     const counterCodes = ['CH', 'INV', 'JV', 'PO', 'PR', 'CRM', 'AR', 'WH', 'LC'];
     const currentYear = 2026;
 
@@ -464,11 +464,11 @@ export async function runMasterSeeder() {
         { upsert: true, new: true }
       );
     }
-    console.log(`✅ Sequence Counters initialized for 2026 (${counterCodes.join(', ')})`);
+    logger.info(`✅ Sequence Counters initialized for 2026 (${counterCodes.join(', ')})`);
 
-    console.log('\n════════════════════════════════════════════════════════════════════════');
-    console.log('  MASTER SEEDING COMPLETED SUCCESSFULLY! ALL DATA PERSISTED.');
-    console.log('════════════════════════════════════════════════════════════════════════\n');
+    logger.info('\n════════════════════════════════════════════════════════════════════════');
+    logger.info('  MASTER SEEDING COMPLETED SUCCESSFULLY! ALL DATA PERSISTED.');
+    logger.info('════════════════════════════════════════════════════════════════════════\n');
   } catch (err: any) {
     logger.error('Error in Master Seeder:', err);
     console.error('❌ Master Seeding failed:', err.message);

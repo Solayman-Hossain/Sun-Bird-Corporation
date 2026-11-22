@@ -512,11 +512,10 @@ export function ErpMarketingView({
             key={item.id}
             type="button"
             onClick={() => setSubmodule(item.id)}
-            className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer ${
-              activeSubmodule === item.id
-                ? 'bg-[#1e3932] text-[#e6b980] font-bold shadow-xs'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
+            className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer ${activeSubmodule === item.id
+              ? 'bg-[#1e3932] text-[#e6b980] font-bold shadow-xs'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+              }`}
           >
             {item.label}
           </button>
@@ -754,13 +753,12 @@ export function ErpMarketingView({
                       </td>
                       <td className="px-4 py-3">
                         <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            b.status === 'PUBLISHED'
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                              : b.status === 'APPROVED'
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${b.status === 'PUBLISHED'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                            : b.status === 'APPROVED'
                               ? 'bg-blue-50 text-blue-700 border border-blue-200'
                               : 'bg-slate-100 text-slate-600'
-                          }`}
+                            }`}
                         >
                           {b.status}
                         </span>
@@ -799,84 +797,83 @@ export function ErpMarketingView({
       {['promotional-campaigns', 'product-promotions', 'category-promotions', 'brand-promotions'].includes(
         activeSubmodule
       ) && (
-        <div className="space-y-4">
-          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <h3 className="font-bold text-slate-900 text-sm">ক্যাম্পেইন ও প্রমোশন তালিকা ({campaigns.length})</h3>
-            <button
-              onClick={() => setShowCampaignModal(true)}
-              className="px-3 py-1.5 bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>নতুন ক্যাম্পেইন</span>
-            </button>
-          </div>
+          <div className="space-y-4">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
+              <h3 className="font-bold text-slate-900 text-sm">ক্যাম্পেইন ও প্রমোশন তালিকা ({campaigns.length})</h3>
+              <button
+                onClick={() => setShowCampaignModal(true)}
+                className="px-3 py-1.5 bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>নতুন ক্যাম্পেইন</span>
+              </button>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {campaigns.map((c) => (
-              <div key={c._id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="text-[10px] font-mono text-slate-400 font-bold">{c.campaignCode}</span>
-                    <h4 className="font-bold text-slate-900 text-sm leading-tight">{c.name}</h4>
-                  </div>
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                      c.status === 'ACTIVE'
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {campaigns.map((c) => (
+                <div key={c._id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <span className="text-[10px] font-mono text-slate-400 font-bold">{c.campaignCode}</span>
+                      <h4 className="font-bold text-slate-900 text-sm leading-tight">{c.name}</h4>
+                    </div>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${c.status === 'ACTIVE'
                         ? 'bg-emerald-100 text-emerald-800'
                         : c.status === 'PENDING_APPROVAL'
-                        ? 'bg-amber-100 text-amber-800'
-                        : 'bg-slate-100 text-slate-600'
-                    }`}
-                  >
-                    {c.status}
-                  </span>
-                </div>
-
-                <p className="text-xs text-slate-500 line-clamp-2">{c.description || 'মেডিকেল ইকুইপমেন্ট প্রমোশন'}</p>
-
-                <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2 text-[11px]">
-                  <div>
-                    <span className="text-slate-400 block">বাজেট:</span>
-                    <span className="font-bold font-mono text-slate-900">৳{c.budget.toLocaleString()}</span>
+                          ? 'bg-amber-100 text-amber-800'
+                          : 'bg-slate-100 text-slate-600'
+                        }`}
+                    >
+                      {c.status}
+                    </span>
                   </div>
-                  <div>
-                    <span className="text-slate-400 block">ছাড়:</span>
-                    <span className="font-bold text-rose-600">{c.discountPercentage || 0}% OFF</span>
+
+                  <p className="text-xs text-slate-500 line-clamp-2">{c.description || 'মেডিকেল ইকুইপমেন্ট প্রমোশন'}</p>
+
+                  <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2 text-[11px]">
+                    <div>
+                      <span className="text-slate-400 block">বাজেট:</span>
+                      <span className="font-bold font-mono text-slate-900">৳{c.budget.toLocaleString()}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block">ছাড়:</span>
+                      <span className="font-bold text-rose-600">{c.discountPercentage || 0}% OFF</span>
+                    </div>
+                  </div>
+
+                  {/* Workflow Buttons */}
+                  <div className="pt-2 flex items-center gap-1.5">
+                    {c.status === 'DRAFT' && (
+                      <button
+                        onClick={() => handleSubmitCampaign(c._id)}
+                        className="w-full py-1.5 bg-indigo-600 text-white rounded-lg font-bold text-xs hover:bg-indigo-700"
+                      >
+                        Submit for Approval
+                      </button>
+                    )}
+                    {c.status === 'PENDING_APPROVAL' && (
+                      <button
+                        onClick={() => handleApproveCampaign(c._id)}
+                        className="w-full py-1.5 bg-emerald-600 text-white rounded-lg font-bold text-xs hover:bg-emerald-700"
+                      >
+                        Approve & Activate
+                      </button>
+                    )}
+                    {c.status === 'ACTIVE' && (
+                      <button
+                        onClick={() => marketingService.updateCampaignStatus(c._id, 'PAUSED').then(loadInitialData)}
+                        className="w-full py-1.5 bg-slate-200 text-slate-700 rounded-lg font-bold text-xs hover:bg-slate-300"
+                      >
+                        Pause Campaign
+                      </button>
+                    )}
                   </div>
                 </div>
-
-                {/* Workflow Buttons */}
-                <div className="pt-2 flex items-center gap-1.5">
-                  {c.status === 'DRAFT' && (
-                    <button
-                      onClick={() => handleSubmitCampaign(c._id)}
-                      className="w-full py-1.5 bg-indigo-600 text-white rounded-lg font-bold text-xs hover:bg-indigo-700"
-                    >
-                      Submit for Approval
-                    </button>
-                  )}
-                  {c.status === 'PENDING_APPROVAL' && (
-                    <button
-                      onClick={() => handleApproveCampaign(c._id)}
-                      className="w-full py-1.5 bg-emerald-600 text-white rounded-lg font-bold text-xs hover:bg-emerald-700"
-                    >
-                      Approve & Activate
-                    </button>
-                  )}
-                  {c.status === 'ACTIVE' && (
-                    <button
-                      onClick={() => marketingService.updateCampaignStatus(c._id, 'PAUSED').then(loadInitialData)}
-                      className="w-full py-1.5 bg-slate-200 text-slate-700 rounded-lg font-bold text-xs hover:bg-slate-300"
-                    >
-                      Pause Campaign
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 4. SUBMODULE: CMS WEBSITE CONTENT & LANDING PAGES */}
@@ -944,64 +941,64 @@ export function ErpMarketingView({
       {['social-media-management', 'social-accounts', 'social-content', 'social-calendar'].includes(
         activeSubmodule
       ) && (
-        <div className="space-y-6">
-          {/* Social Accounts Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {socialAccounts.map((acc) => (
-              <div key={acc._id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-                    {acc.platform === 'FACEBOOK' ? <Share2 className="w-5 h-5" /> : <Globe className="w-5 h-5" />}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-900 text-xs">{acc.accountName}</h4>
-                    <p className="text-[10px] text-slate-400">{acc.accountHandle || acc.platform}</p>
-                  </div>
-                </div>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                  সংযুক্ত
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* Social Posts List */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-slate-900 text-sm">সোশ্যাল মিডিয়া পোস্ট শিডিউল</h3>
-              <button
-                onClick={() => setShowSocialPostModal(true)}
-                className="px-3 py-1.5 bg-[#1e3932] text-[#e6b980] rounded-lg text-xs font-bold flex items-center gap-1.5"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>নতুন পোস্ট লিখুন</span>
-              </button>
-            </div>
-
-            <div className="divide-y divide-slate-100">
-              {socialPosts.map((post) => (
-                <div key={post._id} className="py-3 flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] font-bold text-slate-400">{post.postCode}</span>
-                      <h5 className="font-bold text-slate-900 text-xs">{post.title}</h5>
+          <div className="space-y-6">
+            {/* Social Accounts Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {socialAccounts.map((acc) => (
+                <div key={acc._id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                      {acc.platform === 'FACEBOOK' ? <Share2 className="w-5 h-5" /> : <Globe className="w-5 h-5" />}
                     </div>
-                    <p className="text-xs text-slate-600 mt-1">{post.primaryCaption}</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      {post.publishStatus}
-                    </span>
-                    <div className="text-[10px] text-slate-400 mt-1">
-                      {new Date(post.scheduledDate).toLocaleDateString('bn-BD')}
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-xs">{acc.accountName}</h4>
+                      <p className="text-[10px] text-slate-400">{acc.accountHandle || acc.platform}</p>
                     </div>
                   </div>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                    সংযুক্ত
+                  </span>
                 </div>
               ))}
             </div>
+
+            {/* Social Posts List */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-slate-900 text-sm">সোশ্যাল মিডিয়া পোস্ট শিডিউল</h3>
+                <button
+                  onClick={() => setShowSocialPostModal(true)}
+                  className="px-3 py-1.5 bg-[#1e3932] text-[#e6b980] rounded-lg text-xs font-bold flex items-center gap-1.5"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>নতুন পোস্ট লিখুন</span>
+                </button>
+              </div>
+
+              <div className="divide-y divide-slate-100">
+                {socialPosts.map((post) => (
+                  <div key={post._id} className="py-3 flex items-start justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] font-bold text-slate-400">{post.postCode}</span>
+                        <h5 className="font-bold text-slate-900 text-xs">{post.title}</h5>
+                      </div>
+                      <p className="text-xs text-slate-600 mt-1">{post.primaryCaption}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        {post.publishStatus}
+                      </span>
+                      <div className="text-[10px] text-slate-400 mt-1">
+                        {new Date(post.scheduledDate).toLocaleDateString('bn-BD')}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 6. SUBMODULE: MARKETING MASTER CALENDAR */}
