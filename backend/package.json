@@ -35,6 +35,7 @@
     "test:webhooks-queues": "ts-node -r dotenv/config src/controllers/verify-webhooks-queues.ts",
     "test:s3-media": "ts-node -r dotenv/config src/services/verify-s3-media.ts",
     "test:api-integration": "ts-node -r dotenv/config src/services/verify-full-api-integration.ts",
+    "test:audit-all": "ts-node -r dotenv/config scripts/run-audit-suites.ts",
     "seed": "ts-node -r dotenv/config src/seeders/masterSeeder.ts",
     "seed:prod": "ts-node -r dotenv/config scripts/seedProduction.ts",
     "test:jest": "jest --config jest.config.js --runInBand --detectOpenHandles",
