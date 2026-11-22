@@ -6,10 +6,16 @@ export class AiSecurityService {
     // Bank accounts, IBANs, Credit Cards
     /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})\b/g, // Card numbers
     /\b(A\/C|Account\s*(?:No|Number)?|Bank\s*Acc)[\s:]*([0-9]{8,18})\b/gi,
-    // Passwords, Secrets, API Keys
+    // Passwords, Secrets, API Keys, Tokens
     /\b(?:password|passwd|secret|apikey|api_key|token)[\s:=]+([^\s,;]+)/gi,
     // National ID (NID), SSN
     /\b(?:NID|National\s*ID)[\s:=]*([0-9]{10,17})\b/gi,
+    // Bangladesh Mobile Numbers (e.g. +88017XXXXXXXX, 018XXXXXXXX)
+    /(?:\+?88)?01[3-9]\d{8}\b/g,
+    // Labeled phone / contact numbers
+    /\b(?:phone|mobile|cell|contact)[\s:=]*([+0-9\s-]{10,16})\b/gi,
+    // Customer Emails
+    /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g,
   ];
 
   /**
@@ -23,7 +29,7 @@ export class AiSecurityService {
     let modified = text;
     let didRedact = false;
 
-    // 1. Regex redaction for account numbers and secrets
+    // 1. Regex redaction for account numbers, secrets, phones, and emails
     for (const pattern of this.SENSITIVE_PATTERNS) {
       if (pattern.test(modified)) {
         didRedact = true;
@@ -36,10 +42,17 @@ export class AiSecurityService {
 
     // 2. Redact employee base salaries if present in raw string
     if (!isAdmin) {
-      const salaryPattern = /\b(?:basicSalary|baseSalary|grossSalary|salary)[\s:=]*([0-9]+(?:\.[0-9]+)?)\b/gi;
+      const salaryPattern = /\b(?:basicSalary|baseSalary|grossSalary|netSalary|salary|wage|allowance|payroll)[\s:=]*([0-9]+(?:\.[0-9]+)?)\b/gi;
       if (salaryPattern.test(modified)) {
         didRedact = true;
         modified = modified.replace(salaryPattern, 'salary: [REDACTED_RESTRICTED_CONFIDENTIAL]');
+      }
+
+      // Redact internal product cost / landed cost prices
+      const costPattern = /\b(?:costPrice|purchasePrice|landedCost|supplierPrice|costPerUnit|unitCost)[\s:=]*([0-9]+(?:\.[0-9]+)?)\b/gi;
+      if (costPattern.test(modified)) {
+        didRedact = true;
+        modified = modified.replace(costPattern, 'cost: [REDACTED_RESTRICTED_CONFIDENTIAL]');
       }
     }
 

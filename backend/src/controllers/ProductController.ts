@@ -54,10 +54,10 @@ export class ProductController {
         }
       }
 
-      // Query database (strictly excluding internal cost prices from public storefront)
+      // Query database (strictly excluding internal cost prices and supplier info from public storefront)
       const [products, total] = await Promise.all([
         ProductModel.find(filter)
-          .select('-purchasePrice -costPrice -createdBy -__v')
+          .select('-purchasePrice -costPrice -landedCost -supplier -costPerUnit -supplierPrice -supplierId -unitCost -createdBy -__v')
           .sort(sortOption)
           .skip(skip)
           .limit(limit)
@@ -141,7 +141,7 @@ export class ProductController {
       let product = null;
       if (Types.ObjectId.isValid(idOrSku)) {
         product = await ProductModel.findOne({ _id: idOrSku, isActive: true })
-          .select('-purchasePrice -costPrice -createdBy -__v')
+          .select('-purchasePrice -costPrice -landedCost -supplier -costPerUnit -supplierPrice -supplierId -unitCost -createdBy -__v')
           .lean();
       }
 
@@ -150,7 +150,7 @@ export class ProductController {
           sku: idOrSku.trim().toUpperCase(),
           isActive: true,
         })
-          .select('-purchasePrice -costPrice -createdBy -__v')
+          .select('-purchasePrice -costPrice -landedCost -supplier -costPerUnit -supplierPrice -supplierId -unitCost -createdBy -__v')
           .lean();
       }
 

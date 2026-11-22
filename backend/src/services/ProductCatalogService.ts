@@ -257,7 +257,7 @@ export class ProductCatalogService {
     // Projection: Strip purchasePrice and costPrice if includeInternalCost is false
     let projection = '-__v';
     if (!includeInternalCost) {
-      projection += ' -purchasePrice -costPrice';
+      projection += ' -purchasePrice -costPrice -landedCost -supplier -costPerUnit -supplierPrice -supplierId -unitCost';
     }
 
     const [products, total] = await Promise.all([
@@ -314,7 +314,7 @@ export class ProductCatalogService {
 
     let projection = '-__v';
     if (!includeInternalCost) {
-      projection += ' -purchasePrice -costPrice';
+      projection += ' -purchasePrice -costPrice -landedCost -supplier -costPerUnit -supplierPrice -supplierId -unitCost';
     }
 
     const product = await ProductModel.findOne(query).select(projection).lean();

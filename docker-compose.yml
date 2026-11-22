@@ -33,16 +33,16 @@ services:
       - MONGO_URI=${MONGO_URI:-mongodb://mongodb:27017/sunbird_erp?replicaSet=rs0}
       - MONGODB_URI=${MONGODB_URI:-mongodb://mongodb:27017/sunbird_erp?replicaSet=rs0}
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
-      - JWT_SECRET=${JWT_SECRET:-sunbird_super_secure_production_secret_key_2026}
-      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET:-sunbird_super_secure_production_secret_key_2026}
-      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-sunbird_refresh_secure_production_secret_key_2026}
-      - SSLCOMMERZ_STORE_ID=${SSLCOMMERZ_STORE_ID:-sunbi67450live}
-      - SSLCOMMERZ_STORE_PASSWD=${SSLCOMMERZ_STORE_PASSWD:-sunbi67450live@ssl}
-      - SSLCOMMERZ_IS_SANDBOX=${SSLCOMMERZ_IS_SANDBOX:-false}
-      - PATHAO_CLIENT_ID=${PATHAO_CLIENT_ID:-sunbird_pathao_client}
-      - PATHAO_CLIENT_SECRET=${PATHAO_CLIENT_SECRET:-sunbird_pathao_secret}
-      - STEADFAST_API_KEY=${STEADFAST_API_KEY:-sunbird_steadfast_key}
-      - STEADFAST_SECRET_KEY=${STEADFAST_SECRET_KEY:-sunbird_steadfast_secret}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - SSLCOMMERZ_STORE_ID=${SSLCOMMERZ_STORE_ID:-}
+      - SSLCOMMERZ_STORE_PASSWD=${SSLCOMMERZ_STORE_PASSWD:-}
+      - SSLCOMMERZ_IS_SANDBOX=${SSLCOMMERZ_IS_SANDBOX:-true}
+      - PATHAO_CLIENT_ID=${PATHAO_CLIENT_ID:-}
+      - PATHAO_CLIENT_SECRET=${PATHAO_CLIENT_SECRET:-}
+      - STEADFAST_API_KEY=${STEADFAST_API_KEY:-}
+      - STEADFAST_SECRET_KEY=${STEADFAST_SECRET_KEY:-}
     expose:
       - "5000"
     depends_on:

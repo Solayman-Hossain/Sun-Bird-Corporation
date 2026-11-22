@@ -191,11 +191,11 @@ export const env = cleanEnv(process.env, {
   }),
   // ── SSLCOMMERZ Payment Gateway & Courier Webhook Secrets ──────────────────
   SSLCOMMERZ_STORE_ID: str({
-    default: 'sunbird_test',
+    default: '',
     desc: 'SSLCOMMERZ Store ID',
   }),
   SSLCOMMERZ_STORE_PASSWORD: str({
-    default: 'sunbird_test@ssl',
+    default: '',
     desc: 'SSLCOMMERZ Store Password',
   }),
   SSLCOMMERZ_IS_SANDBOX: bool({

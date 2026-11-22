@@ -11,8 +11,13 @@ node_modules/
 # Environment Variables & Secrets
 .env
 .env.*
+*.env
+backend/.env
+frontend/.env.local
+frontend/.env*.local
 !.env.example
-!.env.*.example
+!backend/.env.example
+!frontend/.env.example
 
 # Build & Compiled Outputs
 dist/
