@@ -182,7 +182,7 @@ export const orderProcessingService = {
   // 4. Create manual order
   async createManualOrder(payload: any): Promise<OrderProcessingItem> {
     const res = await apiClient<{ success: boolean; data: OrderProcessingItem }>(
-      '/erp/orders/manual',
+      '/erp/orders',
       {
         method: 'POST',
         body: JSON.stringify(payload),
@@ -283,7 +283,7 @@ export const orderProcessingService = {
 
   async recordCod(id: string, payload: any): Promise<OrderProcessingItem> {
     const res = await apiClient<{ success: boolean; data: OrderProcessingItem }>(
-      `/erp/orders/${id}/cod-collection`,
+      `/erp/orders/${id}/cod/collect`,
       {
         method: 'POST',
         body: JSON.stringify(payload),
@@ -306,7 +306,7 @@ export const orderProcessingService = {
 
   async reserveStock(id: string, warehouseId?: string): Promise<{ order: OrderProcessingItem; reservation: any }> {
     const res = await apiClient<{ success: boolean; data: { order: OrderProcessingItem; reservation: any } }>(
-      `/erp/orders/${id}/reserve-stock`,
+      `/erp/orders/${id}/reserve`,
       {
         method: 'POST',
         body: JSON.stringify({ warehouseId }),
@@ -379,7 +379,7 @@ export const orderProcessingService = {
 
   async confirmDelivery(id: string, payload: any): Promise<OrderProcessingItem> {
     const res = await apiClient<{ success: boolean; data: OrderProcessingItem }>(
-      `/erp/orders/${id}/confirm-delivery`,
+      `/erp/orders/${id}/delivery`,
       {
         method: 'POST',
         body: JSON.stringify(payload),
@@ -431,14 +431,14 @@ export const orderProcessingService = {
   },
 
   // 14. Reports
-  async getReports(reportType: string, params: Record<string, any> = {}): Promise<any> {
+  async getReports(reportType: string = 'summary', params: Record<string, any> = {}): Promise<any> {
     const q = new URLSearchParams();
-    q.append('reportType', reportType);
     Object.entries(params).forEach(([k, v]) => {
       if (v !== undefined && v !== null && v !== '') q.append(k, String(v));
     });
+    const queryString = q.toString() ? `?${q.toString()}` : '';
     const res = await apiClient<{ success: boolean; data: any }>(
-      `/erp/orders/reports?${q.toString()}`
+      `/erp/orders/reports/${encodeURIComponent(reportType)}${queryString}`
     );
     return res.data;
   },

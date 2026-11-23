@@ -40,12 +40,14 @@ router.post('/:id/payments/:paymentNumber/reject', hasPermission('orders', 'APPR
 router.post('/:id/cod/collect', hasPermission('orders', 'UPDATE'), OrderProcessingController.recordCodCollection);
 
 // ── Stock Availability & Reservation ─────────────────────────────────────────
+router.post('/stock-availability', hasPermission('orders', 'READ'), OrderProcessingController.checkPreOrderStockAvailability);
 router.get('/:id/stock-availability', hasPermission('orders', 'READ'), OrderProcessingController.checkStockAvailability);
 router.post('/:id/reserve', hasPermission('orders', 'UPDATE'), OrderProcessingController.reserveStock);
 router.post('/:id/release-reservation', hasPermission('orders', 'UPDATE'), OrderProcessingController.releaseReservation);
 
 // ── Picking & Packing ────────────────────────────────────────────────────────
 router.post('/:id/picking', hasPermission('orders', 'UPDATE'), OrderProcessingController.createPickingList);
+router.patch('/:id/picking/:pickingId/items', hasPermission('orders', 'UPDATE'), OrderProcessingController.updatePickingItem);
 router.post('/:id/picking/:pickingId/complete', hasPermission('orders', 'UPDATE'), OrderProcessingController.completePicking);
 router.post('/:id/packing', hasPermission('orders', 'UPDATE'), OrderProcessingController.createPacking);
 

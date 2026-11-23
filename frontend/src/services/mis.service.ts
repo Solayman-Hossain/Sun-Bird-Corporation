@@ -215,7 +215,7 @@ export class MisService {
   public static async getExecutiveOverview(params?: Record<string, any>): Promise<MisExecutiveOverview> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: MisExecutiveOverview }>(
-      `/api/v1/erp/mis/overview${query ? `?${query}` : ''}`
+      `/erp/mis/overview${query ? `?${query}` : ''}`
     );
     return res.data;
   }
@@ -223,7 +223,7 @@ export class MisService {
   public static async getSalesIntelligence(params?: Record<string, any>): Promise<MisSalesIntelligence> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: MisSalesIntelligence }>(
-      `/api/v1/erp/mis/sales${query ? `?${query}` : ''}`
+      `/erp/mis/sales${query ? `?${query}` : ''}`
     );
     return res.data;
   }
@@ -231,7 +231,7 @@ export class MisService {
   public static async getFinancialIntelligence(params?: Record<string, any>): Promise<MisFinancialIntelligence> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: MisFinancialIntelligence }>(
-      `/api/v1/erp/mis/financial${query ? `?${query}` : ''}`
+      `/erp/mis/financial${query ? `?${query}` : ''}`
     );
     return res.data;
   }
@@ -239,19 +239,19 @@ export class MisService {
   public static async getInventoryIntelligence(params?: Record<string, any>): Promise<MisInventoryIntelligence> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: MisInventoryIntelligence }>(
-      `/api/v1/erp/mis/inventory${query ? `?${query}` : ''}`
+      `/erp/mis/inventory${query ? `?${query}` : ''}`
     );
     return res.data;
   }
 
   public static async getDataQuality(): Promise<MisDataQualityAudit> {
-    const res = await apiClient<{ success: boolean; data: MisDataQualityAudit }>('/api/v1/erp/mis/data-quality');
+    const res = await apiClient<{ success: boolean; data: MisDataQualityAudit }>('/erp/mis/data-quality');
     return res.data;
   }
 
   // 2. AI ANALYST
   public static async queryAiAnalyst(query: string, context?: any): Promise<MisAiAnalystAnswer> {
-    const res = await apiClient<{ success: boolean; data: MisAiAnalystAnswer }>('/api/v1/erp/mis/ai/analyst', {
+    const res = await apiClient<{ success: boolean; data: MisAiAnalystAnswer }>('/erp/mis/ai/analyst', {
       method: 'POST',
       body: JSON.stringify({ query, context }),
     });
@@ -262,13 +262,13 @@ export class MisService {
   public static async getKpis(params?: Record<string, any>): Promise<MisKpiTargetItem[]> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: MisKpiTargetItem[] }>(
-      `/api/v1/erp/mis/kpis${query ? `?${query}` : ''}`
+      `/erp/mis/kpis${query ? `?${query}` : ''}`
     );
     return res.data;
   }
 
   public static async upsertKpi(data: any): Promise<MisKpiTargetItem> {
-    const res = await apiClient<{ success: boolean; data: MisKpiTargetItem }>('/api/v1/erp/mis/kpis', {
+    const res = await apiClient<{ success: boolean; data: MisKpiTargetItem }>('/erp/mis/kpis', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -278,7 +278,7 @@ export class MisService {
   // 4. FORECASTS
   public static async getForecasts(forecastType?: string): Promise<MisForecastItem[]> {
     const res = await apiClient<{ success: boolean; data: MisForecastItem[] }>(
-      `/api/v1/erp/mis/forecasts${forecastType ? `?type=${forecastType}` : ''}`
+      `/erp/mis/forecasts${forecastType ? `?type=${forecastType}` : ''}`
     );
     return res.data;
   }
@@ -288,7 +288,7 @@ export class MisService {
     timeHorizon?: string;
     scenario?: string;
   }): Promise<MisForecastItem> {
-    const res = await apiClient<{ success: boolean; data: MisForecastItem }>('/api/v1/erp/mis/forecasts/generate', {
+    const res = await apiClient<{ success: boolean; data: MisForecastItem }>('/erp/mis/forecasts/generate', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -299,20 +299,20 @@ export class MisService {
   public static async getRisks(params?: Record<string, any>): Promise<MisRiskItem[]> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: MisRiskItem[] }>(
-      `/api/v1/erp/mis/risks${query ? `?${query}` : ''}`
+      `/erp/mis/risks${query ? `?${query}` : ''}`
     );
     return res.data;
   }
 
   public static async scanRisks(): Promise<MisRiskItem[]> {
-    const res = await apiClient<{ success: boolean; data: MisRiskItem[] }>('/api/v1/erp/mis/risks/scan', {
+    const res = await apiClient<{ success: boolean; data: MisRiskItem[] }>('/erp/mis/risks/scan', {
       method: 'POST',
     });
     return res.data;
   }
 
   public static async updateRiskStatus(id: string, status: string, notes?: string): Promise<MisRiskItem> {
-    const res = await apiClient<{ success: boolean; data: MisRiskItem }>(`/api/v1/erp/mis/risks/${id}/status`, {
+    const res = await apiClient<{ success: boolean; data: MisRiskItem }>(`/erp/mis/risks/${id}/status`, {
       method: 'PUT',
       body: JSON.stringify({ status, notes }),
     });
@@ -321,13 +321,13 @@ export class MisService {
 
   // 6. RECOMMENDATIONS
   public static async getRecommendations(): Promise<MisRecommendationItem[]> {
-    const res = await apiClient<{ success: boolean; data: MisRecommendationItem[] }>('/api/v1/erp/mis/recommendations');
+    const res = await apiClient<{ success: boolean; data: MisRecommendationItem[] }>('/erp/mis/recommendations');
     return res.data;
   }
 
   public static async updateRecommendationStatus(id: string, status: string, notes?: string): Promise<MisRecommendationItem> {
     const res = await apiClient<{ success: boolean; data: MisRecommendationItem }>(
-      `/api/v1/erp/mis/recommendations/${id}/status`,
+      `/erp/mis/recommendations/${id}/status`,
       {
         method: 'PUT',
         body: JSON.stringify({ status, notes }),
@@ -339,19 +339,19 @@ export class MisService {
   // 7. DAILY DIGEST
   public static async getDailyDigest(date?: string): Promise<MisDailyDigestItem> {
     const res = await apiClient<{ success: boolean; data: MisDailyDigestItem }>(
-      `/api/v1/erp/mis/daily-digest${date ? `?date=${date}` : ''}`
+      `/erp/mis/daily-digest${date ? `?date=${date}` : ''}`
     );
     return res.data;
   }
 
   // 8. TEMPLATES & SETTINGS
   public static async getReportTemplates(): Promise<any[]> {
-    const res = await apiClient<{ success: boolean; data: any[] }>('/api/v1/erp/mis/reports/templates');
+    const res = await apiClient<{ success: boolean; data: any[] }>('/erp/mis/reports/templates');
     return res.data;
   }
 
   public static async saveReportTemplate(data: any): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/mis/reports/templates', {
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/mis/reports/templates', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -359,12 +359,12 @@ export class MisService {
   }
 
   public static async getSettings(): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/mis/settings');
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/mis/settings');
     return res.data;
   }
 
   public static async updateSettings(data: any): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/mis/settings', {
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/mis/settings', {
       method: 'PUT',
       body: JSON.stringify(data),
     });

@@ -149,7 +149,7 @@ export interface AiSettingsData {
 export class AiService {
   // 1. Control Center
   public static async getControlCenter(): Promise<AiControlCenterData> {
-    const res = await apiClient<{ success: boolean; data: AiControlCenterData }>('/api/v1/erp/ai/control-center');
+    const res = await apiClient<{ success: boolean; data: AiControlCenterData }>('/erp/ai/control-center');
     return res.data;
   }
 
@@ -158,7 +158,7 @@ export class AiService {
     const res = await apiClient<{
       success: boolean;
       data: { conversationId: string; userMessage: AiMessageRecord; assistantMessage: AiMessageRecord };
-    }>('/api/v1/erp/ai/chat', {
+    }>('/erp/ai/chat', {
       method: 'POST',
       body: JSON.stringify({ query, conversationId, moduleContext }),
     });
@@ -166,25 +166,25 @@ export class AiService {
   }
 
   public static async getConversations(): Promise<AiConversationRecord[]> {
-    const res = await apiClient<{ success: boolean; data: AiConversationRecord[] }>('/api/v1/erp/ai/conversations');
+    const res = await apiClient<{ success: boolean; data: AiConversationRecord[] }>('/erp/ai/conversations');
     return res.data;
   }
 
   public static async getConversationMessages(conversationId: string): Promise<AiMessageRecord[]> {
     const res = await apiClient<{ success: boolean; data: AiMessageRecord[] }>(
-      `/api/v1/erp/ai/conversations/${conversationId}/messages`
+      `/erp/ai/conversations/${conversationId}/messages`
     );
     return res.data;
   }
 
   // 3. Providers
   public static async getProviders(): Promise<AiProviderRecord[]> {
-    const res = await apiClient<{ success: boolean; data: AiProviderRecord[] }>('/api/v1/erp/ai/providers');
+    const res = await apiClient<{ success: boolean; data: AiProviderRecord[] }>('/erp/ai/providers');
     return res.data;
   }
 
   public static async upsertProvider(data: Partial<AiProviderRecord>): Promise<AiProviderRecord> {
-    const res = await apiClient<{ success: boolean; data: AiProviderRecord }>('/api/v1/erp/ai/providers', {
+    const res = await apiClient<{ success: boolean; data: AiProviderRecord }>('/erp/ai/providers', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -193,12 +193,12 @@ export class AiService {
 
   // 4. Models
   public static async getModels(): Promise<AiModelRecord[]> {
-    const res = await apiClient<{ success: boolean; data: AiModelRecord[] }>('/api/v1/erp/ai/models');
+    const res = await apiClient<{ success: boolean; data: AiModelRecord[] }>('/erp/ai/models');
     return res.data;
   }
 
   public static async upsertModel(data: Partial<AiModelRecord>): Promise<AiModelRecord> {
-    const res = await apiClient<{ success: boolean; data: AiModelRecord }>('/api/v1/erp/ai/models', {
+    const res = await apiClient<{ success: boolean; data: AiModelRecord }>('/erp/ai/models', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -207,12 +207,12 @@ export class AiService {
 
   // 5. Features
   public static async getFeatures(): Promise<AiFeatureRecord[]> {
-    const res = await apiClient<{ success: boolean; data: AiFeatureRecord[] }>('/api/v1/erp/ai/features');
+    const res = await apiClient<{ success: boolean; data: AiFeatureRecord[] }>('/erp/ai/features');
     return res.data;
   }
 
   public static async toggleFeature(featureCode: string, isGloballyEnabled: boolean): Promise<AiFeatureRecord> {
-    const res = await apiClient<{ success: boolean; data: AiFeatureRecord }>('/api/v1/erp/ai/features/toggle', {
+    const res = await apiClient<{ success: boolean; data: AiFeatureRecord }>('/erp/ai/features/toggle', {
       method: 'POST',
       body: JSON.stringify({ featureCode, isGloballyEnabled }),
     });
@@ -222,13 +222,13 @@ export class AiService {
   // 6. Prompts
   public static async getPrompts(module?: string): Promise<AiPromptTemplateRecord[]> {
     const res = await apiClient<{ success: boolean; data: AiPromptTemplateRecord[] }>(
-      `/api/v1/erp/ai/prompts${module ? `?module=${module}` : ''}`
+      `/erp/ai/prompts${module ? `?module=${module}` : ''}`
     );
     return res.data;
   }
 
   public static async upsertPrompt(data: any): Promise<AiPromptTemplateRecord> {
-    const res = await apiClient<{ success: boolean; data: AiPromptTemplateRecord }>('/api/v1/erp/ai/prompts', {
+    const res = await apiClient<{ success: boolean; data: AiPromptTemplateRecord }>('/erp/ai/prompts', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -237,12 +237,12 @@ export class AiService {
 
   // 7. Documents
   public static async getDocumentJobs(): Promise<AiDocumentJobRecord[]> {
-    const res = await apiClient<{ success: boolean; data: AiDocumentJobRecord[] }>('/api/v1/erp/ai/documents');
+    const res = await apiClient<{ success: boolean; data: AiDocumentJobRecord[] }>('/erp/ai/documents');
     return res.data;
   }
 
   public static async createDocumentJob(data: any): Promise<AiDocumentJobRecord> {
-    const res = await apiClient<{ success: boolean; data: AiDocumentJobRecord }>('/api/v1/erp/ai/documents', {
+    const res = await apiClient<{ success: boolean; data: AiDocumentJobRecord }>('/erp/ai/documents', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -255,7 +255,7 @@ export class AiService {
     userEditedPayload?: Record<string, any>,
     reviewNotes?: string
   ): Promise<AiDocumentJobRecord> {
-    const res = await apiClient<{ success: boolean; data: AiDocumentJobRecord }>(`/api/v1/erp/ai/documents/${id}/review`, {
+    const res = await apiClient<{ success: boolean; data: AiDocumentJobRecord }>(`/erp/ai/documents/${id}/review`, {
       method: 'PUT',
       body: JSON.stringify({ action, userEditedPayload, reviewNotes }),
     });
@@ -265,13 +265,13 @@ export class AiService {
   // 8. Knowledge
   public static async getKnowledgeDocs(category?: string): Promise<AiKnowledgeDocRecord[]> {
     const res = await apiClient<{ success: boolean; data: AiKnowledgeDocRecord[] }>(
-      `/api/v1/erp/ai/knowledge${category ? `?category=${category}` : ''}`
+      `/erp/ai/knowledge${category ? `?category=${category}` : ''}`
     );
     return res.data;
   }
 
   public static async createKnowledgeDoc(data: any): Promise<AiKnowledgeDocRecord> {
-    const res = await apiClient<{ success: boolean; data: AiKnowledgeDocRecord }>('/api/v1/erp/ai/knowledge', {
+    const res = await apiClient<{ success: boolean; data: AiKnowledgeDocRecord }>('/erp/ai/knowledge', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -280,12 +280,12 @@ export class AiService {
 
   // 9. Settings
   public static async getSettings(): Promise<AiSettingsData> {
-    const res = await apiClient<{ success: boolean; data: AiSettingsData }>('/api/v1/erp/ai/settings');
+    const res = await apiClient<{ success: boolean; data: AiSettingsData }>('/erp/ai/settings');
     return res.data;
   }
 
   public static async updateSettings(data: any): Promise<AiSettingsData> {
-    const res = await apiClient<{ success: boolean; data: AiSettingsData }>('/api/v1/erp/ai/settings', {
+    const res = await apiClient<{ success: boolean; data: AiSettingsData }>('/erp/ai/settings', {
       method: 'PUT',
       body: JSON.stringify(data),
     });

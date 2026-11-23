@@ -159,12 +159,12 @@ export interface RepairJobCardRecord {
 export class SupportService {
   // 1. DASHBOARD & MIS
   public static async getDashboard(): Promise<SupportDashboardData> {
-    const res = await apiClient<{ success: boolean; data: SupportDashboardData }>('/api/v1/erp/support/dashboard');
+    const res = await apiClient<{ success: boolean; data: SupportDashboardData }>('/erp/support/dashboard');
     return res.data;
   }
 
   public static async getMisAnalytics(): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/support/analytics/mis');
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/support/analytics/mis');
     return res.data;
   }
 
@@ -172,20 +172,20 @@ export class SupportService {
   public static async getTickets(params?: Record<string, any>): Promise<{ tickets: SupportTicketRecord[]; total: number; page: number; totalPages: number }> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: { tickets: SupportTicketRecord[]; total: number; page: number; totalPages: number } }>(
-      `/api/v1/erp/support/tickets${query ? `?${query}` : ''}`
+      `/erp/support/tickets${query ? `?${query}` : ''}`
     );
     return res.data;
   }
 
   public static async getTicketById(id: string): Promise<{ ticket: SupportTicketRecord; messages: SupportMessageRecord[] }> {
     const res = await apiClient<{ success: boolean; data: { ticket: SupportTicketRecord; messages: SupportMessageRecord[] } }>(
-      `/api/v1/erp/support/tickets/${id}`
+      `/erp/support/tickets/${id}`
     );
     return res.data;
   }
 
   public static async createTicket(data: any): Promise<SupportTicketRecord> {
-    const res = await apiClient<{ success: boolean; data: SupportTicketRecord }>('/api/v1/erp/support/tickets', {
+    const res = await apiClient<{ success: boolean; data: SupportTicketRecord }>('/erp/support/tickets', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -193,7 +193,7 @@ export class SupportService {
   }
 
   public static async assignTicket(id: string, data: { userId: string; userName: string }): Promise<SupportTicketRecord> {
-    const res = await apiClient<{ success: boolean; data: SupportTicketRecord }>(`/api/v1/erp/support/tickets/${id}/assign`, {
+    const res = await apiClient<{ success: boolean; data: SupportTicketRecord }>(`/erp/support/tickets/${id}/assign`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -201,7 +201,7 @@ export class SupportService {
   }
 
   public static async escalateTicket(id: string, data: { escalatedToUserId?: string; reason: string }): Promise<SupportTicketRecord> {
-    const res = await apiClient<{ success: boolean; data: SupportTicketRecord }>(`/api/v1/erp/support/tickets/${id}/escalate`, {
+    const res = await apiClient<{ success: boolean; data: SupportTicketRecord }>(`/erp/support/tickets/${id}/escalate`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -209,7 +209,7 @@ export class SupportService {
   }
 
   public static async addTicketMessage(id: string, data: any): Promise<SupportMessageRecord> {
-    const res = await apiClient<{ success: boolean; data: SupportMessageRecord }>(`/api/v1/erp/support/tickets/${id}/messages`, {
+    const res = await apiClient<{ success: boolean; data: SupportMessageRecord }>(`/erp/support/tickets/${id}/messages`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -217,7 +217,7 @@ export class SupportService {
   }
 
   public static async resolveTicket(id: string, data: { resolutionNotes: string; isClose?: boolean }): Promise<SupportTicketRecord> {
-    const res = await apiClient<{ success: boolean; data: SupportTicketRecord }>(`/api/v1/erp/support/tickets/${id}/resolve`, {
+    const res = await apiClient<{ success: boolean; data: SupportTicketRecord }>(`/erp/support/tickets/${id}/resolve`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -228,20 +228,20 @@ export class SupportService {
   public static async getRmas(params?: Record<string, any>): Promise<{ rmas: RmaRequestRecord[]; total: number; page: number; totalPages: number }> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: { rmas: RmaRequestRecord[]; total: number; page: number; totalPages: number } }>(
-      `/api/v1/erp/support/rmas${query ? `?${query}` : ''}`
+      `/erp/support/rmas${query ? `?${query}` : ''}`
     );
     return res.data;
   }
 
   public static async getRmaById(id: string): Promise<{ rma: RmaRequestRecord; inspections: any[] }> {
     const res = await apiClient<{ success: boolean; data: { rma: RmaRequestRecord; inspections: any[] } }>(
-      `/api/v1/erp/support/rmas/${id}`
+      `/erp/support/rmas/${id}`
     );
     return res.data;
   }
 
   public static async createRma(data: any): Promise<RmaRequestRecord> {
-    const res = await apiClient<{ success: boolean; data: RmaRequestRecord }>('/api/v1/erp/support/rmas', {
+    const res = await apiClient<{ success: boolean; data: RmaRequestRecord }>('/erp/support/rmas', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -249,7 +249,7 @@ export class SupportService {
   }
 
   public static async approveOrRejectRma(id: string, decision: 'APPROVED' | 'REJECTED', rejectionReason?: string): Promise<RmaRequestRecord> {
-    const res = await apiClient<{ success: boolean; data: RmaRequestRecord }>(`/api/v1/erp/support/rmas/${id}/approve`, {
+    const res = await apiClient<{ success: boolean; data: RmaRequestRecord }>(`/erp/support/rmas/${id}/approve`, {
       method: 'POST',
       body: JSON.stringify({ decision, rejectionReason }),
     });
@@ -257,7 +257,7 @@ export class SupportService {
   }
 
   public static async updateRmaShipping(id: string, data: any): Promise<RmaRequestRecord> {
-    const res = await apiClient<{ success: boolean; data: RmaRequestRecord }>(`/api/v1/erp/support/rmas/${id}/shipping`, {
+    const res = await apiClient<{ success: boolean; data: RmaRequestRecord }>(`/erp/support/rmas/${id}/shipping`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
@@ -265,7 +265,7 @@ export class SupportService {
   }
 
   public static async createRmaInspection(id: string, data: any): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>(`/api/v1/erp/support/rmas/${id}/inspections`, {
+    const res = await apiClient<{ success: boolean; data: any }>(`/erp/support/rmas/${id}/inspections`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -273,7 +273,7 @@ export class SupportService {
   }
 
   public static async processRmaRefund(id: string, refundVoucherNumber?: string): Promise<RmaRequestRecord> {
-    const res = await apiClient<{ success: boolean; data: RmaRequestRecord }>(`/api/v1/erp/support/rmas/${id}/refund`, {
+    const res = await apiClient<{ success: boolean; data: RmaRequestRecord }>(`/erp/support/rmas/${id}/refund`, {
       method: 'POST',
       body: JSON.stringify({ refundVoucherNumber }),
     });
@@ -281,7 +281,7 @@ export class SupportService {
   }
 
   public static async completeRmaReplacement(id: string, replacementOrderNumber: string): Promise<RmaRequestRecord> {
-    const res = await apiClient<{ success: boolean; data: RmaRequestRecord }>(`/api/v1/erp/support/rmas/${id}/replacement`, {
+    const res = await apiClient<{ success: boolean; data: RmaRequestRecord }>(`/erp/support/rmas/${id}/replacement`, {
       method: 'POST',
       body: JSON.stringify({ replacementOrderNumber }),
     });
@@ -292,14 +292,14 @@ export class SupportService {
   public static async getWarranties(params?: Record<string, any>): Promise<{ warranties: WarrantyRecordItem[]; total: number; page: number; totalPages: number }> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: { warranties: WarrantyRecordItem[]; total: number; page: number; totalPages: number } }>(
-      `/api/v1/erp/support/warranties${query ? `?${query}` : ''}`
+      `/erp/support/warranties${query ? `?${query}` : ''}`
     );
     return res.data;
   }
 
   public static async getExpiringWarranties(days: number = 30): Promise<WarrantyRecordItem[]> {
     const res = await apiClient<{ success: boolean; data: WarrantyRecordItem[] }>(
-      `/api/v1/erp/support/warranties/expiring?days=${days}`
+      `/erp/support/warranties/expiring?days=${days}`
     );
     return res.data;
   }
@@ -307,13 +307,13 @@ export class SupportService {
   public static async verifyWarranty(serialNumber: string, defectDescription?: string): Promise<any> {
     const query = defectDescription ? `?defectDescription=${encodeURIComponent(defectDescription)}` : '';
     const res = await apiClient<{ success: boolean; data: any }>(
-      `/api/v1/erp/support/warranties/verify/${encodeURIComponent(serialNumber)}${query}`
+      `/erp/support/warranties/verify/${encodeURIComponent(serialNumber)}${query}`
     );
     return res.data;
   }
 
   public static async registerWarranty(data: any): Promise<WarrantyRecordItem> {
-    const res = await apiClient<{ success: boolean; data: WarrantyRecordItem }>('/api/v1/erp/support/warranties', {
+    const res = await apiClient<{ success: boolean; data: WarrantyRecordItem }>('/erp/support/warranties', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -323,13 +323,13 @@ export class SupportService {
   public static async getWarrantyClaims(params?: Record<string, any>): Promise<{ claims: any[]; total: number; page: number; totalPages: number }> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: { claims: any[]; total: number; page: number; totalPages: number } }>(
-      `/api/v1/erp/support/claims${query ? `?${query}` : ''}`
+      `/erp/support/claims${query ? `?${query}` : ''}`
     );
     return res.data;
   }
 
   public static async createWarrantyClaim(data: any): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/support/claims', {
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/support/claims', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -339,13 +339,13 @@ export class SupportService {
   public static async getRepairJobCards(params?: Record<string, any>): Promise<{ jobs: RepairJobCardRecord[]; total: number; page: number; totalPages: number }> {
     const query = new URLSearchParams(params as any).toString();
     const res = await apiClient<{ success: boolean; data: { jobs: RepairJobCardRecord[]; total: number; page: number; totalPages: number } }>(
-      `/api/v1/erp/support/repairs${query ? `?${query}` : ''}`
+      `/erp/support/repairs${query ? `?${query}` : ''}`
     );
     return res.data;
   }
 
   public static async createRepairJobCard(data: any): Promise<RepairJobCardRecord> {
-    const res = await apiClient<{ success: boolean; data: RepairJobCardRecord }>('/api/v1/erp/support/repairs', {
+    const res = await apiClient<{ success: boolean; data: RepairJobCardRecord }>('/erp/support/repairs', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -353,7 +353,7 @@ export class SupportService {
   }
 
   public static async updateRepairJobCard(id: string, data: any): Promise<RepairJobCardRecord> {
-    const res = await apiClient<{ success: boolean; data: RepairJobCardRecord }>(`/api/v1/erp/support/repairs/${id}`, {
+    const res = await apiClient<{ success: boolean; data: RepairJobCardRecord }>(`/erp/support/repairs/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
@@ -362,7 +362,7 @@ export class SupportService {
 
   // 5. AI CO-PILOT
   public static async classifyComplaintAi(subject: string, description: string): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/support/ai/classify-complaint', {
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/support/ai/classify-complaint', {
       method: 'POST',
       body: JSON.stringify({ subject, description }),
     });
@@ -370,7 +370,7 @@ export class SupportService {
   }
 
   public static async draftAiReply(ticket: any, agentNotes?: string): Promise<{ draftedMessage: string; tone: string; suggestedNextStep: string }> {
-    const res = await apiClient<{ success: boolean; data: { draftedMessage: string; tone: string; suggestedNextStep: string } }>('/api/v1/erp/support/ai/draft-reply', {
+    const res = await apiClient<{ success: boolean; data: { draftedMessage: string; tone: string; suggestedNextStep: string } }>('/erp/support/ai/draft-reply', {
       method: 'POST',
       body: JSON.stringify({ ticket, agentNotes }),
     });
@@ -378,7 +378,7 @@ export class SupportService {
   }
 
   public static async getTroubleshootingAi(productName: string, faultDescription: string): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/support/ai/troubleshooting', {
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/support/ai/troubleshooting', {
       method: 'POST',
       body: JSON.stringify({ productName, faultDescription }),
     });
@@ -386,7 +386,7 @@ export class SupportService {
   }
 
   public static async askAiAssistant(query: string, context?: any): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/support/ai/assistant', {
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/support/ai/assistant', {
       method: 'POST',
       body: JSON.stringify({ query, context }),
     });
@@ -396,12 +396,12 @@ export class SupportService {
   // 6. FEEDBACK, KB, SETTINGS & AUDIT
   public static async getFeedbacks(params?: Record<string, any>): Promise<any> {
     const query = new URLSearchParams(params as any).toString();
-    const res = await apiClient<{ success: boolean; data: any }>(`/api/v1/erp/support/feedback${query ? `?${query}` : ''}`);
+    const res = await apiClient<{ success: boolean; data: any }>(`/erp/support/feedback${query ? `?${query}` : ''}`);
     return res.data;
   }
 
   public static async submitCustomerFeedback(data: any): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/support/feedback', {
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/support/feedback', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -410,12 +410,12 @@ export class SupportService {
 
   public static async getKnowledgeBase(params?: Record<string, any>): Promise<any[]> {
     const query = new URLSearchParams(params as any).toString();
-    const res = await apiClient<{ success: boolean; data: any[] }>(`/api/v1/erp/support/knowledge-base${query ? `?${query}` : ''}`);
+    const res = await apiClient<{ success: boolean; data: any[] }>(`/erp/support/knowledge-base${query ? `?${query}` : ''}`);
     return res.data;
   }
 
   public static async createKnowledgeBaseArticle(data: any): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/support/knowledge-base', {
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/support/knowledge-base', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -423,12 +423,12 @@ export class SupportService {
   }
 
   public static async getSettings(): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/support/settings');
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/support/settings');
     return res.data;
   }
 
   public static async updateSettings(data: any): Promise<any> {
-    const res = await apiClient<{ success: boolean; data: any }>('/api/v1/erp/support/settings', {
+    const res = await apiClient<{ success: boolean; data: any }>('/erp/support/settings', {
       method: 'PUT',
       body: JSON.stringify(data),
     });
@@ -437,7 +437,7 @@ export class SupportService {
 
   public static async getAuditLogs(params?: Record<string, any>): Promise<any> {
     const query = new URLSearchParams(params as any).toString();
-    const res = await apiClient<{ success: boolean; data: any }>(`/api/v1/erp/support/audit-logs${query ? `?${query}` : ''}`);
+    const res = await apiClient<{ success: boolean; data: any }>(`/erp/support/audit-logs${query ? `?${query}` : ''}`);
     return res.data;
   }
 }

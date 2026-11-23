@@ -143,47 +143,47 @@ export interface SessionItem {
 
 export class SystemAdminService {
   public static async getDashboard(): Promise<SystemDashboardData> {
-    const res = await apiClient.get<{ success: boolean; data: SystemDashboardData }>('/api/v1/erp/system/dashboard');
+    const res = await apiClient.get<{ success: boolean; data: SystemDashboardData }>('/erp/system/dashboard');
     return res.data;
   }
 
   public static async getSettings(): Promise<SystemSettingsData> {
-    const res = await apiClient.get<{ success: boolean; data: SystemSettingsData }>('/api/v1/erp/system/settings');
+    const res = await apiClient.get<{ success: boolean; data: SystemSettingsData }>('/erp/system/settings');
     return res.data;
   }
 
   public static async updateSettings(data: Partial<SystemSettingsData>): Promise<SystemSettingsData> {
-    const res = await apiClient.put<{ success: boolean; data: SystemSettingsData }>('/api/v1/erp/system/settings', data);
+    const res = await apiClient.put<{ success: boolean; data: SystemSettingsData }>('/erp/system/settings', data);
     return res.data;
   }
 
   public static async getSecurityPolicy(): Promise<SecurityPolicyData> {
-    const res = await apiClient.get<{ success: boolean; data: SecurityPolicyData }>('/api/v1/erp/system/security/policy');
+    const res = await apiClient.get<{ success: boolean; data: SecurityPolicyData }>('/erp/system/security/policy');
     return res.data;
   }
 
   public static async updateSecurityPolicy(data: Partial<SecurityPolicyData>): Promise<SecurityPolicyData> {
-    const res = await apiClient.put<{ success: boolean; data: SecurityPolicyData }>('/api/v1/erp/system/security/policy', data);
+    const res = await apiClient.put<{ success: boolean; data: SecurityPolicyData }>('/erp/system/security/policy', data);
     return res.data;
   }
 
   public static async getDatabaseMetrics(): Promise<any> {
-    const res = await apiClient.get<{ success: boolean; data: any }>('/api/v1/erp/system/database/metrics');
+    const res = await apiClient.get<{ success: boolean; data: any }>('/erp/system/database/metrics');
     return res.data;
   }
 
   public static async triggerBackup(type: 'MANUAL' | 'AUTOMATED' = 'MANUAL'): Promise<BackupItem> {
-    const res = await apiClient.post<{ success: boolean; data: BackupItem }>('/api/v1/erp/system/backups/trigger', { backupType: type });
+    const res = await apiClient.post<{ success: boolean; data: BackupItem }>('/erp/system/backups/trigger', { backupType: type });
     return res.data;
   }
 
   public static async getBackupHistory(): Promise<BackupItem[]> {
-    const res = await apiClient.get<{ success: boolean; data: BackupItem[] }>('/api/v1/erp/system/backups/history');
+    const res = await apiClient.get<{ success: boolean; data: BackupItem[] }>('/erp/system/backups/history');
     return res.data;
   }
 
   public static async executeRestore(backupId: string, targetEnvironment: string = 'STAGING'): Promise<RestoreItem> {
-    const res = await apiClient.post<{ success: boolean; data: RestoreItem }>('/api/v1/erp/system/restores/execute', {
+    const res = await apiClient.post<{ success: boolean; data: RestoreItem }>('/erp/system/restores/execute', {
       backupId,
       targetEnvironment,
     });
@@ -191,27 +191,27 @@ export class SystemAdminService {
   }
 
   public static async getRestoreHistory(): Promise<RestoreItem[]> {
-    const res = await apiClient.get<{ success: boolean; data: RestoreItem[] }>('/api/v1/erp/system/restores/history');
+    const res = await apiClient.get<{ success: boolean; data: RestoreItem[] }>('/erp/system/restores/history');
     return res.data;
   }
 
   public static async getStorageMetrics(): Promise<any> {
-    const res = await apiClient.get<{ success: boolean; data: any }>('/api/v1/erp/system/storage/metrics');
+    const res = await apiClient.get<{ success: boolean; data: any }>('/erp/system/storage/metrics');
     return res.data;
   }
 
   public static async getIntegrations(): Promise<IntegrationItem[]> {
-    const res = await apiClient.get<{ success: boolean; data: IntegrationItem[] }>('/api/v1/erp/system/integrations');
+    const res = await apiClient.get<{ success: boolean; data: IntegrationItem[] }>('/erp/system/integrations');
     return res.data;
   }
 
   public static async testIntegration(key: string): Promise<any> {
-    const res = await apiClient.post<{ success: boolean; data: any }>('/api/v1/erp/system/integrations/test', { key });
+    const res = await apiClient.post<{ success: boolean; data: any }>('/erp/system/integrations/test', { key });
     return res.data;
   }
 
   public static async getQueueMetrics(): Promise<any> {
-    const res = await apiClient.get<{ success: boolean; data: any }>('/api/v1/erp/system/queues/metrics');
+    const res = await apiClient.get<{ success: boolean; data: any }>('/erp/system/queues/metrics');
     return res.data;
   }
 
@@ -222,18 +222,18 @@ export class SystemAdminService {
     if (params?.search) q.set('search', params.search);
     if (params?.page) q.set('page', String(params.page));
     if (params?.limit) q.set('limit', String(params.limit));
-    const url = `/api/v1/erp/system/logs${q.toString() ? `?${q.toString()}` : ''}`;
+    const url = `/erp/system/logs${q.toString() ? `?${q.toString()}` : ''}`;
     const res = await apiClient.get<{ success: boolean; data: { logs: SystemLogItem[]; pagination: any } }>(url);
     return res.data;
   }
 
   public static async getFeatureFlags(): Promise<FeatureFlagItem[]> {
-    const res = await apiClient.get<{ success: boolean; data: FeatureFlagItem[] }>('/api/v1/erp/system/feature-flags');
+    const res = await apiClient.get<{ success: boolean; data: FeatureFlagItem[] }>('/erp/system/feature-flags');
     return res.data;
   }
 
   public static async toggleFeatureFlag(flagKey: string, isEnabled: boolean): Promise<FeatureFlagItem> {
-    const res = await apiClient.post<{ success: boolean; data: FeatureFlagItem }>('/api/v1/erp/system/feature-flags/toggle', {
+    const res = await apiClient.post<{ success: boolean; data: FeatureFlagItem }>('/erp/system/feature-flags/toggle', {
       flagKey,
       isEnabled,
     });
@@ -241,22 +241,22 @@ export class SystemAdminService {
   }
 
   public static async getSessions(): Promise<SessionItem[]> {
-    const res = await apiClient.get<{ success: boolean; data: SessionItem[] }>('/api/v1/erp/system/sessions');
+    const res = await apiClient.get<{ success: boolean; data: SessionItem[] }>('/erp/system/sessions');
     return res.data;
   }
 
   public static async revokeSession(sessionId: string): Promise<boolean> {
-    const res = await apiClient.post<{ success: boolean }>(`/api/v1/erp/system/sessions/${sessionId}/revoke`);
+    const res = await apiClient.post<{ success: boolean }>(`/erp/system/sessions/${sessionId}/revoke`);
     return Boolean(res.success);
   }
 
   public static async getLoginHistory(): Promise<any> {
-    const res = await apiClient.get<{ success: boolean; data: any }>('/api/v1/erp/system/login-history');
+    const res = await apiClient.get<{ success: boolean; data: any }>('/erp/system/login-history');
     return res.data;
   }
 
   public static async createDataExchange(jobType: 'IMPORT' | 'EXPORT', entityType: string, format: string, organizationId: string): Promise<any> {
-    const res = await apiClient.post<{ success: boolean; data: any }>('/api/v1/erp/system/data-exchange', {
+    const res = await apiClient.post<{ success: boolean; data: any }>('/erp/system/data-exchange', {
       jobType,
       entityType,
       format,

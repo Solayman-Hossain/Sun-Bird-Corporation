@@ -283,7 +283,25 @@ export class OrderProcessingController {
   }
 
   /**
-   * 14. Check Stock Availability
+   * 14. Check Stock Availability (Pre-Order / General Inquiry)
+   */
+  public static async checkPreOrderStockAvailability(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { items, warehouseId } = req.body;
+      const orgId = (req.user as any)?.organizationId;
+      const stock = await OrderReservationService.checkStockAvailability(
+        items || [],
+        warehouseId,
+        orgId
+      );
+      res.status(200).json({ success: true, data: stock });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  /**
+   * 14b. Check Order-Specific Stock Availability
    */
   public static async checkStockAvailability(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -358,6 +376,28 @@ export class OrderProcessingController {
         orgId
       );
       res.status(201).json({ success: true, data: picking });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  /**
+   * 18a. Scan & Update Individual Picking Item
+   */
+  public static async updatePickingItem(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const orderId = String(req.params.id);
+      const pickingId = String(req.params.pickingId);
+      const { sku, pickedQty, barcode } = req.body;
+
+      const session = await OrderPickingPackingService.updatePickingItem(
+        orderId,
+        pickingId,
+        sku,
+        pickedQty,
+        barcode
+      );
+      res.status(200).json({ success: true, data: session });
     } catch (err) {
       next(err);
     }
