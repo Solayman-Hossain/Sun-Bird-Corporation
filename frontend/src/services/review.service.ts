@@ -4,7 +4,7 @@ import { ReviewItem } from '../types';
 export const reviewService = {
   async getByProductId(productId: string): Promise<ReviewItem[]> {
     try {
-      const res = await apiClient<{ success: boolean; data: ReviewItem[] }>(`/reviews/product/${encodeURIComponent(productId)}`);
+      const res = await apiClient<{ success: boolean; data: ReviewItem[] }>(`/public/reviews/${encodeURIComponent(productId)}`);
       return res?.success && res.data ? res.data : [];
     } catch {
       return [];

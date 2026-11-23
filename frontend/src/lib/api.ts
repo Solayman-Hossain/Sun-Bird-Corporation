@@ -164,7 +164,7 @@ export async function trackOrder(query: string): Promise<{
 }> {
   try {
     const res = await apiClient<{ success: boolean; data: any }>(
-      `/tracking/${encodeURIComponent(query)}`
+      `/public/track-order/${encodeURIComponent(query)}`
     );
     return res;
   } catch {
@@ -202,7 +202,7 @@ export async function submitRmaClaim(payload: any): Promise<{
 }> {
   try {
     const res = await apiClient<{ success: boolean; data: any; ticketId?: string }>(
-      '/rma/claims',
+      '/public/disputes/rma',
       {
         method: 'POST',
         body: JSON.stringify(payload),
@@ -229,7 +229,7 @@ export async function sendChatMessage(message: string): Promise<{
   reply: string;
 }> {
   try {
-    const res = await apiClient<{ success: boolean; reply: string }>('/chat/message', {
+    const res = await apiClient<{ success: boolean; reply: string }>('/public/chat/message', {
       method: 'POST',
       body: JSON.stringify({ message }),
     });

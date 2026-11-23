@@ -15,7 +15,7 @@ export const productService = {
 
   async getBySku(sku: string): Promise<Product | null> {
     try {
-      const res = await apiClient<{ success: boolean; data: Product }>(`/products/${encodeURIComponent(sku)}`);
+      const res = await apiClient<{ success: boolean; data: Product }>(`/public/products/${encodeURIComponent(sku)}`);
       if (res?.success && res.data) return res.data;
       return INITIAL_PRODUCTS.find((p) => p.sku === sku) || null;
     } catch {

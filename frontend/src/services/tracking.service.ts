@@ -15,7 +15,7 @@ export interface TrackingDetails {
 export const trackingService = {
   async track(trackingQuery: string): Promise<TrackingDetails | null> {
     try {
-      const res = await apiClient<{ success: boolean; data: TrackingDetails }>(`/tracking/${encodeURIComponent(trackingQuery)}`);
+      const res = await apiClient<{ success: boolean; data: TrackingDetails }>(`/public/track-order/${encodeURIComponent(trackingQuery)}`);
       return res?.success && res.data ? res.data : null;
     } catch {
       return null;
